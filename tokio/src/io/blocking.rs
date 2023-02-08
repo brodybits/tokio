@@ -11,6 +11,8 @@ use std::task::{Context, Poll};
 
 use self::State::*;
 
+use no_panic::no_panic;
+
 /// `T` should not implement _both_ Read and Write.
 #[derive(Debug)]
 pub(crate) struct Blocking<T> {
@@ -37,6 +39,7 @@ enum State<T> {
 cfg_io_blocking! {
     impl<T> Blocking<T> {
         #[cfg_attr(feature = "fs", allow(dead_code))]
+        #[no_panic]
         pub(crate) fn new(inner: T) -> Blocking<T> {
             Blocking {
                 inner: Some(inner),
@@ -51,6 +54,7 @@ impl<T> AsyncRead for Blocking<T>
 where
     T: Read + Unpin + Send + 'static,
 {
+    #[no_panic]
     fn poll_read(
         mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -102,6 +106,7 @@ impl<T> AsyncWrite for Blocking<T>
 where
     T: Write + Unpin + Send + 'static,
 {
+    #[no_panic]
     fn poll_write(
         mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -139,6 +144,7 @@ where
         }
     }
 
+    #[no_panic]
     fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         loop {
             let need_flush = self.need_flush;
@@ -171,6 +177,7 @@ where
         }
     }
 
+    #[no_panic]
     fn poll_shutdown(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         Poll::Ready(Ok(()))
     }
