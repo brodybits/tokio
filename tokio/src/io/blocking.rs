@@ -11,6 +11,8 @@ use std::task::{Context, Poll};
 
 use self::State::*;
 
+use no_panic::no_panic;
+
 /// `T` should not implement _both_ Read and Write.
 #[derive(Debug)]
 pub(crate) struct Blocking<T> {
@@ -37,6 +39,8 @@ enum State<T> {
 cfg_io_blocking! {
     impl<T> Blocking<T> {
         #[cfg_attr(feature = "fs", allow(dead_code))]
+        // XXX TBD ???:
+        //#[no_panic]
         pub(crate) fn new(inner: T) -> Blocking<T> {
             Blocking {
                 inner: Some(inner),
@@ -51,6 +55,7 @@ impl<T> AsyncRead for Blocking<T>
 where
     T: Read + Unpin + Send + 'static,
 {
+    #[no_panic]
     fn poll_read(
         mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -102,6 +107,8 @@ impl<T> AsyncWrite for Blocking<T>
 where
     T: Write + Unpin + Send + 'static,
 {
+    // XXX TBD ???:
+    //#[no_panic]
     fn poll_write(
         mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -139,6 +146,7 @@ where
         }
     }
 
+    #[no_panic]
     fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         loop {
             let need_flush = self.need_flush;
@@ -171,6 +179,7 @@ where
         }
     }
 
+    #[no_panic]
     fn poll_shutdown(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         Poll::Ready(Ok(()))
     }
@@ -189,6 +198,7 @@ macro_rules! uninterruptibly {
 }
 
 impl Buf {
+    //#[no_panic]
     pub(crate) fn with_capacity(n: usize) -> Buf {
         Buf {
             buf: Vec::with_capacity(n),
@@ -196,14 +206,17 @@ impl Buf {
         }
     }
 
+    //#[no_panic]
     pub(crate) fn is_empty(&self) -> bool {
         self.len() == 0
     }
 
+    //#[no_panic]
     pub(crate) fn len(&self) -> usize {
         self.buf.len() - self.pos
     }
 
+    //#[no_panic]
     pub(crate) fn copy_to(&mut self, dst: &mut ReadBuf<'_>) -> usize {
         let n = cmp::min(self.len(), dst.remaining());
         dst.put_slice(&self.bytes()[..n]);
@@ -217,6 +230,7 @@ impl Buf {
         n
     }
 
+    //#[no_panic]
     pub(crate) fn copy_from(&mut self, src: &[u8]) -> usize {
         assert!(self.is_empty());
 
@@ -226,10 +240,12 @@ impl Buf {
         n
     }
 
+    //#[no_panic]
     pub(crate) fn bytes(&self) -> &[u8] {
         &self.buf[self.pos..]
     }
 
+    //#[no_panic]
     pub(crate) fn ensure_capacity_for(&mut self, bytes: &ReadBuf<'_>) {
         assert!(self.is_empty());
 
@@ -244,6 +260,7 @@ impl Buf {
         }
     }
 
+    //#[no_panic]
     pub(crate) fn read_from<T: Read>(&mut self, rd: &mut T) -> io::Result<usize> {
         let res = uninterruptibly!(rd.read(&mut self.buf));
 
@@ -258,6 +275,7 @@ impl Buf {
         res
     }
 
+    //#[no_panic]
     pub(crate) fn write_to<T: Write>(&mut self, wr: &mut T) -> io::Result<()> {
         assert_eq!(self.pos, 0);
 
@@ -270,6 +288,7 @@ impl Buf {
 
 cfg_fs! {
     impl Buf {
+        //#[no_panic]
         pub(crate) fn discard_read(&mut self) -> i64 {
             let ret = -(self.bytes().len() as i64);
             self.pos = 0;

@@ -7,6 +7,8 @@ use std::io;
 use std::os::unix::io::{AsRawFd, RawFd};
 use std::{task::Context, task::Poll};
 
+use no_panic::no_panic;
+
 /// Associates an IO object backed by a Unix file descriptor with the tokio
 /// reactor, allowing for readiness to be polled. The file descriptor must be of
 /// a type that can be used with the OS polling facilities (ie, `poll`, `epoll`,
@@ -181,6 +183,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// feature flag is not enabled.
     #[inline]
     #[track_caller]
+    //#[no_panic]
     pub fn new(inner: T) -> io::Result<Self>
     where
         T: AsRawFd,
@@ -197,6 +200,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// feature flag is not enabled.
     #[inline]
     #[track_caller]
+    //#[no_panic]
     pub fn with_interest(inner: T, interest: Interest) -> io::Result<Self>
     where
         T: AsRawFd,
@@ -205,6 +209,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     }
 
     #[track_caller]
+    //#[no_panic]
     pub(crate) fn new_with_handle_and_interest(
         inner: T,
         handle: scheduler::Handle,
@@ -223,16 +228,19 @@ impl<T: AsRawFd> AsyncFd<T> {
 
     /// Returns a shared reference to the backing object of this [`AsyncFd`].
     #[inline]
+    #[no_panic]
     pub fn get_ref(&self) -> &T {
         self.inner.as_ref().unwrap()
     }
 
     /// Returns a mutable reference to the backing object of this [`AsyncFd`].
     #[inline]
+    #[no_panic]
     pub fn get_mut(&mut self) -> &mut T {
         self.inner.as_mut().unwrap()
     }
 
+    //#[no_panic]
     fn take_inner(&mut self) -> Option<T> {
         let fd = self.inner.as_ref().map(AsRawFd::as_raw_fd);
 
@@ -245,6 +253,7 @@ impl<T: AsRawFd> AsyncFd<T> {
 
     /// Deregisters this file descriptor and returns ownership of the backing
     /// object.
+    #[no_panic]
     pub fn into_inner(mut self) -> T {
         self.take_inner().unwrap()
     }
@@ -276,6 +285,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// [`Context`]: struct@std::task::Context
     /// [`Waker`]: struct@std::task::Waker
     /// [`Waker::wake`]: method@std::task::Waker::wake
+    #[no_panic]
     pub fn poll_read_ready<'a>(
         &'a self,
         cx: &mut Context<'_>,
@@ -314,6 +324,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// [`Context`]: struct@std::task::Context
     /// [`Waker`]: struct@std::task::Waker
     /// [`Waker::wake`]: method@std::task::Waker::wake
+    #[no_panic]
     pub fn poll_read_ready_mut<'a>(
         &'a mut self,
         cx: &mut Context<'_>,
@@ -354,6 +365,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// [`Context`]: struct@std::task::Context
     /// [`Waker`]: struct@std::task::Waker
     /// [`Waker::wake`]: method@std::task::Waker::wake
+    #[no_panic]
     pub fn poll_write_ready<'a>(
         &'a self,
         cx: &mut Context<'_>,
@@ -392,6 +404,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// [`Context`]: struct@std::task::Context
     /// [`Waker`]: struct@std::task::Waker
     /// [`Waker::wake`]: method@std::task::Waker::wake
+    #[no_panic]
     pub fn poll_write_ready_mut<'a>(
         &'a mut self,
         cx: &mut Context<'_>,
@@ -405,6 +418,7 @@ impl<T: AsRawFd> AsyncFd<T> {
         .into()
     }
 
+    #[no_panic]
     async fn readiness(&self, interest: Interest) -> io::Result<AsyncFdReadyGuard<'_, T>> {
         let event = self.registration.readiness(interest).await?;
 
@@ -414,6 +428,7 @@ impl<T: AsRawFd> AsyncFd<T> {
         })
     }
 
+    #[no_panic]
     async fn readiness_mut(
         &mut self,
         interest: Interest,
@@ -435,6 +450,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// provides shared access to the inner IO resource when handling the
     /// [`AsyncFdReadyGuard`].
     #[allow(clippy::needless_lifetimes)] // The lifetime improves rustdoc rendering.
+    #[no_panic]
     pub async fn readable<'a>(&'a self) -> io::Result<AsyncFdReadyGuard<'a, T>> {
         self.readiness(Interest::READABLE).await
     }
@@ -446,6 +462,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// This method takes `&mut self`, so it is possible to access the inner IO
     /// resource mutably when handling the [`AsyncFdReadyMutGuard`].
     #[allow(clippy::needless_lifetimes)] // The lifetime improves rustdoc rendering.
+    #[no_panic]
     pub async fn readable_mut<'a>(&'a mut self) -> io::Result<AsyncFdReadyMutGuard<'a, T>> {
         self.readiness_mut(Interest::READABLE).await
     }
@@ -459,6 +476,7 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// provides shared access to the inner IO resource when handling the
     /// [`AsyncFdReadyGuard`].
     #[allow(clippy::needless_lifetimes)] // The lifetime improves rustdoc rendering.
+    #[no_panic]
     pub async fn writable<'a>(&'a self) -> io::Result<AsyncFdReadyGuard<'a, T>> {
         self.readiness(Interest::WRITABLE).await
     }
@@ -470,18 +488,21 @@ impl<T: AsRawFd> AsyncFd<T> {
     /// This method takes `&mut self`, so it is possible to access the inner IO
     /// resource mutably when handling the [`AsyncFdReadyMutGuard`].
     #[allow(clippy::needless_lifetimes)] // The lifetime improves rustdoc rendering.
+    #[no_panic]
     pub async fn writable_mut<'a>(&'a mut self) -> io::Result<AsyncFdReadyMutGuard<'a, T>> {
         self.readiness_mut(Interest::WRITABLE).await
     }
 }
 
 impl<T: AsRawFd> AsRawFd for AsyncFd<T> {
+    #[no_panic]
     fn as_raw_fd(&self) -> RawFd {
         self.inner.as_ref().unwrap().as_raw_fd()
     }
 }
 
 impl<T: std::fmt::Debug + AsRawFd> std::fmt::Debug for AsyncFd<T> {
+    #[no_panic]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("AsyncFd")
             .field("inner", &self.inner)
@@ -490,6 +511,7 @@ impl<T: std::fmt::Debug + AsRawFd> std::fmt::Debug for AsyncFd<T> {
 }
 
 impl<T: AsRawFd> Drop for AsyncFd<T> {
+    //#[no_panic]
     fn drop(&mut self) {
         let _ = self.take_inner();
     }
@@ -506,6 +528,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyGuard<'a, Inner> {
     /// when a read is observed to block.
     ///
     /// [`drop`]: method@std::mem::drop
+    #[no_panic]
     pub fn clear_ready(&mut self) {
         if let Some(event) = self.event.take() {
             self.async_fd.registration.clear_readiness(event);
@@ -517,6 +540,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyGuard<'a, Inner> {
     ///
     /// While this function is itself a no-op, it satisfies the `#[must_use]`
     /// constraint on the [`AsyncFdReadyGuard`] type.
+    #[no_panic]
     pub fn retain_ready(&mut self) {
         // no-op
     }
@@ -539,6 +563,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyGuard<'a, Inner> {
     /// [`WouldBlock`]: std::io::ErrorKind::WouldBlock
     // Alias for old name in 0.x
     #[cfg_attr(docsrs, doc(alias = "with_io"))]
+    #[no_panic]
     pub fn try_io<R>(
         &mut self,
         f: impl FnOnce(&'a AsyncFd<Inner>) -> io::Result<R>,
@@ -558,11 +583,13 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyGuard<'a, Inner> {
     }
 
     /// Returns a shared reference to the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_ref(&self) -> &'a AsyncFd<Inner> {
         self.async_fd
     }
 
     /// Returns a shared reference to the backing object of the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_inner(&self) -> &'a Inner {
         self.get_ref().get_ref()
     }
@@ -579,6 +606,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyMutGuard<'a, Inner> {
     /// when a read is observed to block.
     ///
     /// [`drop`]: method@std::mem::drop
+    #[no_panic]
     pub fn clear_ready(&mut self) {
         if let Some(event) = self.event.take() {
             self.async_fd.registration.clear_readiness(event);
@@ -590,6 +618,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyMutGuard<'a, Inner> {
     ///
     /// While this function is itself a no-op, it satisfies the `#[must_use]`
     /// constraint on the [`AsyncFdReadyGuard`] type.
+    #[no_panic]
     pub fn retain_ready(&mut self) {
         // no-op
     }
@@ -610,6 +639,7 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyMutGuard<'a, Inner> {
     /// create this `AsyncFdReadyGuard`.
     ///
     /// [`WouldBlock`]: std::io::ErrorKind::WouldBlock
+    #[no_panic]
     pub fn try_io<R>(
         &mut self,
         f: impl FnOnce(&mut AsyncFd<Inner>) -> io::Result<R>,
@@ -629,27 +659,32 @@ impl<'a, Inner: AsRawFd> AsyncFdReadyMutGuard<'a, Inner> {
     }
 
     /// Returns a shared reference to the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_ref(&self) -> &AsyncFd<Inner> {
         self.async_fd
     }
 
     /// Returns a mutable reference to the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_mut(&mut self) -> &mut AsyncFd<Inner> {
         self.async_fd
     }
 
     /// Returns a shared reference to the backing object of the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_inner(&self) -> &Inner {
         self.get_ref().get_ref()
     }
 
     /// Returns a mutable reference to the backing object of the inner [`AsyncFd`].
+    #[no_panic]
     pub fn get_inner_mut(&mut self) -> &mut Inner {
         self.get_mut().get_mut()
     }
 }
 
 impl<'a, T: std::fmt::Debug + AsRawFd> std::fmt::Debug for AsyncFdReadyGuard<'a, T> {
+    #[no_panic]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ReadyGuard")
             .field("async_fd", &self.async_fd)
@@ -658,6 +693,7 @@ impl<'a, T: std::fmt::Debug + AsRawFd> std::fmt::Debug for AsyncFdReadyGuard<'a,
 }
 
 impl<'a, T: std::fmt::Debug + AsRawFd> std::fmt::Debug for AsyncFdReadyMutGuard<'a, T> {
+    #[no_panic]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("MutReadyGuard")
             .field("async_fd", &self.async_fd)
