@@ -3,6 +3,8 @@ use crate::fs::asyncify;
 use std::io;
 use std::path::Path;
 
+//use no_panic::no_panic;
+
 /// Creates a new hard link on the filesystem.
 ///
 /// This is an async version of [`std::fs::hard_link`][std]
@@ -38,6 +40,7 @@ use std::path::Path;
 ///     Ok(())
 /// }
 /// ```
+//#[no_panic]
 pub async fn hard_link(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> {
     let src = src.as_ref().to_owned();
     let dst = dst.as_ref().to_owned();

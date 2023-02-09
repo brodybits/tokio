@@ -98,6 +98,9 @@ autocfg = "1.1"
 
 [dependencies]
 tokio-macros = { version = "1.7.0", path = "../tokio-macros", optional = true }
+#no-panic = { git="https://github.com/brodybits/no-panic" }
+#no-panic = { path = "../../no-panic" }
+no-panic = { git="https://github.com/brodybits/no-panic" }
 
 pin-project-lite = "0.2.0"
 

@@ -3,6 +3,8 @@ use crate::fs::asyncify;
 use std::io;
 use std::path::Path;
 
+use no_panic::no_panic;
+
 /// A builder for creating directories in various manners.
 ///
 /// This is a specialized version of [`std::fs::DirBuilder`] for usage on
@@ -34,6 +36,7 @@ impl DirBuilder {
     ///
     /// let builder = DirBuilder::new();
     /// ```
+    //#[no_panic]
     pub fn new() -> Self {
         Default::default()
     }
@@ -55,6 +58,7 @@ impl DirBuilder {
     /// let mut builder = DirBuilder::new();
     /// builder.recursive(true);
     /// ```
+    //#[no_panic]
     pub fn recursive(&mut self, recursive: bool) -> &mut Self {
         self.recursive = recursive;
         self
@@ -96,6 +100,7 @@ impl DirBuilder {
     ///     Ok(())
     /// }
     /// ```
+    //#[no_panic]
     pub async fn create(&self, path: impl AsRef<Path>) -> io::Result<()> {
         let path = path.as_ref().to_owned();
         let mut builder = std::fs::DirBuilder::new();
@@ -129,6 +134,7 @@ feature! {
         /// let mut builder = DirBuilder::new();
         /// builder.mode(0o775);
         /// ```
+        #[no_panic]
         pub fn mode(&mut self, mode: u32) -> &mut Self {
             self.mode = Some(mode);
             self

@@ -3,6 +3,8 @@ use crate::fs::asyncify;
 use std::io;
 use std::path::{Path, PathBuf};
 
+use no_panic::no_panic;
+
 /// Returns the canonical, absolute form of a path with all intermediate
 /// components normalized and symbolic links resolved.
 ///
@@ -45,6 +47,7 @@ use std::path::{Path, PathBuf};
 ///     Ok(())
 /// }
 /// ```
+#[no_panic]
 pub async fn canonicalize(path: impl AsRef<Path>) -> io::Result<PathBuf> {
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::canonicalize(path)).await

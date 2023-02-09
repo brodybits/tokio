@@ -4,6 +4,8 @@ use std::fs::Metadata;
 use std::io;
 use std::path::Path;
 
+//use no_panic::no_panic;
+
 /// Given a path, queries the file system to get information about a file,
 /// directory, etc.
 ///
@@ -41,6 +43,7 @@ use std::path::Path;
 ///     Ok(())
 /// }
 /// ```
+//#[no_panic]
 pub async fn metadata(path: impl AsRef<Path>) -> io::Result<Metadata> {
     let path = path.as_ref().to_owned();
     asyncify(|| std::fs::metadata(path)).await
