@@ -3,6 +3,8 @@ use crate::fs::asyncify;
 use std::io;
 use std::path::Path;
 
+use no_panic::no_panic;
+
 /// Recursively creates a directory and all of its parent components if they
 /// are missing.
 ///
@@ -47,6 +49,7 @@ use std::path::Path;
 ///     Ok(())
 /// }
 /// ```
+#[no_panic]
 pub async fn create_dir_all(path: impl AsRef<Path>) -> io::Result<()> {
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::create_dir_all(path)).await

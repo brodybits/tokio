@@ -155,6 +155,7 @@ impl File {
     ///
     /// [`read_to_end`]: fn@crate::io::AsyncReadExt::read_to_end
     /// [`AsyncReadExt`]: trait@crate::io::AsyncReadExt
+    //#[no_panic]
     pub async fn open(path: impl AsRef<Path>) -> io::Result<File> {
         let path = path.as_ref().to_owned();
         let std = asyncify(|| StdFile::open(path)).await?;
@@ -505,6 +506,7 @@ impl File {
 }
 
 impl AsyncRead for File {
+    //#[no_panic]
     fn poll_read(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -573,6 +575,7 @@ impl AsyncRead for File {
 }
 
 impl AsyncSeek for File {
+    //#[no_panic]
     fn start_seek(self: Pin<&mut Self>, mut pos: SeekFrom) -> io::Result<()> {
         let me = self.get_mut();
         let inner = me.inner.get_mut();
@@ -605,6 +608,7 @@ impl AsyncSeek for File {
         }
     }
 
+    //#[no_panic]
     fn poll_complete(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<io::Result<u64>> {
         let inner = self.inner.get_mut();
 
@@ -636,6 +640,7 @@ impl AsyncSeek for File {
 }
 
 impl AsyncWrite for File {
+    //#[no_panic]
     fn poll_write(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
@@ -706,11 +711,13 @@ impl AsyncWrite for File {
         }
     }
 
+    #[no_panic]
     fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         let inner = self.inner.get_mut();
         inner.poll_flush(cx)
     }
 
+    //#[no_panic]
     fn poll_shutdown(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         self.poll_flush(cx)
     }
@@ -734,6 +741,7 @@ impl fmt::Debug for File {
 
 #[cfg(unix)]
 impl std::os::unix::io::AsRawFd for File {
+    //#[no_panic]
     fn as_raw_fd(&self) -> std::os::unix::io::RawFd {
         self.std.as_raw_fd()
     }
@@ -741,6 +749,7 @@ impl std::os::unix::io::AsRawFd for File {
 
 #[cfg(unix)]
 impl std::os::unix::io::FromRawFd for File {
+    #[no_panic]
     unsafe fn from_raw_fd(fd: std::os::unix::io::RawFd) -> Self {
         StdFile::from_raw_fd(fd).into()
     }
@@ -748,6 +757,8 @@ impl std::os::unix::io::FromRawFd for File {
 
 #[cfg(windows)]
 impl std::os::windows::io::AsRawHandle for File {
+    // XXX TBD ???
+    //#[no_panic]
     fn as_raw_handle(&self) -> std::os::windows::io::RawHandle {
         self.std.as_raw_handle()
     }
@@ -755,12 +766,15 @@ impl std::os::windows::io::AsRawHandle for File {
 
 #[cfg(windows)]
 impl std::os::windows::io::FromRawHandle for File {
+    // XXX TBD ???
+    //#[no_panic]
     unsafe fn from_raw_handle(handle: std::os::windows::io::RawHandle) -> Self {
         StdFile::from_raw_handle(handle).into()
     }
 }
 
 impl Inner {
+    //#[no_panic]
     async fn complete_inflight(&mut self) {
         use crate::future::poll_fn;
 
@@ -769,6 +783,7 @@ impl Inner {
         }
     }
 
+    //#[no_panic]
     fn poll_flush(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
         if let Some(e) = self.last_write_err.take() {
             return Ready(Err(e.into()));

@@ -13,6 +13,8 @@ use std::{
     task::{Context, Poll},
 };
 
+use no_panic::no_panic;
+
 mock! {
     #[derive(Debug)]
     pub File {
@@ -54,28 +56,33 @@ mock! {
 }
 
 impl Read for MockFile {
+    #[no_panic]
     fn read(&mut self, dst: &mut [u8]) -> io::Result<usize> {
         self.inner_read(dst)
     }
 }
 
 impl Read for &'_ MockFile {
+    #[no_panic]
     fn read(&mut self, dst: &mut [u8]) -> io::Result<usize> {
         self.inner_read(dst)
     }
 }
 
 impl Seek for &'_ MockFile {
+    #[no_panic]
     fn seek(&mut self, pos: SeekFrom) -> io::Result<u64> {
         self.inner_seek(pos)
     }
 }
 
 impl Write for &'_ MockFile {
+    #[no_panic]
     fn write(&mut self, src: &[u8]) -> io::Result<usize> {
         self.inner_write(src)
     }
 
+    #[no_panic]
     fn flush(&mut self) -> io::Result<()> {
         self.inner_flush()
     }
@@ -90,6 +97,7 @@ pub(super) struct JoinHandle<T> {
     rx: oneshot::Receiver<T>,
 }
 
+    #[no_panic]
 pub(super) fn spawn_blocking<F, R>(f: F) -> JoinHandle<R>
 where
     F: FnOnce() -> R + Send + 'static,
@@ -105,6 +113,7 @@ where
     JoinHandle { rx }
 }
 
+    #[no_panic]
 pub(super) fn spawn_mandatory_blocking<F, R>(f: F) -> Option<JoinHandle<R>>
 where
     F: FnOnce() -> R + Send + 'static,
@@ -123,6 +132,7 @@ where
 impl<T> Future for JoinHandle<T> {
     type Output = Result<T, io::Error>;
 
+    #[no_panic]
     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         use std::task::Poll::*;
 
@@ -137,10 +147,12 @@ impl<T> Future for JoinHandle<T> {
 pub(super) mod pool {
     use super::*;
 
+    #[no_panic]
     pub(in super::super) fn len() -> usize {
         QUEUE.with(|cell| cell.borrow().len())
     }
 
+    #[no_panic]
     pub(in super::super) fn run_one() {
         let task = QUEUE
             .with(|cell| cell.borrow_mut().pop_front())
