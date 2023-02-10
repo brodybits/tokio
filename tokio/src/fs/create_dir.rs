@@ -3,6 +3,8 @@ use crate::fs::asyncify;
 use std::io;
 use std::path::Path;
 
+//use no_panic::no_panic;
+
 /// Creates a new, empty directory at the provided path.
 ///
 /// This is an async version of [`std::fs::create_dir`][std]
@@ -46,6 +48,7 @@ use std::path::Path;
 ///     Ok(())
 /// }
 /// ```
+//#[no_panic]
 pub async fn create_dir(path: impl AsRef<Path>) -> io::Result<()> {
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::create_dir(path)).await
