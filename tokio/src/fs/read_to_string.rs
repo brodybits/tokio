@@ -2,6 +2,8 @@ use crate::fs::asyncify;
 
 use std::{io, path::Path};
 
+//use no_panic::no_panic;
+
 /// Creates a future which will open a file for reading and read the entire
 /// contents into a string and return said string.
 ///
@@ -24,6 +26,7 @@ use std::{io, path::Path};
 /// # Ok(())
 /// # }
 /// ```
+//#[no_panic]
 pub async fn read_to_string(path: impl AsRef<Path>) -> io::Result<String> {
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::read_to_string(path)).await

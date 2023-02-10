@@ -10,6 +10,8 @@ use mock_open_options::MockOpenOptions as StdOpenOptions;
 #[cfg(not(test))]
 use std::fs::OpenOptions as StdOpenOptions;
 
+use no_panic::no_panic;
+
 /// Options and flags which can be used to configure how a file is opened.
 ///
 /// This builder exposes the ability to configure how a [`File`] is opened and
@@ -95,6 +97,7 @@ impl OpenOptions {
     /// let mut options = OpenOptions::new();
     /// let future = options.read(true).open("foo.txt");
     /// ```
+    #[no_panic]
     pub fn new() -> OpenOptions {
         OpenOptions(StdOpenOptions::new())
     }
@@ -124,6 +127,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn read(&mut self, read: bool) -> &mut OpenOptions {
         self.0.read(read);
         self
@@ -154,6 +158,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn write(&mut self, write: bool) -> &mut OpenOptions {
         self.0.write(write);
         self
@@ -213,6 +218,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn append(&mut self, append: bool) -> &mut OpenOptions {
         self.0.append(append);
         self
@@ -246,6 +252,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn truncate(&mut self, truncate: bool) -> &mut OpenOptions {
         self.0.truncate(truncate);
         self
@@ -282,6 +289,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn create(&mut self, create: bool) -> &mut OpenOptions {
         self.0.create(create);
         self
@@ -325,6 +333,7 @@ impl OpenOptions {
     ///     Ok(())
     /// }
     /// ```
+    #[no_panic]
     pub fn create_new(&mut self, create_new: bool) -> &mut OpenOptions {
         self.0.create_new(create_new);
         self
@@ -382,6 +391,7 @@ impl OpenOptions {
     /// [`NotFound`]: std::io::ErrorKind::NotFound
     /// [`Other`]: std::io::ErrorKind::Other
     /// [`PermissionDenied`]: std::io::ErrorKind::PermissionDenied
+    #[no_panic]
     pub async fn open(&self, path: impl AsRef<Path>) -> io::Result<File> {
         let path = path.as_ref().to_owned();
         let opts = self.0.clone();
@@ -391,6 +401,7 @@ impl OpenOptions {
     }
 
     /// Returns a mutable reference to the underlying `std::fs::OpenOptions`
+    #[no_panic]
     pub(super) fn as_inner_mut(&mut self) -> &mut StdOpenOptions {
         &mut self.0
     }
@@ -425,6 +436,7 @@ feature! {
         ///     Ok(())
         /// }
         /// ```
+        #[no_panic]
         pub fn mode(&mut self, mode: u32) -> &mut OpenOptions {
             self.as_inner_mut().mode(mode);
             self
@@ -457,6 +469,7 @@ feature! {
         ///     Ok(())
         /// }
         /// ```
+        #[no_panic]
         pub fn custom_flags(&mut self, flags: i32) -> &mut OpenOptions {
             self.as_inner_mut().custom_flags(flags);
             self
@@ -493,6 +506,7 @@ feature! {
         /// ```
         ///
         /// [`CreateFile`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
+        #[no_panic]
         pub fn access_mode(&mut self, access: u32) -> &mut OpenOptions {
             self.as_inner_mut().access_mode(access);
             self
@@ -526,6 +540,7 @@ feature! {
         /// ```
         ///
         /// [`CreateFile`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
+        #[no_panic]
         pub fn share_mode(&mut self, share: u32) -> &mut OpenOptions {
             self.as_inner_mut().share_mode(share);
             self
@@ -558,6 +573,7 @@ feature! {
         ///
         /// [`CreateFile`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
         /// [`CreateFile2`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfile2
+        #[no_panic]
         pub fn custom_flags(&mut self, flags: u32) -> &mut OpenOptions {
             self.as_inner_mut().custom_flags(flags);
             self
@@ -597,6 +613,7 @@ feature! {
         ///
         /// [`CreateFile`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
         /// [`CreateFile2`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfile2
+        #[no_panic]
         pub fn attributes(&mut self, attributes: u32) -> &mut OpenOptions {
             self.as_inner_mut().attributes(attributes);
             self
@@ -645,6 +662,7 @@ feature! {
         /// [`CreateFile2`]: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfile2
         /// [Impersonation Levels]:
         ///     https://docs.microsoft.com/en-us/windows/win32/api/winnt/ne-winnt-security_impersonation_level
+        #[no_panic]
         pub fn security_qos_flags(&mut self, flags: u32) -> &mut OpenOptions {
             self.as_inner_mut().security_qos_flags(flags);
             self
@@ -653,12 +671,14 @@ feature! {
 }
 
 impl From<StdOpenOptions> for OpenOptions {
+    #[no_panic]
     fn from(options: StdOpenOptions) -> OpenOptions {
         OpenOptions(options)
     }
 }
 
 impl Default for OpenOptions {
+    #[no_panic]
     fn default() -> Self {
         Self::new()
     }

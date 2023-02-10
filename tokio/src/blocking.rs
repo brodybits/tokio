@@ -15,6 +15,9 @@ cfg_not_rt! {
     use std::pin::Pin;
     use std::task::{Context, Poll};
 
+    use no_panic::no_panic;
+
+    #[no_panic]
     pub(crate) fn spawn_blocking<F, R>(_f: F) -> JoinHandle<R>
     where
         F: FnOnce() -> R + Send + 'static,
@@ -25,6 +28,7 @@ cfg_not_rt! {
     }
 
     cfg_fs! {
+        #[no_panic]
         pub(crate) fn spawn_mandatory_blocking<F, R>(_f: F) -> Option<JoinHandle<R>>
         where
             F: FnOnce() -> R + Send + 'static,
@@ -44,6 +48,7 @@ cfg_not_rt! {
     impl<R> Future for JoinHandle<R> {
         type Output = Result<R, std::io::Error>;
 
+        #[no_panic]
         fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
             unreachable!()
         }
@@ -53,11 +58,13 @@ cfg_not_rt! {
     where
         T: fmt::Debug,
     {
+        #[no_panic]
         fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
             fmt.debug_struct("JoinHandle").finish()
         }
     }
 
+    #[no_panic]
     fn assert_send_sync<T: Send + Sync>() {
     }
 }

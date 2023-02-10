@@ -20,6 +20,8 @@ use crate::blocking::spawn_blocking;
 #[cfg(not(test))]
 use crate::blocking::JoinHandle;
 
+use no_panic::no_panic;
+
 const CHUNK_SIZE: usize = 32;
 
 /// Returns a stream over the entries within a directory.
@@ -30,6 +32,7 @@ const CHUNK_SIZE: usize = 32;
 /// operation on a separate thread pool using [`spawn_blocking`].
 ///
 /// [`spawn_blocking`]: crate::task::spawn_blocking
+//#[no_panic]
 pub async fn read_dir(path: impl AsRef<Path>) -> io::Result<ReadDir> {
     let path = path.as_ref().to_owned();
     asyncify(|| -> io::Result<ReadDir> {
@@ -76,6 +79,7 @@ impl ReadDir {
     /// # Cancel safety
     ///
     /// This method is cancellation safe.
+    //#[no_panic]
     pub async fn next_entry(&mut self) -> io::Result<Option<DirEntry>> {
         use crate::future::poll_fn;
         poll_fn(|cx| self.poll_next_entry(cx)).await
@@ -133,6 +137,7 @@ impl ReadDir {
         }
     }
 
+    //#[no_panic]
     fn next_chunk(buf: &mut VecDeque<io::Result<DirEntry>>, std: &mut std::fs::ReadDir) {
         for ret in std.by_ref().take(CHUNK_SIZE) {
             let success = ret.is_ok();
@@ -179,6 +184,7 @@ feature! {
         /// # Ok(())
         /// # }
         /// ```
+        #[no_panic]
         pub fn ino(&self) -> u64 {
             self.as_inner().ino()
         }
@@ -237,6 +243,7 @@ impl DirEntry {
     /// ```
     ///
     /// The exact text, of course, depends on what files you have in `.`.
+    #[no_panic]
     pub fn path(&self) -> PathBuf {
         self.std.path()
     }
@@ -258,6 +265,7 @@ impl DirEntry {
     /// # Ok(())
     /// # }
     /// ```
+    //#[no_panic]
     pub fn file_name(&self) -> OsString {
         self.std.file_name()
     }
@@ -292,6 +300,7 @@ impl DirEntry {
     /// # Ok(())
     /// # }
     /// ```
+    #[no_panic]
     pub async fn metadata(&self) -> io::Result<Metadata> {
         let std = self.std.clone();
         asyncify(move || std.metadata()).await
@@ -327,6 +336,7 @@ impl DirEntry {
     /// # Ok(())
     /// # }
     /// ```
+    #[no_panic]
     pub async fn file_type(&self) -> io::Result<FileType> {
         #[cfg(not(any(
             target_os = "solaris",
@@ -344,6 +354,7 @@ impl DirEntry {
 
     /// Returns a reference to the underlying `std::fs::DirEntry`.
     #[cfg(unix)]
+    #[no_panic]
     pub(super) fn as_inner(&self) -> &std::fs::DirEntry {
         &self.std
     }
