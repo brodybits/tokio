@@ -146,6 +146,15 @@ fn tempfile() -> NamedTempFile {
 }
 
 #[tokio::test]
+async fn file_debug_fmt() {
+    let mut tempfile = tempfile();
+
+    let mut file = File::open(tempfile.path()).await.unwrap();
+
+    assert_eq!(&format!("{:?}", file)[0..33], "tokio::fs::File { std: File { fd:");
+}
+
+#[tokio::test]
 #[cfg(unix)]
 async fn unix_fd() {
     use std::os::unix::io::AsRawFd;

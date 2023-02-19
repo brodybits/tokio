@@ -712,7 +712,6 @@ impl From<StdFile> for File {
 
 impl fmt::Debug for File {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        panic!("XXX");
         fmt.debug_struct("tokio::fs::File")
             .field("std", &self.std)
             .finish()
