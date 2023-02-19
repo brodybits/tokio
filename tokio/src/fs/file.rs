@@ -399,7 +399,6 @@ impl File {
     /// # }
     /// ```
     pub async fn try_clone(&self) -> io::Result<File> {
-        panic!("XXX");
         let std = self.std.clone();
         let std_file = asyncify(move || std.try_clone()).await?;
         Ok(File::from_std(std_file))
@@ -424,7 +423,6 @@ impl File {
     /// # }
     /// ```
     pub async fn into_std(mut self) -> StdFile {
-        panic!("XXX");
         self.inner.get_mut().complete_inflight().await;
         Arc::try_unwrap(self.std).expect("Arc::try_unwrap failed")
     }
@@ -450,7 +448,6 @@ impl File {
     /// # }
     /// ```
     pub fn try_into_std(mut self) -> Result<StdFile, Self> {
-        panic!("XXX");
         match Arc::try_unwrap(self.std) {
             Ok(file) => Ok(file),
             Err(std_file_arc) => {

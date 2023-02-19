@@ -87,6 +87,46 @@ async fn coop() {
     panic!("did not yield");
 }
 
+#[tokio::test]
+async fn write_to_clone() {
+    let tempfile = tempfile();
+
+    let mut file = File::create(tempfile.path()).await.unwrap();
+    let mut clone = file.try_clone().await.unwrap();
+
+    clone.write_all(HELLO).await.unwrap();
+    clone.flush().await.unwrap();
+
+    let contents = std::fs::read(tempfile.path()).unwrap();
+    assert_eq!(contents, HELLO);
+}
+
+#[tokio::test]
+async fn write_into_std() {
+    let tempfile = tempfile();
+
+    let mut file = File::create(tempfile.path()).await.unwrap();
+    let mut std = file.into_std().await;
+
+    std.write_all(HELLO);
+
+    let contents = std::fs::read(tempfile.path()).unwrap();
+    assert_eq!(contents, HELLO);
+}
+
+#[tokio::test]
+async fn write_into_std_immediate() {
+    let tempfile = tempfile();
+
+    let mut file = File::create(tempfile.path()).await.unwrap();
+    let mut std = file.try_into_std().unwrap();
+
+    std.write_all(HELLO);
+
+    let contents = std::fs::read(tempfile.path()).unwrap();
+    assert_eq!(contents, HELLO);
+}
+
 fn tempfile() -> NamedTempFile {
     NamedTempFile::new().unwrap()
 }
