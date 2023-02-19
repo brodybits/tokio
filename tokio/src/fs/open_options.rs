@@ -96,6 +96,7 @@ impl OpenOptions {
     /// let future = options.read(true).open("foo.txt");
     /// ```
     pub fn new() -> OpenOptions {
+        panic!("XXX");
         OpenOptions(StdOpenOptions::new())
     }
 

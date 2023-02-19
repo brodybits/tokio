@@ -423,6 +423,7 @@ impl File {
     /// # }
     /// ```
     pub async fn into_std(mut self) -> StdFile {
+        panic!("XXX");
         self.inner.get_mut().complete_inflight().await;
         Arc::try_unwrap(self.std).expect("Arc::try_unwrap failed")
     }
@@ -706,12 +707,14 @@ impl AsyncWrite for File {
 
 impl From<StdFile> for File {
     fn from(std: StdFile) -> Self {
+        panic!("XXX");
         Self::from_std(std)
     }
 }
 
 impl fmt::Debug for File {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        panic!("XXX");
         fmt.debug_struct("tokio::fs::File")
             .field("std", &self.std)
             .finish()
@@ -728,6 +731,7 @@ impl std::os::unix::io::AsRawFd for File {
 #[cfg(unix)]
 impl std::os::unix::io::FromRawFd for File {
     unsafe fn from_raw_fd(fd: std::os::unix::io::RawFd) -> Self {
+        panic!("XXX");
         StdFile::from_raw_fd(fd).into()
     }
 }

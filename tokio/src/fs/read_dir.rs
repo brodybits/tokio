@@ -180,6 +180,7 @@ feature! {
         /// # }
         /// ```
         pub fn ino(&self) -> u64 {
+            panic!("XXX");
             self.as_inner().ino()
         }
     }
@@ -238,6 +239,7 @@ impl DirEntry {
     ///
     /// The exact text, of course, depends on what files you have in `.`.
     pub fn path(&self) -> PathBuf {
+        panic!("XXX");
         self.std.path()
     }
 
@@ -259,6 +261,7 @@ impl DirEntry {
     /// # }
     /// ```
     pub fn file_name(&self) -> OsString {
+        panic!("XXX");
         self.std.file_name()
     }
 
@@ -293,6 +296,7 @@ impl DirEntry {
     /// # }
     /// ```
     pub async fn metadata(&self) -> io::Result<Metadata> {
+        panic!("XXX");
         let std = self.std.clone();
         asyncify(move || std.metadata()).await
     }
@@ -328,6 +332,8 @@ impl DirEntry {
     /// # }
     /// ```
     pub async fn file_type(&self) -> io::Result<FileType> {
+        panic!("XXX");
+
         #[cfg(not(any(
             target_os = "solaris",
             target_os = "illumos",
@@ -345,6 +351,7 @@ impl DirEntry {
     /// Returns a reference to the underlying `std::fs::DirEntry`.
     #[cfg(unix)]
     pub(super) fn as_inner(&self) -> &std::fs::DirEntry {
+        panic!("XXX");
         &self.std
     }
 }
