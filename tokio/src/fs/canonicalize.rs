@@ -46,7 +46,7 @@ use std::path::{Path, PathBuf};
 /// }
 /// ```
 pub async fn canonicalize(path: impl AsRef<Path>) -> io::Result<PathBuf> {
-    panic!("XXX");
+    //panic!("XXX");
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::canonicalize(path)).await
 }
