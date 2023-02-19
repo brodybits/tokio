@@ -728,7 +728,6 @@ impl std::os::unix::io::AsRawFd for File {
 #[cfg(unix)]
 impl std::os::unix::io::FromRawFd for File {
     unsafe fn from_raw_fd(fd: std::os::unix::io::RawFd) -> Self {
-        panic!("XXX");
         StdFile::from_raw_fd(fd).into()
     }
 }

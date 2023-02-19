@@ -156,12 +156,33 @@ async fn file_debug_fmt() {
 
 #[tokio::test]
 #[cfg(unix)]
-async fn unix_fd() {
+async fn unix_fd_is_valid() {
     use std::os::unix::io::AsRawFd;
     let tempfile = tempfile();
 
     let file = File::create(tempfile.path()).await.unwrap();
     assert!(file.as_raw_fd() as u64 > 0);
+}
+
+#[tokio::test]
+#[cfg(unix)]
+async fn read_file_from_unix_fd() {
+    use std::os::unix::io::AsRawFd;
+    use std::os::unix::io::FromRawFd;
+
+    let mut tempfile = tempfile();
+    tempfile.write_all(HELLO).unwrap();
+
+    let file1 = File::open(tempfile.path()).await.unwrap();
+    let raw_fd = file1.as_raw_fd();
+    assert!(raw_fd > 0);
+
+    let mut file2 = unsafe { File::from_raw_fd(raw_fd) };
+
+    let mut buf = [0; 1024];
+    let n = file2.read(&mut buf).await.unwrap();
+    assert_eq!(n, HELLO.len());
+    assert_eq!(&buf[..n], HELLO);
 }
 
 #[tokio::test]
