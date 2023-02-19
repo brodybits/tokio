@@ -706,7 +706,6 @@ impl AsyncWrite for File {
 
 impl From<StdFile> for File {
     fn from(std: StdFile) -> Self {
-        panic!("XXX");
         Self::from_std(std)
     }
 }

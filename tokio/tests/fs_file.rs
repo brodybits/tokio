@@ -127,6 +127,20 @@ async fn write_into_std_immediate() {
     assert_eq!(contents, HELLO);
 }
 
+#[tokio::test]
+async fn read_file_from_std() {
+    let mut tempfile = tempfile();
+    tempfile.write_all(HELLO).unwrap();
+
+    let mut std_file = std::fs::File::open(tempfile.path()).unwrap();
+    let mut file = File::from(std_file);
+
+    let mut buf = [0; 1024];
+    let n = file.read(&mut buf).await.unwrap();
+    assert_eq!(n, HELLO.len());
+    assert_eq!(&buf[..n], HELLO);
+}
+
 fn tempfile() -> NamedTempFile {
     NamedTempFile::new().unwrap()
 }
