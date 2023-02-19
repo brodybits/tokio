@@ -180,7 +180,7 @@ feature! {
         /// # }
         /// ```
         pub fn ino(&self) -> u64 {
-            panic!("XXX");
+            //panic!("XXX");
             self.as_inner().ino()
         }
     }
@@ -261,7 +261,7 @@ impl DirEntry {
     /// # }
     /// ```
     pub fn file_name(&self) -> OsString {
-        panic!("XXX");
+        //panic!("XXX");
         self.std.file_name()
     }
 
@@ -351,7 +351,7 @@ impl DirEntry {
     /// Returns a reference to the underlying `std::fs::DirEntry`.
     #[cfg(unix)]
     pub(super) fn as_inner(&self) -> &std::fs::DirEntry {
-        panic!("XXX");
+        //panic!("XXX");
         &self.std
     }
 }
