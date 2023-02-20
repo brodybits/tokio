@@ -10,6 +10,7 @@ use std::path::Path;
 ///
 /// [std]: fn@std::fs::set_permissions
 pub async fn set_permissions(path: impl AsRef<Path>, perm: Permissions) -> io::Result<()> {
+    assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
     let path = path.as_ref().to_owned();
     asyncify(|| std::fs::set_permissions(path, perm)).await
 }

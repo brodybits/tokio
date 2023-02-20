@@ -399,6 +399,7 @@ impl File {
     /// # }
     /// ```
     pub async fn try_clone(&self) -> io::Result<File> {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         let std = self.std.clone();
         let std_file = asyncify(move || std.try_clone()).await?;
         Ok(File::from_std(std_file))
@@ -423,6 +424,7 @@ impl File {
     /// # }
     /// ```
     pub async fn into_std(mut self) -> StdFile {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         self.inner.get_mut().complete_inflight().await;
         Arc::try_unwrap(self.std).expect("Arc::try_unwrap failed")
     }
@@ -448,6 +450,7 @@ impl File {
     /// # }
     /// ```
     pub fn try_into_std(mut self) -> Result<StdFile, Self> {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         match Arc::try_unwrap(self.std) {
             Ok(file) => Ok(file),
             Err(std_file_arc) => {
@@ -706,12 +709,14 @@ impl AsyncWrite for File {
 
 impl From<StdFile> for File {
     fn from(std: StdFile) -> Self {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         Self::from_std(std)
     }
 }
 
 impl fmt::Debug for File {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         fmt.debug_struct("tokio::fs::File")
             .field("std", &self.std)
             .finish()
@@ -728,6 +733,7 @@ impl std::os::unix::io::AsRawFd for File {
 #[cfg(unix)]
 impl std::os::unix::io::FromRawFd for File {
     unsafe fn from_raw_fd(fd: std::os::unix::io::RawFd) -> Self {
+        assert_eq!(std::env::var("PANIC_UNLESS").unwrap(), "XXX");
         StdFile::from_raw_fd(fd).into()
     }
 }
