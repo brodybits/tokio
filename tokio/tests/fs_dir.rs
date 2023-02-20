@@ -85,3 +85,15 @@ async fn read_inherent() {
         vec!["aa".to_string(), "bb".to_string(), "cc".to_string()]
     );
 }
+
+#[tokio::test]
+async fn canonicalize_dir() {
+    assert_eq!(
+        fs::canonicalize("/.")
+            .await
+            .expect("result")
+            .to_str()
+            .unwrap(),
+        "/"
+    );
+}
