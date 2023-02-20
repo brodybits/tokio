@@ -130,6 +130,7 @@ feature! {
         /// builder.mode(0o775);
         /// ```
         pub fn mode(&mut self, mode: u32) -> &mut Self {
+            panic!("XXX");
             self.mode = Some(mode);
             self
         }
