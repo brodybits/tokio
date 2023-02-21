@@ -12,6 +12,7 @@ use std::path::Path;
 ///
 /// [std]: std::os::windows::fs::symlink_dir
 pub async fn symlink_dir(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> {
+    assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
     let src = src.as_ref().to_owned();
     let dst = dst.as_ref().to_owned();
 

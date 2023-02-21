@@ -9,6 +9,7 @@ use std::path::Path;
 ///
 /// [std]: fn@std::fs::remove_dir_all
 pub async fn remove_dir_all(path: impl AsRef<Path>) -> io::Result<()> {
+    assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
     let path = path.as_ref().to_owned();
     asyncify(move || std::fs::remove_dir_all(path)).await
 }
