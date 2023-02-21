@@ -238,7 +238,6 @@ impl DirEntry {
     ///
     /// The exact text, of course, depends on what files you have in `.`.
     pub fn path(&self) -> PathBuf {
-        assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
         self.std.path()
     }
 
@@ -294,7 +293,6 @@ impl DirEntry {
     /// # }
     /// ```
     pub async fn metadata(&self) -> io::Result<Metadata> {
-        assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
         let std = self.std.clone();
         asyncify(move || std.metadata()).await
     }
@@ -330,8 +328,6 @@ impl DirEntry {
     /// # }
     /// ```
     pub async fn file_type(&self) -> io::Result<FileType> {
-        assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
-
         #[cfg(not(any(
             target_os = "solaris",
             target_os = "illumos",
