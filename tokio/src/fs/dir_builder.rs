@@ -130,7 +130,6 @@ feature! {
         /// builder.mode(0o775);
         /// ```
         pub fn mode(&mut self, mode: u32) -> &mut Self {
-            assert_eq!(std::env::var("PANIC_UNLESS_XXX").unwrap(), "XXX");
             self.mode = Some(mode);
             self
         }
