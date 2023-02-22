@@ -58,5 +58,5 @@ async fn open_options_mode() {
 
 #[tokio::test]
 async fn open_options_custom_flags() {
-    assert!(format!("{:?}", OpenOptions::new().custom_flags(libc::O_NOFOLLOW)).contains("custom_flags: 131072"));
+    assert!(format!("{:?}", OpenOptions::new().custom_flags(libc::O_TRUNC)).contains("custom_flags: 1024"));
 }
