@@ -146,12 +146,23 @@ fn tempfile() -> NamedTempFile {
 }
 
 #[tokio::test]
+#[cfg(unix)]
 async fn file_debug_fmt() {
     let tempfile = tempfile();
 
     let file = File::open(tempfile.path()).await.unwrap();
 
     assert_eq!(&format!("{:?}", file)[0..33], "tokio::fs::File { std: File { fd:");
+}
+
+#[tokio::test]
+#[cfg(windows)]
+async fn file_debug_fmt() {
+    let tempfile = tempfile();
+
+    let file = File::open(tempfile.path()).await.unwrap();
+
+    assert_eq!(&format!("{:?}", file)[0..37], "tokio::fs::File { std: File { handle:");
 }
 
 #[tokio::test]
