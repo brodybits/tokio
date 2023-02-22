@@ -46,6 +46,29 @@ async fn build_dir() {
 }
 
 #[tokio::test]
+async fn build_dir_mode() {
+    let base_dir = tempdir().unwrap();
+    let new_dir = base_dir.path().join("abc");
+
+    assert_ok!(
+        fs::DirBuilder::new()
+            .recursive(true)
+            .mode(0o444)
+            .create(new_dir.clone())
+            .await
+    );
+
+    assert_eq!(
+        fs::metadata(new_dir)
+            .await
+            .expect("metadata result")
+            .permissions()
+            .readonly(),
+        true
+    );
+}
+
+#[tokio::test]
 async fn remove() {
     let base_dir = tempdir().unwrap();
     let new_dir = base_dir.path().join("foo");
