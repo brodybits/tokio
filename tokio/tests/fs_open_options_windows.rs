@@ -2,10 +2,7 @@
 #![cfg(all(feature = "full", not(tokio_wasi)))] // Wasi does not support file operations
 #![cfg(windows)]
 
-//use std::io::Write;
-//use tempfile::NamedTempFile;
 use tokio::fs::OpenOptions;
-//use tokio::io::AsyncReadExt;
 use windows_sys::Win32::Storage::FileSystem;
 
 #[tokio::test]
