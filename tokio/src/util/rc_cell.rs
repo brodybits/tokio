@@ -1,6 +1,7 @@
 use crate::loom::cell::UnsafeCell;
 
-use std::rc::Rc;
+extern crate alloc;
+use alloc::rc::Rc;
 
 /// This is exactly like `Cell<Option<Rc<T>>>`, except that it provides a `get`
 /// method even though `Rc` is not `Copy`.

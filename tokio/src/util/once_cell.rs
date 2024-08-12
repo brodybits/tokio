@@ -1,6 +1,8 @@
 #![allow(dead_code)]
-use std::cell::UnsafeCell;
-use std::mem::MaybeUninit;
+use core::cell::UnsafeCell;
+use core::mem::MaybeUninit;
+
+extern crate std; // XXX
 use std::sync::Once;
 
 pub(crate) struct OnceCell<T> {
@@ -52,7 +54,7 @@ impl<T> OnceCell<T> {
             // `call_once` until it has run exactly once. Thus, we have
             // exclusive access to `value`.
             unsafe {
-                std::ptr::write(value_ptr, set_to);
+                core::ptr::write(value_ptr, set_to);
             }
         });
     }
@@ -63,7 +65,7 @@ impl<T> Drop for OnceCell<T> {
         if self.once.is_completed() {
             let value_ptr = self.value.get() as *mut T;
             unsafe {
-                std::ptr::drop_in_place(value_ptr);
+                core::ptr::drop_in_place(value_ptr);
             }
         }
     }

@@ -25,7 +25,8 @@ cfg_rt_multi_thread! {
     }
 }
 
-use crate::runtime::driver;
+// XXX XXX
+// use crate::runtime::driver;
 
 #[derive(Debug, Clone)]
 pub(crate) enum Handle {
@@ -57,22 +58,23 @@ pub(super) enum Context {
 }
 
 impl Handle {
-    #[cfg_attr(not(feature = "full"), allow(dead_code))]
-    pub(crate) fn driver(&self) -> &driver::Handle {
-        match *self {
-            #[cfg(feature = "rt")]
-            Handle::CurrentThread(ref h) => &h.driver,
+    // XXX TBD XXX
+    // #[cfg_attr(not(feature = "full"), allow(dead_code))]
+    // pub(crate) fn driver(&self) -> &driver::Handle {
+    //     match *self {
+    //         #[cfg(feature = "rt")]
+    //         Handle::CurrentThread(ref h) => &h.driver,
 
-            #[cfg(feature = "rt-multi-thread")]
-            Handle::MultiThread(ref h) => &h.driver,
+    //         #[cfg(feature = "rt-multi-thread")]
+    //         Handle::MultiThread(ref h) => &h.driver,
 
-            #[cfg(all(tokio_unstable, feature = "rt-multi-thread"))]
-            Handle::MultiThreadAlt(ref h) => &h.driver,
+    //         #[cfg(all(tokio_unstable, feature = "rt-multi-thread"))]
+    //         Handle::MultiThreadAlt(ref h) => &h.driver,
 
-            #[cfg(not(feature = "rt"))]
-            Handle::Disabled => unreachable!(),
-        }
-    }
+    //         #[cfg(not(feature = "rt"))]
+    //         Handle::Disabled => unreachable!(),
+    //     }
+    // }
 }
 
 cfg_rt! {

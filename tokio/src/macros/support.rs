@@ -10,4 +10,4 @@ cfg_macros! {
 
 pub use core::future::{Future, IntoFuture};
 pub use core::pin::Pin;
-pub use std::task::Poll;
+pub use core::task::Poll;

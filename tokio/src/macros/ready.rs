@@ -1,8 +1,8 @@
 macro_rules! ready {
     ($e:expr $(,)?) => {
         match $e {
-            std::task::Poll::Ready(t) => t,
-            std::task::Poll::Pending => return std::task::Poll::Pending,
+            core::task::Poll::Ready(t) => t,
+            core::task::Poll::Pending => return core::task::Poll::Pending,
         }
     };
 }

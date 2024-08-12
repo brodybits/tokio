@@ -3,8 +3,13 @@
 //! This implementation mirrors that of the Rust standard library.
 
 use crate::loom::sync::{Condvar, Mutex};
-use std::fmt;
-use std::time::{Duration, Instant};
+use core::fmt;
+// use core::time::{Duration, Instant};
+use core::time::Duration;
+
+// XXX XXX XXX
+extern crate std; // XXX TBD XXX
+use std::time::Instant;
 
 /// A barrier enables multiple threads to synchronize the beginning
 /// of some computation.

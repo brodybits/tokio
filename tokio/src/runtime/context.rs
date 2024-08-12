@@ -1,7 +1,7 @@
 use crate::loom::thread::AccessError;
 use crate::runtime::coop;
 
-use std::cell::Cell;
+use core::cell::Cell;
 
 #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
 use crate::util::rand::FastRand;
@@ -21,7 +21,7 @@ cfg_rt! {
 
     use crate::runtime::{scheduler, task::Id};
 
-    use std::task::Waker;
+    use core::task::Waker;
 
     cfg_taskdump! {
         use crate::runtime::task::trace;

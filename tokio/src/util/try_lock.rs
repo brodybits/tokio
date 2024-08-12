@@ -1,5 +1,7 @@
 use crate::loom::sync::atomic::AtomicBool;
 
+extern crate std; // XXX
+
 use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 use std::ops::{Deref, DerefMut};

@@ -4,10 +4,11 @@ use crate::runtime::scheduler::CurrentThread;
 use crate::runtime::{context, EnterGuard, Handle};
 use crate::task::JoinHandle;
 
-use std::future::Future;
-use std::time::Duration;
+use core::future::Future;
+use core::time::Duration;
 
-use std::boxed::Box;
+extern crate alloc;
+use alloc::boxed::Box;
 
 cfg_rt_multi_thread! {
     use crate::runtime::Builder;

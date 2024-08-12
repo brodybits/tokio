@@ -5,7 +5,7 @@ cfg_trace! {
             task::{Context, Poll},
         };
         use pin_project_lite::pin_project;
-        use std::future::Future;
+        use core::future::Future;
         pub(crate) use tracing::instrument::Instrumented;
 
         #[inline]
@@ -86,7 +86,7 @@ cfg_trace! {
 }
 cfg_time! {
     #[track_caller]
-    pub(crate) fn caller_location() -> Option<&'static std::panic::Location<'static>> {
+    pub(crate) fn caller_location() -> Option<&'static core::panic::Location<'static>> {
         #[cfg(all(tokio_unstable, feature = "tracing"))]
         return Some(std::panic::Location::caller());
         #[cfg(not(all(tokio_unstable, feature = "tracing")))]

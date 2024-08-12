@@ -9,14 +9,27 @@ use crate::runtime::task::{self, JoinHandle};
 use crate::runtime::{Builder, Callback, Handle, BOX_FUTURE_THRESHOLD};
 use crate::util::metric_atomics::MetricAtomicUsize;
 
-use std::collections::{HashMap, VecDeque};
-use std::fmt;
-use std::io;
-use std::sync::atomic::Ordering;
-use std::time::Duration;
+// XXX TODO MOVE TO XXX XXX
+extern crate alloc;
 
-use std::boxed::Box;
-use std::string::String;
+// use alloc::collections::{HashMap, VecDeque};
+use alloc::collections::VecDeque;
+
+use core::fmt;
+use core::sync::atomic::Ordering;
+use core::time::Duration;
+
+// use std::io;
+// use std::sync::atomic::Ordering;
+// use std::time::Duration;
+
+use alloc::boxed::Box;
+// use std::string::String;
+
+// XXX XXX XXX
+extern crate std; // XXX TBD XXX
+use std::collections::HashMap;
+use std::io;
 
 pub(crate) struct BlockingPool {
     spawner: Spawner,

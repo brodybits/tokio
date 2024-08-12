@@ -25,10 +25,11 @@ pub(crate) mod future {
 }
 
 pub(crate) mod hint {
-    pub(crate) use std::hint::spin_loop;
+    pub(crate) use core::hint::spin_loop;
 }
 
 pub(crate) mod rand {
+    extern crate std; // XXX TBD XXX
     use std::collections::hash_map::RandomState;
     use std::hash::{BuildHasher, Hash, Hasher};
     use std::sync::atomic::AtomicU32;
@@ -50,6 +51,7 @@ pub(crate) mod rand {
 }
 
 pub(crate) mod sync {
+    extern crate std; // XXX TBD XXX
     pub(crate) use std::sync::{Arc, Weak};
 
     // Below, make sure all the feature-influenced types are exported for
@@ -75,13 +77,14 @@ pub(crate) mod sync {
         pub(crate) use crate::loom::std::atomic_u64::{AtomicU64, StaticAtomicU64};
         pub(crate) use crate::loom::std::atomic_usize::AtomicUsize;
 
-        pub(crate) use std::sync::atomic::{fence, AtomicBool, AtomicPtr, AtomicU8, Ordering};
+        pub(crate) use core::sync::atomic::{fence, AtomicBool, AtomicPtr, AtomicU8, Ordering};
     }
 
     pub(crate) use super::barrier::Barrier;
 }
 
 pub(crate) mod sys {
+    extern crate std; // XXX TBD XXX
     #[cfg(feature = "rt-multi-thread")]
     pub(crate) fn num_cpus() -> usize {
         use std::num::NonZeroUsize;
@@ -118,6 +121,7 @@ pub(crate) mod sys {
 }
 
 pub(crate) mod thread {
+    extern crate std; // XXX TBD XXX
     #[inline]
     pub(crate) fn yield_now() {
         std::hint::spin_loop();

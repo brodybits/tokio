@@ -1,10 +1,10 @@
-use std::cell::UnsafeCell;
-use std::fmt;
-use std::ops::Deref;
+use core::cell::UnsafeCell;
+use core::fmt;
+use core::ops::Deref;
 
 /// `AtomicU16` providing an additional `unsync_load` function.
 pub(crate) struct AtomicU16 {
-    inner: UnsafeCell<std::sync::atomic::AtomicU16>,
+    inner: UnsafeCell<core::sync::atomic::AtomicU16>,
 }
 
 unsafe impl Send for AtomicU16 {}
@@ -12,7 +12,7 @@ unsafe impl Sync for AtomicU16 {}
 
 impl AtomicU16 {
     pub(crate) const fn new(val: u16) -> AtomicU16 {
-        let inner = UnsafeCell::new(std::sync::atomic::AtomicU16::new(val));
+        let inner = UnsafeCell::new(core::sync::atomic::AtomicU16::new(val));
         AtomicU16 { inner }
     }
 
@@ -24,12 +24,12 @@ impl AtomicU16 {
     /// Additionally, there must be no concurrent mutations.
     pub(crate) unsafe fn unsync_load(&self) -> u16 {
         // See <https://github.com/tokio-rs/tokio/issues/6155>
-        self.load(std::sync::atomic::Ordering::Relaxed)
+        self.load(core::sync::atomic::Ordering::Relaxed)
     }
 }
 
 impl Deref for AtomicU16 {
-    type Target = std::sync::atomic::AtomicU16;
+    type Target = core::sync::atomic::AtomicU16;
 
     fn deref(&self) -> &Self::Target {
         // safety: it is always safe to access `&self` fns on the inner value as

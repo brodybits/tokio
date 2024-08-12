@@ -451,7 +451,7 @@
 
 #![no_std]
 
-extern crate std;
+// extern crate std; // XXX TBD ??? ??? ???
 
 // Test that pointer width is compatible. This asserts that e.g. usize is at
 // least 32 bits, which a lot of components in Tokio currently assumes.
@@ -506,9 +506,11 @@ cfg_fs! {
 
 mod future;
 
-pub mod io;
-pub mod net;
+// XXX XXX
+// pub mod io;
+// pub mod net;
 
+// XXX TBD ??? ???
 mod loom;
 
 cfg_process! {
@@ -523,12 +525,13 @@ cfg_process! {
 ))]
 mod blocking;
 
-cfg_rt! {
-    pub mod runtime;
-}
-cfg_not_rt! {
-    pub(crate) mod runtime;
-}
+// XXX TBD XXX XXX
+// cfg_rt! {
+//     pub mod runtime;
+// }
+// cfg_not_rt! {
+//     pub(crate) mod runtime;
+// }
 
 cfg_signal! {
     pub mod signal;
@@ -569,8 +572,8 @@ mod trace {
     cfg_not_taskdump! {
         #[inline(always)]
         #[allow(dead_code)]
-        pub(crate) fn trace_leaf(_: &mut std::task::Context<'_>) -> std::task::Poll<()> {
-            std::task::Poll::Ready(())
+        pub(crate) fn trace_leaf(_: &mut core::task::Context<'_>) -> core::task::Poll<()> {
+            core::task::Poll::Ready(())
         }
     }
 
