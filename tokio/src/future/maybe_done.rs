@@ -83,6 +83,9 @@ mod miri_tests {
         task::{Context, Poll, Wake},
     };
 
+    use std::borrow::ToOwned;
+    use std::string::String;
+
     struct ThingAdder<'a> {
         thing: &'a mut String,
     }

@@ -7,6 +7,8 @@ use std::io::{self, IoSlice, SeekFrom, Write};
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::vec::Vec;
+
 pin_project! {
     /// Wraps a writer and buffers its output.
     ///

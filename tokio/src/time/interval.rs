@@ -7,6 +7,8 @@ use std::panic::Location;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+
 /// Creates new [`Interval`] that yields with interval of `period`. The first
 /// tick completes immediately. The default [`MissedTickBehavior`] is
 /// [`Burst`](MissedTickBehavior::Burst), but this can be configured

@@ -5,6 +5,9 @@ use crate::util::once_cell::OnceCell;
 use std::ops;
 use std::sync::atomic::{AtomicBool, Ordering};
 
+use std::vec;
+use std::vec::Vec;
+
 pub(crate) type EventId = usize;
 
 /// State for a specific event, whether a notification is pending delivery,

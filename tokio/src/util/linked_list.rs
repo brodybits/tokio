@@ -12,6 +12,9 @@ use core::marker::{PhantomData, PhantomPinned};
 use core::mem::ManuallyDrop;
 use core::ptr::{self, NonNull};
 
+// use std::boxed::Box;
+// use std::vec;
+
 /// An intrusive linked list.
 ///
 /// Currently, the list is not emptied on drop. It is the caller's
@@ -470,6 +473,10 @@ pub(crate) mod tests {
     use super::*;
 
     use std::pin::Pin;
+
+    use std::boxed::Box;
+    use std::vec;
+    use std::vec::Vec;
 
     #[derive(Debug)]
     #[repr(C)]

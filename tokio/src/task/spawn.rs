@@ -3,6 +3,8 @@ use crate::task::JoinHandle;
 
 use std::future::Future;
 
+use std::boxed::Box;
+
 cfg_rt! {
     /// Spawns a new asynchronous task, returning a
     /// [`JoinHandle`](JoinHandle) for it.

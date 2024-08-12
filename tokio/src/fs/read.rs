@@ -1,6 +1,8 @@
 use crate::fs::asyncify;
 
+use std::borrow::ToOwned;
 use std::{io, path::Path};
+use std::vec::Vec;
 
 /// Reads the entire contents of a file into a bytes vector.
 ///

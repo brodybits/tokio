@@ -3,6 +3,9 @@ use std::ops::DerefMut;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+use std::vec::Vec;
+
 /// Writes bytes asynchronously.
 ///
 /// The trait inherits from [`std::io::Write`] and indicates that an I/O object is

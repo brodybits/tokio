@@ -18,6 +18,10 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Once;
 use std::task::{Context, Poll};
 
+use std::format;
+
+use std::vec::Vec;
+
 pub(crate) type OsStorage = Vec<SignalInfo>;
 
 impl Init for OsStorage {

@@ -13,6 +13,8 @@ use std::{
     task::{Context, Poll},
 };
 
+use std::boxed::Box;
+
 mock! {
     #[derive(Debug)]
     pub File {

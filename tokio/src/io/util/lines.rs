@@ -7,6 +7,9 @@ use std::mem;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::string::String;
+use std::vec::Vec;
+
 pin_project! {
     /// Reads lines from an [`AsyncBufRead`].
     ///

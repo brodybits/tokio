@@ -5,6 +5,8 @@ use crate::sync::watch;
 use std::io;
 use std::process::ExitStatus;
 
+use std::vec::Vec;
+
 /// An interface for waiting on a process to exit.
 pub(crate) trait Wait {
     /// Get the identifier for this process or diagnostics.

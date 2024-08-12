@@ -9,6 +9,8 @@ use std::mem;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::vec::Vec;
+
 pin_project! {
     /// Future for the [`read_until`](crate::io::AsyncBufReadExt::read_until) method.
     /// The delimiter is included in the resulting vector.

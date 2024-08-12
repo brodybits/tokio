@@ -1,6 +1,11 @@
+use std::borrow::ToOwned;
+
 use std::future;
 use std::io;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, SocketAddrV4, SocketAddrV6};
+
+use std::vec::Vec;
+use std::string::String;
 
 /// Converts or resolves without blocking to one or more `SocketAddr` values.
 ///

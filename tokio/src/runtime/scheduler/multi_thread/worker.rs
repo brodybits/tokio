@@ -75,6 +75,12 @@ use std::task::Waker;
 use std::thread;
 use std::time::Duration;
 
+use std::boxed::Box;
+use std::vec;
+use std::vec::Vec;
+
+use std::eprintln;
+
 cfg_unstable_metrics! {
     mod metrics;
 }

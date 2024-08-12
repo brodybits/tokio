@@ -5,6 +5,8 @@ use crate::sync::mpsc::error::{SendError, TryRecvError};
 use std::fmt;
 use std::task::{Context, Poll};
 
+use std::vec::Vec;
+
 /// Send values to the associated `UnboundedReceiver`.
 ///
 /// Instances are created by the [`unbounded_channel`] function.

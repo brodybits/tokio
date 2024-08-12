@@ -5,6 +5,8 @@ use std::cell::RefCell;
 use std::thread;
 use std::time::Duration;
 
+use std::vec;
+
 #[allow(unused)]
 macro_rules! assert_metrics {
     ($stats:ident, $field:ident == $v:expr) => {
@@ -51,6 +53,7 @@ fn fits_256_one_at_a_time() {
 
 #[test]
 fn fits_256_all_at_once() {
+    use std::vec::Vec;
     let (_, mut local) = queue::local();
 
     let mut tasks = (0..256)
@@ -68,6 +71,7 @@ fn fits_256_all_at_once() {
 
 #[test]
 fn fits_256_all_in_chunks() {
+    use std::vec::Vec;
     let (_, mut local) = queue::local();
 
     let mut tasks = (0..256)

@@ -140,6 +140,9 @@ mod test {
     use std::task::Context;
     use std::task::Poll;
 
+    use std::vec;
+    use std::vec::Vec;
+
     #[derive(Debug)]
     struct MockWait {
         total_kills: usize,

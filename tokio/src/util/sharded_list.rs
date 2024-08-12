@@ -6,6 +6,9 @@ use crate::util::metric_atomics::{MetricAtomicU64, MetricAtomicUsize};
 
 use super::linked_list::{Link, LinkedList};
 
+use std::boxed::Box;
+use std::vec::Vec;
+
 /// An intrusive linked list supporting highly concurrent updates.
 ///
 /// It currently relies on `LinkedList`, so it is the caller's

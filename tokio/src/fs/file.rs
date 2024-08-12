@@ -2,6 +2,7 @@
 //!
 //! [`File`]: File
 
+use std::borrow::ToOwned;
 use crate::fs::{asyncify, OpenOptions};
 use crate::io::blocking::{Buf, DEFAULT_MAX_BUF_SIZE};
 use crate::io::{AsyncRead, AsyncSeek, AsyncWrite, ReadBuf};

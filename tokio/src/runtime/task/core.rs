@@ -22,6 +22,8 @@ use std::pin::Pin;
 use std::ptr::NonNull;
 use std::task::{Context, Poll, Waker};
 
+use std::boxed::Box;
+
 /// The task cell. Contains the components of the task.
 ///
 /// It is critical for `Header` to be the first field as the task structure will

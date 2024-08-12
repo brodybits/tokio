@@ -2,6 +2,7 @@
 use crate::io::AsyncWrite;
 use std::pin::Pin;
 use std::task::{Context, Poll};
+
 /// # Windows
 /// [`AsyncWrite`] adapter that finds last char boundary in given buffer and does not write the rest,
 /// if buffer contents seems to be `utf8`. Otherwise it only trims buffer down to `DEFAULT_MAX_BUF_SIZE`.
@@ -115,6 +116,10 @@ mod tests {
     use std::pin::Pin;
     use std::task::Context;
     use std::task::Poll;
+
+    use std::string::String;
+    use std::vec::Vec;
+    use std::vec;
 
     struct TextMockWriter;
 

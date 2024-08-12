@@ -3,6 +3,8 @@ use std::ops::DerefMut;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+
 /// Seek bytes asynchronously.
 ///
 /// This trait is analogous to the [`std::io::Seek`] trait, but integrates

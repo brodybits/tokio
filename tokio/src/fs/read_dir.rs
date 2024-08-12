@@ -11,6 +11,8 @@ use std::sync::Arc;
 use std::task::Context;
 use std::task::Poll;
 
+use std::borrow::ToOwned;
+
 #[cfg(test)]
 use super::mocks::spawn_blocking;
 #[cfg(test)]

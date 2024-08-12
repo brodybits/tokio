@@ -23,6 +23,8 @@ use std::future::Future;
 use std::marker::PhantomData;
 use std::{error, fmt};
 
+use std::boxed::Box;
+
 /// Runtime context guard.
 ///
 /// Returned by [`Runtime::enter`] and [`Handle::enter`], the context guard exits

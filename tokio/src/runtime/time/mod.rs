@@ -30,6 +30,9 @@ use crate::loom::sync::atomic::AtomicU64;
 use std::fmt;
 use std::{num::NonZeroU64, ptr::NonNull};
 
+use std::boxed::Box;
+use std::vec::Vec;
+
 struct AtomicOptionNonZeroU64(AtomicU64);
 
 // A helper type to store the `next_wake`.

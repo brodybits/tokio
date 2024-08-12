@@ -5,6 +5,8 @@ use std::ops::DerefMut;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+
 /// Reads bytes asynchronously.
 ///
 /// This trait is analogous to [`std::io::BufRead`], but integrates with

@@ -11,6 +11,9 @@ use crate::loom::thread;
 
 use super::TimerEntry;
 
+use std::boxed::Box;
+use std::vec;
+
 fn block_on<T>(f: impl std::future::Future<Output = T>) -> T {
     #[cfg(loom)]
     return loom::future::block_on(f);

@@ -5,6 +5,8 @@
 
 use std::any::Any;
 
+use std::boxed::Box;
+
 pub(crate) struct SyncWrapper<T> {
     value: T,
 }

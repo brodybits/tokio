@@ -7,6 +7,9 @@ use std::ptr::NonNull;
 use std::sync::atomic::Ordering::{Acquire, Release};
 use std::sync::Arc;
 
+use std::vec;
+use std::vec::Vec;
+
 pub(super) struct RegistrationSet {
     num_pending_release: AtomicUsize,
 }

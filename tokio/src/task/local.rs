@@ -17,6 +17,8 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::Poll;
 
+use std::boxed::Box;
+
 use pin_project_lite::pin_project;
 
 cfg_rt! {

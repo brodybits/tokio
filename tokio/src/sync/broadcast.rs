@@ -130,6 +130,9 @@ use std::ptr::NonNull;
 use std::sync::atomic::Ordering::{Acquire, Relaxed, Release, SeqCst};
 use std::task::{Context, Poll, Waker};
 
+use std::boxed::Box;
+use std::vec::Vec;
+
 /// Sending-half of the [`broadcast`] channel.
 ///
 /// May be used from many threads. Messages can be sent with

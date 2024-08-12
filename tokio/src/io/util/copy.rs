@@ -5,6 +5,9 @@ use std::io;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+use std::vec;
+
 #[derive(Debug)]
 pub(super) struct CopyBuffer {
     read_done: bool,

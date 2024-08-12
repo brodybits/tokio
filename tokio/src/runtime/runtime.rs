@@ -7,6 +7,8 @@ use crate::task::JoinHandle;
 use std::future::Future;
 use std::time::Duration;
 
+use std::boxed::Box;
+
 cfg_rt_multi_thread! {
     use crate::runtime::Builder;
     use crate::runtime::scheduler::MultiThread;

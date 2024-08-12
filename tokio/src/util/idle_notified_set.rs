@@ -11,6 +11,8 @@ use std::mem::ManuallyDrop;
 use std::ptr::NonNull;
 use std::task::{Context, Waker};
 
+use std::vec::Vec;
+
 use crate::loom::cell::UnsafeCell;
 use crate::loom::sync::{Arc, Mutex};
 use crate::util::linked_list::{self, Link};

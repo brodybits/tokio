@@ -1,5 +1,7 @@
 use crate::runtime::scheduler::inject;
 
+use std::println;
+
 #[test]
 fn push_and_pop() {
     const N: usize = 2;

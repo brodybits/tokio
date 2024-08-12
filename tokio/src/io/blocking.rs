@@ -8,6 +8,8 @@ use std::io::prelude::*;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::vec::Vec;
+
 /// `T` should not implement _both_ Read and Write.
 #[derive(Debug)]
 pub(crate) struct Blocking<T> {

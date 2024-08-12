@@ -18,6 +18,8 @@ use std::task::Waker;
 use std::time::Duration;
 use std::{fmt, thread};
 
+use std::boxed::Box;
+
 /// Executes tasks on the current thread
 pub(crate) struct CurrentThread {
     /// Core scheduler data is acquired by a thread entering `block_on`.

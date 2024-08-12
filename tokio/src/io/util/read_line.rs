@@ -10,6 +10,9 @@ use std::pin::Pin;
 use std::string::FromUtf8Error;
 use std::task::{Context, Poll};
 
+use std::string::String;
+use std::vec::Vec;
+
 pin_project! {
     /// Future for the [`read_line`](crate::io::AsyncBufReadExt::read_line) method.
     #[derive(Debug)]

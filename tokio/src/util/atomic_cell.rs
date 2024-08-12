@@ -3,6 +3,8 @@ use crate::loom::sync::atomic::AtomicPtr;
 use std::ptr;
 use std::sync::atomic::Ordering::AcqRel;
 
+use std::boxed::Box;
+
 pub(crate) struct AtomicCell<T> {
     data: AtomicPtr<T>,
 }

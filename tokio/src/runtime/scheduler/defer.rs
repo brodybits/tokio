@@ -1,6 +1,8 @@
 use std::cell::RefCell;
 use std::task::Waker;
 
+use std::vec::Vec;
+
 pub(crate) struct Defer {
     deferred: RefCell<Vec<Waker>>,
 }

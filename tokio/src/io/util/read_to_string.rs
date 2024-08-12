@@ -10,6 +10,9 @@ use std::pin::Pin;
 use std::task::{Context, Poll};
 use std::{io, mem};
 
+use std::vec::Vec;
+use std::string::String;
+
 pin_project! {
     /// Future for the [`read_to_string`](super::AsyncReadExt::read_to_string) method.
     #[derive(Debug)]

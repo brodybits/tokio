@@ -9,6 +9,9 @@ use std::mem::{self, MaybeUninit};
 use std::ptr;
 use std::sync::atomic::Ordering::{AcqRel, Acquire, Relaxed, Release};
 
+use std::boxed::Box;
+use std::vec::Vec;
+
 // Use wider integers when possible to increase ABA resilience.
 //
 // See issue #5041: <https://github.com/tokio-rs/tokio/issues/5041>.

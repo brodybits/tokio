@@ -1,5 +1,6 @@
 use crate::fs::asyncify;
 
+use std::borrow::ToOwned;
 use std::{io, path::Path};
 
 /// Creates a future that will open a file for writing and write the entire

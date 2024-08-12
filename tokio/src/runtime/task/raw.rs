@@ -5,6 +5,8 @@ use crate::runtime::task::{Cell, Harness, Header, Id, Schedule, State};
 use std::ptr::NonNull;
 use std::task::{Poll, Waker};
 
+use std::boxed::Box;
+
 /// Raw task handle
 #[derive(Clone)]
 pub(crate) struct RawTask {

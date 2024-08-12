@@ -7,6 +7,8 @@ use std::ops;
 use std::ptr::{self, NonNull};
 use std::sync::atomic::Ordering::{self, AcqRel, Acquire, Release};
 
+use std::boxed::Box;
+
 /// A block in a linked list.
 ///
 /// Each block in the list can hold up to `BLOCK_CAP` messages.

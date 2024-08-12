@@ -6,6 +6,8 @@ use std::fmt;
 use std::io;
 use std::time::Duration;
 
+use std::string::String;
+
 /// Builds Tokio Runtime with custom configuration values.
 ///
 /// Methods can be chained in order to set the configuration values. The

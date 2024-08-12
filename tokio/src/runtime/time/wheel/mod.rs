@@ -7,6 +7,8 @@ use self::level::Level;
 
 use std::{array, ptr::NonNull};
 
+use std::boxed::Box;
+
 use super::EntryList;
 
 /// Timing wheel implementation.

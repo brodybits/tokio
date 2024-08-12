@@ -7,6 +7,9 @@ use std::pin::Pin;
 use std::task::{Context, Poll};
 use std::{cmp, fmt, mem};
 
+use std::boxed::Box;
+use std::vec;
+
 pin_project! {
     /// The `BufReader` struct adds buffering to any reader.
     ///

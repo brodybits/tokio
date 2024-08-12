@@ -15,6 +15,9 @@ use std::io;
 use std::sync::atomic::Ordering;
 use std::time::Duration;
 
+use std::boxed::Box;
+use std::string::String;
+
 pub(crate) struct BlockingPool {
     spawner: Spawner,
     shutdown_rx: shutdown::Receiver,

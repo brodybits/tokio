@@ -4,6 +4,8 @@ use std::ops::DerefMut;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
+use std::boxed::Box;
+
 /// Reads bytes from a source.
 ///
 /// This trait is analogous to the [`std::io::Read`] trait, but integrates with
