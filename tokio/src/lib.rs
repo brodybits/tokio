@@ -558,9 +558,9 @@ cfg_time! {
 }
 
 mod trace {
-    use std::future::Future;
-    use std::pin::Pin;
-    use std::task::{Context, Poll};
+    use core::future::Future;
+    use core::pin::Pin;
+    use core::task::{Context, Poll};
 
     cfg_taskdump! {
         pub(crate) use crate::runtime::task::trace::trace_leaf;
@@ -643,9 +643,9 @@ pub mod doc;
 #[allow(unused)]
 pub(crate) use self::doc::os;
 
-#[cfg(not(docsrs))]
-#[allow(unused)]
-pub(crate) use std::os;
+// #[cfg(not(docsrs))]
+// #[allow(unused)]
+// pub(crate) use std::os;
 
 cfg_macros! {
     /// Implementation detail of the `select!` macro. This macro is **not**

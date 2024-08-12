@@ -10,10 +10,10 @@ cfg_rt! {
 }
 
 cfg_not_rt! {
-    use std::fmt;
-    use std::future::Future;
-    use std::pin::Pin;
-    use std::task::{Context, Poll};
+    use core::fmt;
+    use core::future::Future;
+    use core::pin::Pin;
+    use core::task::{Context, Poll};
 
     pub(crate) fn spawn_blocking<F, R>(_f: F) -> JoinHandle<R>
     where
