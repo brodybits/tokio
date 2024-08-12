@@ -2,10 +2,10 @@
 
 //! Definition of the `PollFn` adapter combinator.
 
-use std::fmt;
-use std::future::Future;
-use std::pin::Pin;
-use std::task::{Context, Poll};
+use core::fmt;
+use core::future::Future;
+use core::pin::Pin;
+use core::task::{Context, Poll};
 
 // This struct is intentionally `!Unpin` when `F` is `!Unpin`. This is to
 // mitigate the issue where rust puts noalias on mutable references to the
