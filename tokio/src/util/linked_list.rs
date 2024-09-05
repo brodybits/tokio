@@ -469,7 +469,10 @@ impl<T> fmt::Debug for Pointers<T> {
 pub(crate) mod tests {
     use super::*;
 
+    use std::boxed::Box;
     use std::pin::Pin;
+    use std::vec;
+    use std::vec::Vec;
 
     #[derive(Debug)]
     #[repr(C)]

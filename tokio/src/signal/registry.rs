@@ -178,6 +178,8 @@ mod tests {
 
     use futures::future;
 
+    use std::vec;
+
     #[test]
     fn smoke() {
         let rt = rt();

@@ -5,6 +5,9 @@ use std::cell::RefCell;
 use std::thread;
 use std::time::Duration;
 
+#[cfg(test)]
+use std::{vec, vec::Vec};
+
 #[allow(unused)]
 macro_rules! assert_metrics {
     ($stats:ident, $field:ident == $v:expr) => {

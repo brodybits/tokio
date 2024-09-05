@@ -6,6 +6,9 @@ use crate::{
 use mockall::{predicate::eq, Sequence};
 use tokio_test::{assert_pending, assert_ready_err, assert_ready_ok, task};
 
+#[cfg(test)]
+use std::vec;
+
 const HELLO: &[u8] = b"hello world...";
 const FOO: &[u8] = b"foo bar baz...";
 

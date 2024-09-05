@@ -77,8 +77,10 @@ mod miri_tests {
     use super::maybe_done;
 
     use std::{
+        borrow::ToOwned,
         future::Future,
         pin::Pin,
+        string::String,
         sync::Arc,
         task::{Context, Poll, Wake},
     };

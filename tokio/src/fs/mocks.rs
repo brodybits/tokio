@@ -3,6 +3,7 @@ use mockall::mock;
 
 use crate::sync::oneshot;
 use std::{
+    boxed::Box,
     cell::RefCell,
     collections::VecDeque,
     fs::{Metadata, Permissions},

@@ -26,6 +26,8 @@ pub(crate) fn memchr(needle: u8, haystack: &[u8]) -> Option<usize> {
 mod tests {
     use super::memchr;
 
+    use std::vec::Vec;
+
     #[test]
     fn memchr_test() {
         let haystack = b"123abc456\0\xffabc\n";

@@ -2,6 +2,9 @@
 
 use std::{task::Context, time::Duration};
 
+#[cfg(test)]
+use std::{boxed::Box, vec};
+
 #[cfg(not(loom))]
 use futures::task::noop_waker_ref;
 

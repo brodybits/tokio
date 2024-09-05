@@ -1,7 +1,7 @@
 use crate::runtime::task;
 
 #[cfg(test)]
-use std::cell::RefCell;
+use std::{cell::RefCell, vec::Vec};
 
 pub(crate) trait Overflow<T: 'static> {
     fn push(&self, task: task::Notified<T>);
