@@ -57,10 +57,7 @@ fn single_timer() {
             );
             pin!(entry);
 
-            block_on(futures::future::poll_fn(|cx| {
-                entry.as_mut().poll_elapsed(cx)
-            }))
-            .unwrap();
+            block_on(std::future::poll_fn(|cx| entry.as_mut().poll_elapsed(cx))).unwrap();
         });
 
         thread::yield_now();
@@ -129,10 +126,7 @@ fn change_waker() {
                 .as_mut()
                 .poll_elapsed(&mut Context::from_waker(futures::task::noop_waker_ref()));
 
-            block_on(futures::future::poll_fn(|cx| {
-                entry.as_mut().poll_elapsed(cx)
-            }))
-            .unwrap();
+            block_on(std::future::poll_fn(|cx| entry.as_mut().poll_elapsed(cx))).unwrap();
         });
 
         thread::yield_now();
@@ -170,10 +164,7 @@ fn reset_future() {
             entry.as_mut().reset(start + Duration::from_secs(2), true);
 
             // shouldn't complete before 2s
-            block_on(futures::future::poll_fn(|cx| {
-                entry.as_mut().poll_elapsed(cx)
-            }))
-            .unwrap();
+            block_on(std::future::poll_fn(|cx| entry.as_mut().poll_elapsed(cx))).unwrap();
 
             finished_early_.store(true, Ordering::Relaxed);
         });

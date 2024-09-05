@@ -3,7 +3,7 @@
 use pin_project_lite::pin_project;
 use core::future::{Future, IntoFuture};
 use core::pin::Pin;
-use core::task::{Context, Poll};
+use core::task::{ready, Context, Poll};
 
 pin_project! {
     /// A future that may have completed.

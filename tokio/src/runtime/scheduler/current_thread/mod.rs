@@ -1,17 +1,20 @@
-use crate::future::poll_fn;
 use crate::loom::sync::atomic::AtomicBool;
 use crate::loom::sync::Arc;
 use crate::runtime::driver::{self, Driver};
 use crate::runtime::scheduler::{self, Defer, Inject};
-use crate::runtime::task::{self, JoinHandle, OwnedTasks, Schedule, Task};
-use crate::runtime::{blocking, context, Config, MetricsBatch, SchedulerMetrics, WorkerMetrics};
+use crate::runtime::task::{
+    self, JoinHandle, OwnedTasks, Schedule, Task, TaskHarnessScheduleHooks,
+};
+use crate::runtime::{
+    blocking, context, Config, MetricsBatch, SchedulerMetrics, TaskHooks, TaskMeta, WorkerMetrics,
+};
 use crate::sync::notify::Notify;
 use crate::util::atomic_cell::AtomicCell;
 use crate::util::{waker_ref, RngSeedGenerator, Wake, WakerRef};
 
 use std::cell::RefCell;
 use std::collections::VecDeque;
-use std::future::Future;
+use std::future::{poll_fn, Future};
 use std::sync::atomic::Ordering::{AcqRel, Release};
 use std::task::Poll::{Pending, Ready};
 use std::task::Waker;
@@ -43,6 +46,9 @@ pub(crate) struct Handle {
 
     /// Current random number generator seed
     pub(crate) seed_generator: RngSeedGenerator,
+
+    /// User-supplied hooks to invoke for things
+    pub(crate) task_hooks: TaskHooks,
 }
 
 /// Data required for executing the scheduler. The struct is passed around to
@@ -133,6 +139,10 @@ impl CurrentThread {
             .unwrap_or(DEFAULT_GLOBAL_QUEUE_INTERVAL);
 
         let handle = Arc::new(Handle {
+            task_hooks: TaskHooks {
+                task_spawn_callback: config.before_spawn.clone(),
+                task_terminate_callback: config.after_termination.clone(),
+            },
             shared: Shared {
                 inject: Inject::new(),
                 owned: OwnedTasks::new(1),
@@ -438,6 +448,12 @@ impl Handle {
     {
         let (handle, notified) = me.shared.owned.bind(future, me.clone(), id);
 
+        me.task_hooks.spawn(&TaskMeta {
+            #[cfg(tokio_unstable)]
+            id,
+            _phantom: Default::default(),
+        });
+
         if let Some(notified) = notified {
             me.schedule(notified);
         }
@@ -600,6 +616,12 @@ impl Schedule for Arc<Handle> {
                 self.driver.unpark();
             }
         });
+    }
+
+    fn hooks(&self) -> TaskHarnessScheduleHooks {
+        TaskHarnessScheduleHooks {
+            task_terminate_callback: self.task_hooks.task_terminate_callback.clone(),
+        }
     }
 
     cfg_unstable! {

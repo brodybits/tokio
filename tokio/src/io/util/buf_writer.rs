@@ -5,7 +5,7 @@ use pin_project_lite::pin_project;
 use std::fmt;
 use std::io::{self, IoSlice, SeekFrom, Write};
 use std::pin::Pin;
-use std::task::{Context, Poll};
+use std::task::{ready, Context, Poll};
 
 use std::vec::Vec;
 
