@@ -30,6 +30,7 @@ cfg_rt_multi_thread! {
 // XXX XXX
 // use crate::runtime::driver;
 
+#[cfg(feature = "rt")]
 #[derive(Debug, Clone)]
 pub(crate) enum Handle {
     #[cfg(feature = "rt")]
@@ -59,6 +60,7 @@ pub(super) enum Context {
     MultiThreadAlt(multi_thread_alt::Context),
 }
 
+#[cfg(feature = "rt")]
 impl Handle {
     // XXX TBD XXX
     // #[cfg_attr(not(feature = "full"), allow(dead_code))]

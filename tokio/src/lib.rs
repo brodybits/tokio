@@ -526,12 +526,12 @@ cfg_process! {
 mod blocking;
 
 // XXX TBD XXX XXX
-// cfg_rt! {
-//     pub mod runtime;
-// }
-// cfg_not_rt! {
-//     pub(crate) mod runtime;
-// }
+cfg_rt! {
+    pub mod runtime;
+}
+cfg_not_rt! {
+    pub(crate) mod runtime;
+}
 
 cfg_signal! {
     pub mod signal;

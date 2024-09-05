@@ -319,11 +319,10 @@
 #[macro_use]
 mod tests;
 
-// extern crate std; // XXX XXX XXX
+#[cfg(feature = "rt")]
+pub(crate) mod context;
 
-// XXX XXX
-// pub(crate) mod context;
-
+#[cfg(feature = "rt")]
 pub(crate) mod coop;
 
 // XXX TBD HOLD OFF FOR NOW XXX
