@@ -1,7 +1,10 @@
 use std::io::{self, IoSlice};
+
+use std::boxed::Box;
 use std::ops::DerefMut;
 use std::pin::Pin;
 use std::task::{Context, Poll};
+use std::vec::Vec;
 
 /// Writes bytes asynchronously.
 ///

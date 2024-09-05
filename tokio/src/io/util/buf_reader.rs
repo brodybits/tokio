@@ -2,10 +2,12 @@ use crate::io::util::DEFAULT_BUF_SIZE;
 use crate::io::{AsyncBufRead, AsyncRead, AsyncSeek, AsyncWrite, ReadBuf};
 
 use pin_project_lite::pin_project;
+
+use std::boxed::Box;
 use std::io::{self, IoSlice, SeekFrom};
 use std::pin::Pin;
 use std::task::{ready, Context, Poll};
-use std::{cmp, fmt, mem};
+use std::{cmp, fmt, mem, vec};
 
 pin_project! {
     /// The `BufReader` struct adds buffering to any reader.

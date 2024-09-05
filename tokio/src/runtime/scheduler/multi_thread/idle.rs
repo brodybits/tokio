@@ -5,6 +5,7 @@ use crate::runtime::scheduler::multi_thread::Shared;
 
 use std::fmt;
 use std::sync::atomic::Ordering::{self, SeqCst};
+use std::vec::Vec;
 
 pub(super) struct Idle {
     /// Tracks both the number of searching workers and the number of unparked

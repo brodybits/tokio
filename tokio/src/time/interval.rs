@@ -1,6 +1,7 @@
 use crate::time::{sleep_until, Duration, Instant, Sleep};
 use crate::util::trace;
 
+use std::boxed::Box;
 use std::future::{poll_fn, Future};
 use std::panic::Location;
 use std::pin::Pin;

@@ -4,6 +4,7 @@ use crate::runtime::scheduler::CurrentThread;
 use crate::runtime::{context, EnterGuard, Handle};
 use crate::task::JoinHandle;
 
+use std::boxed::Box;
 use std::future::Future;
 use std::time::Duration;
 

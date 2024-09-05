@@ -7,6 +7,7 @@ use crate::io::blocking::{Buf, DEFAULT_MAX_BUF_SIZE};
 use crate::io::{AsyncRead, AsyncSeek, AsyncWrite, ReadBuf};
 use crate::sync::Mutex;
 
+use std::borrow::ToOwned;
 use std::fmt;
 use std::fs::{Metadata, Permissions};
 use std::future::Future;

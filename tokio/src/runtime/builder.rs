@@ -8,6 +8,7 @@ use crate::util::rand::{RngSeed, RngSeedGenerator};
 
 use std::fmt;
 use std::io;
+use std::string::String;
 use std::time::Duration;
 
 /// Builds Tokio Runtime with custom configuration values.

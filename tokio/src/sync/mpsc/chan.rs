@@ -14,6 +14,7 @@ use std::process;
 use std::sync::atomic::Ordering::{AcqRel, Acquire, Relaxed, Release};
 use std::task::Poll::{Pending, Ready};
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 
 /// Channel sender.
 pub(crate) struct Tx<T, S> {

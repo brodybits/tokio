@@ -1,9 +1,12 @@
 use std::any::Any;
+use std::boxed::Box;
 use std::fmt;
 use std::io;
+use std::string::String;
 
 use super::Id;
 use crate::util::SyncWrapper;
+
 cfg_rt! {
     /// Task failed to execute to completion.
     pub struct JoinError {

@@ -7,7 +7,9 @@ use pin_project_lite::pin_project;
 use std::future::Future;
 use std::marker::PhantomPinned;
 use std::pin::Pin;
+use std::string::String;
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 use std::{io, mem};
 
 pin_project! {

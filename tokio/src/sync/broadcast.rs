@@ -122,6 +122,7 @@ use crate::loom::sync::{Arc, Mutex, MutexGuard, RwLock, RwLockReadGuard};
 use crate::util::linked_list::{self, GuardedLinkedList, LinkedList};
 use crate::util::WakeList;
 
+use std::boxed::Box;
 use std::fmt;
 use std::future::Future;
 use std::marker::PhantomPinned;
@@ -129,6 +130,7 @@ use std::pin::Pin;
 use std::ptr::NonNull;
 use std::sync::atomic::Ordering::{Acquire, Relaxed, Release, SeqCst};
 use std::task::{ready, Context, Poll, Waker};
+use std::vec::Vec;
 
 /// Sending-half of the [`broadcast`] channel.
 ///

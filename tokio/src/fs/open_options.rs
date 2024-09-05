@@ -1,5 +1,6 @@
 use crate::fs::{asyncify, File};
 
+use std::borrow::ToOwned;
 use std::io;
 use std::path::Path;
 

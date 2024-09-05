@@ -7,8 +7,9 @@ use std::io;
 use std::marker::PhantomPinned;
 use std::mem;
 use std::pin::Pin;
-use std::string::FromUtf8Error;
+use std::string::{FromUtf8Error, String};
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 
 pin_project! {
     /// Future for the [`read_line`](crate::io::AsyncBufReadExt::read_line) method.

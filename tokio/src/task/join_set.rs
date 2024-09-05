@@ -7,6 +7,7 @@
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
+use std::vec::Vec;
 use std::{fmt, panic};
 
 use crate::runtime::Handle;

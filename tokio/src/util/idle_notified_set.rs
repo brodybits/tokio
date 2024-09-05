@@ -6,12 +6,20 @@
 //! specified using the `T` parameter. It will usually be a `JoinHandle` or
 //! similar.
 
-use std::marker::PhantomPinned;
-use std::mem::ManuallyDrop;
-use std::ptr::NonNull;
-use std::task::{Context, Waker};
+use core::marker::PhantomPinned;
+use core::mem::ManuallyDrop;
+use core::ptr::NonNull;
+use core::task::{Context, Waker};
+
+extern crate alloc;
+// XXX XXX ???
+#[cfg(not(feature = "std"))]
+use alloc::sync::{Arc, Mutex};
+use alloc::vec::Vec;
 
 use crate::loom::cell::UnsafeCell;
+// XXX XXX ???
+#[cfg(feature = "std")]
 use crate::loom::sync::{Arc, Mutex};
 use crate::util::linked_list::{self, Link};
 use crate::util::{waker_ref, Wake};

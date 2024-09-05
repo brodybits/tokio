@@ -9,6 +9,7 @@ use crate::runtime::task::{self, JoinHandle};
 use crate::runtime::{Builder, Callback, Handle, BOX_FUTURE_THRESHOLD};
 use crate::util::metric_atomics::MetricAtomicUsize;
 
+use std::boxed::Box;
 use std::collections::{HashMap, VecDeque};
 use std::fmt;
 use std::io;

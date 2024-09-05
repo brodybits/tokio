@@ -4,6 +4,7 @@ use crate::util::once_cell::OnceCell;
 
 use std::ops;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::vec::Vec;
 
 pub(crate) type EventId = usize;
 

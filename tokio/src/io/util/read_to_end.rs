@@ -8,6 +8,7 @@ use std::marker::PhantomPinned;
 use std::mem::{self, MaybeUninit};
 use std::pin::Pin;
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 
 pin_project! {
     #[derive(Debug)]

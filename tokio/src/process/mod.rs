@@ -251,6 +251,7 @@ use std::path::Path;
 use std::pin::Pin;
 use std::process::{Command as StdCommand, ExitStatus, Output, Stdio};
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 
 #[cfg(unix)]
 use std::os::unix::process::CommandExt;

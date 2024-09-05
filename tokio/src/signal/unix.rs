@@ -13,10 +13,13 @@ use crate::signal::RxFuture;
 use crate::sync::watch;
 
 use mio::net::UnixStream;
+
+use std::format;
 use std::io::{self, Error, ErrorKind, Write};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Once;
 use std::task::{Context, Poll};
+use std::vec::Vec;
 
 pub(crate) type OsStorage = Vec<SignalInfo>;
 

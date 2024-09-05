@@ -1,7 +1,10 @@
 use crate::loom::sync::atomic::AtomicPtr;
 
-use std::ptr;
-use std::sync::atomic::Ordering::AcqRel;
+use core::ptr;
+use core::sync::atomic::Ordering::AcqRel;
+
+extern crate alloc;
+use alloc::boxed::Box;
 
 pub(crate) struct AtomicCell<T> {
     data: AtomicPtr<T>,

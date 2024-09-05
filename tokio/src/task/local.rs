@@ -8,6 +8,7 @@ use crate::runtime::{context, ThreadId, BOX_FUTURE_THRESHOLD};
 use crate::sync::AtomicWaker;
 use crate::util::RcCell;
 
+use std::boxed::Box;
 use std::cell::Cell;
 use std::collections::VecDeque;
 use std::fmt;

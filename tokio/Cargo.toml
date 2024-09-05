@@ -22,8 +22,14 @@ categories = ["asynchronous", "network-programming"]
 keywords = ["io", "async", "non-blocking", "futures"]
 
 [features]
+# XXX TBD ??? ??? ???:
 # Include nothing by default
-default = []
+# default = []
+# XXX TBD ??? ??? ???:
+default = ["std"]
+
+# XXX TODO INCLUDE IN XXX XXX XXX
+std = []
 
 # enable everything
 full = [

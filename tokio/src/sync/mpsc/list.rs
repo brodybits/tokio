@@ -4,6 +4,7 @@ use crate::loom::sync::atomic::{AtomicPtr, AtomicUsize};
 use crate::loom::thread;
 use crate::sync::mpsc::block::{self, Block};
 
+use std::boxed::Box;
 use std::fmt;
 use std::ptr::NonNull;
 use std::sync::atomic::Ordering::{AcqRel, Acquire, Relaxed, Release};

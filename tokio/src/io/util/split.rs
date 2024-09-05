@@ -6,6 +6,7 @@ use std::io;
 use std::mem;
 use std::pin::Pin;
 use std::task::{ready, Context, Poll};
+use std::vec::Vec;
 
 pin_project! {
     /// Splitter for the [`split`](crate::io::AsyncBufReadExt::split) method.

@@ -10,6 +10,7 @@ cfg_time! {
 
 use std::fmt;
 use std::task::{Context, Poll};
+use std::vec::Vec;
 
 /// Sends values to the associated `Receiver`.
 ///

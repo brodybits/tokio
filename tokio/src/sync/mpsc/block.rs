@@ -1,6 +1,7 @@
 use crate::loom::cell::UnsafeCell;
 use crate::loom::sync::atomic::{AtomicPtr, AtomicUsize};
 
+use std::boxed::Box;
 use std::alloc::Layout;
 use std::mem::MaybeUninit;
 use std::ops;

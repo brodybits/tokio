@@ -1,5 +1,10 @@
-use std::ptr::NonNull;
-use std::sync::atomic::Ordering;
+use core::ptr::NonNull;
+use core::sync::atomic::Ordering;
+
+// XXX
+extern crate alloc;
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 
 use crate::loom::sync::{Mutex, MutexGuard};
 use crate::util::metric_atomics::{MetricAtomicU64, MetricAtomicUsize};

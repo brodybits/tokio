@@ -1,5 +1,6 @@
 use crate::fs::asyncify;
 
+use std::borrow::ToOwned;
 use std::collections::VecDeque;
 use std::ffi::OsString;
 use std::fs::{FileType, Metadata};

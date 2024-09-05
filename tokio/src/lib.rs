@@ -449,6 +449,11 @@
 //! Because of this, sockets must currently be created via the `FromRawFd`
 //! trait.
 
+#![no_std]
+
+#[cfg(feature = "std")]
+extern crate std;
+
 // Test that pointer width is compatible. This asserts that e.g. usize is at
 // least 32 bits, which a lot of components in Tokio currently assumes.
 //
@@ -502,9 +507,14 @@ cfg_fs! {
 
 mod future;
 
+// XXX TBD ??? ???
+#[cfg(feature = "std")]
 pub mod io;
+#[cfg(feature = "std")]
 pub mod net;
 
+// XXX TBD ??? ???
+#[cfg(feature = "std")]
 mod loom;
 
 cfg_process! {
@@ -522,6 +532,8 @@ mod blocking;
 cfg_rt! {
     pub mod runtime;
 }
+// XXX TBD ??? ???
+#[cfg(feature = "std")]
 cfg_not_rt! {
     pub(crate) mod runtime;
 }
@@ -544,8 +556,12 @@ cfg_not_sync! {
     mod sync;
 }
 
+// XXX TBD ??? ???
+#[cfg(any(feature = "std"))]
 pub mod task;
 cfg_rt! {
+    // XXX TBD ??? ???
+    #[cfg(any(feature = "std"))]
     pub use task::spawn;
 }
 
@@ -554,9 +570,9 @@ cfg_time! {
 }
 
 mod trace {
-    use std::future::Future;
-    use std::pin::Pin;
-    use std::task::{Context, Poll};
+    use core::future::Future;
+    use core::pin::Pin;
+    use core::task::{Context, Poll};
 
     cfg_taskdump! {
         pub(crate) use crate::runtime::task::trace::trace_leaf;
@@ -565,8 +581,8 @@ mod trace {
     cfg_not_taskdump! {
         #[inline(always)]
         #[allow(dead_code)]
-        pub(crate) fn trace_leaf(_: &mut std::task::Context<'_>) -> std::task::Poll<()> {
-            std::task::Poll::Ready(())
+        pub(crate) fn trace_leaf(_: &mut Context<'_>) -> Poll<()> {
+            Poll::Ready(())
         }
     }
 
@@ -639,6 +655,7 @@ pub mod doc;
 #[allow(unused)]
 pub(crate) use self::doc::os;
 
+#[cfg(feature = "std")]
 #[cfg(not(docsrs))]
 #[allow(unused)]
 pub(crate) use std::os;

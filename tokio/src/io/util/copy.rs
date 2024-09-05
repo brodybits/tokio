@@ -1,9 +1,11 @@
 use crate::io::{AsyncRead, AsyncWrite, ReadBuf};
 
+use std::boxed::Box;
 use std::future::Future;
 use std::io;
 use std::pin::Pin;
 use std::task::{ready, Context, Poll};
+use std::vec;
 
 #[derive(Debug)]
 pub(super) struct CopyBuffer {

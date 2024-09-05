@@ -27,8 +27,11 @@ use crate::time::{Clock, Duration};
 use crate::util::WakeList;
 
 use crate::loom::sync::atomic::AtomicU64;
+
+use std::boxed::Box;
 use std::fmt;
 use std::{num::NonZeroU64, ptr::NonNull};
+use std::vec::Vec;
 
 struct AtomicOptionNonZeroU64(AtomicU64);
 

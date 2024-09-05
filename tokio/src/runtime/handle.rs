@@ -19,6 +19,7 @@ use crate::runtime::task::JoinHandle;
 use crate::runtime::BOX_FUTURE_THRESHOLD;
 use crate::util::error::{CONTEXT_MISSING_ERROR, THREAD_LOCAL_DESTROYED_ERROR};
 
+use std::boxed::Box;
 use std::future::Future;
 use std::marker::PhantomData;
 use std::{error, fmt};
