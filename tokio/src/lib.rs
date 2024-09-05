@@ -510,8 +510,8 @@ mod future;
 // pub mod io;
 // pub mod net;
 
-// XXX TBD ??? ???
-mod loom;
+// XXX TBD SKIP FOR NOW:
+// mod loom;
 
 cfg_process! {
     pub mod process;
