@@ -9,7 +9,7 @@
 
 use crate::runtime::park::{ParkThread, UnparkThread};
 
-extern crate std; // XXX
+// extern crate std; // XXX
 use std::io;
 // XXX CAN DO HERE: use core:: ...
 use std::time::Duration;

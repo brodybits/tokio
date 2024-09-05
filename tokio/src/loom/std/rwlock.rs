@@ -1,4 +1,4 @@
-extern crate std; // XXX TODO XXX XXX
+// extern crate std; // XXX TODO XXX XXX
 use std::sync::{self, RwLockReadGuard, RwLockWriteGuard, TryLockError};
 
 /// Adapter for `std::sync::RwLock` that removes the poisoning aspects

@@ -1,5 +1,5 @@
 // XXX XXX
-extern crate std; // XXX TBD XXX
+// extern crate std; // XXX TBD XXX
 use std::sync::{self, MutexGuard, TryLockError};
 
 /// Adapter for `std::Mutex` that removes the poisoning aspects

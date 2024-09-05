@@ -3,7 +3,7 @@
 use crate::loom::sync::atomic::AtomicUsize;
 use crate::loom::sync::{Arc, Condvar, Mutex};
 
-extern crate std; // XXX - XXX XXX ARC XXX
+// extern crate std; // XXX - XXX XXX ARC XXX
 
 use std::sync::atomic::Ordering::SeqCst;
 use std::time::Duration;

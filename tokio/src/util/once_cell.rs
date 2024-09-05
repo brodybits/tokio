@@ -2,7 +2,7 @@
 use core::cell::UnsafeCell;
 use core::mem::MaybeUninit;
 
-extern crate std; // XXX
+// extern crate std; // XXX
 use std::sync::Once;
 
 pub(crate) struct OnceCell<T> {

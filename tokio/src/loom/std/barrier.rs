@@ -8,7 +8,7 @@ use core::fmt;
 use core::time::Duration;
 
 // XXX XXX XXX
-extern crate std; // XXX TBD XXX
+// extern crate std; // XXX TBD XXX
 use std::time::Instant;
 
 /// A barrier enables multiple threads to synchronize the beginning

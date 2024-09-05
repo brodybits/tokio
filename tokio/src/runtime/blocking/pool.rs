@@ -27,7 +27,7 @@ use alloc::boxed::Box;
 // use std::string::String;
 
 // XXX XXX XXX
-extern crate std; // XXX TBD XXX
+// extern crate std; // XXX TBD XXX
 use std::collections::HashMap;
 use std::io;
 
