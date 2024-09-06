@@ -14,10 +14,19 @@ use core::task::{Context, Waker};
 extern crate alloc;
 // XXX XXX ???
 #[cfg(not(feature = "std"))]
-use alloc::sync::{Arc, Mutex};
+use alloc::sync::Arc; // XXX XXX MISSING: Mutex
 use alloc::vec::Vec;
 
-use crate::loom::cell::UnsafeCell;
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// use crate::loom::cell::UnsafeCell;
+use core::cell::UnsafeCell;
 // XXX XXX ???
 #[cfg(feature = "std")]
 use crate::loom::sync::{Arc, Mutex};

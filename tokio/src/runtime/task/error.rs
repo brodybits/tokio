@@ -1,8 +1,20 @@
-use std::any::Any;
-use std::boxed::Box;
-use std::fmt;
-use std::io;
-use std::string::String;
+use core::any::Any;
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+extern crate alloc;
+use alloc::boxed::Box;
+use core::fmt;
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// use std::io;
+use alloc::string::String;
 
 use super::Id;
 use crate::util::SyncWrapper;
@@ -173,6 +185,15 @@ impl fmt::Debug for JoinError {
     }
 }
 
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+extern crate std;
+use std::io;
 impl std::error::Error for JoinError {}
 
 impl From<JoinError> for io::Error {

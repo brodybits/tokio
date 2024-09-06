@@ -10,18 +10,42 @@
 //! use.
 
 use crate::future::Future;
-use crate::loom::cell::UnsafeCell;
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// XXX XXX XXX XXX
+// use crate::loom::cell::UnsafeCell;
+use core::cell::UnsafeCell;
 use crate::runtime::context;
 use crate::runtime::task::raw::{self, Vtable};
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
 use crate::runtime::task::state::State;
-use crate::runtime::task::{Id, Schedule, TaskHarnessScheduleHooks};
+// use crate::runtime::task::{Id, Schedule, TaskHarnessScheduleHooks};
 use crate::util::linked_list;
 
-use std::boxed::Box;
-use std::num::NonZeroU64;
-use std::pin::Pin;
-use std::ptr::NonNull;
-use std::task::{Context, Poll, Waker};
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+extern crate alloc;
+use alloc::boxed::Box;
+use core::num::NonZeroU64;
+use core::pin::Pin;
+use core::ptr::NonNull;
+use core::task::{Context, Poll, Waker};
 
 /// The task cell. Contains the components of the task.
 ///

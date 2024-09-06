@@ -324,52 +324,68 @@
 cfg_rt! {
     pub use crate::runtime::task::{JoinError, JoinHandle};
 
-    mod blocking;
-    pub use blocking::spawn_blocking;
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // mod blocking;
+    // pub use blocking::spawn_blocking;
 
-    mod spawn;
-    pub use spawn::spawn;
+    // mod spawn;
+    // pub use spawn::spawn;
 
-    cfg_rt_multi_thread! {
-        pub use blocking::block_in_place;
-    }
+    // cfg_rt_multi_thread! {
+    //     pub use blocking::block_in_place;
+    // }
 
-    mod yield_now;
-    pub use yield_now::yield_now;
+    // mod yield_now;
+    // pub use yield_now::yield_now;
 
-    mod consume_budget;
-    pub use consume_budget::consume_budget;
+    // mod consume_budget;
+    // pub use consume_budget::consume_budget;
 
-    mod local;
-    pub use local::{spawn_local, LocalSet, LocalEnterGuard};
+    // mod local;
+    // pub use local::{spawn_local, LocalSet, LocalEnterGuard};
 
-    mod task_local;
-    pub use task_local::LocalKey;
+    // mod task_local;
+    // pub use task_local::LocalKey;
 
-    mod unconstrained;
-    pub use unconstrained::{unconstrained, Unconstrained};
+    // mod unconstrained;
+    // pub use unconstrained::{unconstrained, Unconstrained};
 
-    #[doc(inline)]
-    pub use join_set::JoinSet;
-    pub use crate::runtime::task::AbortHandle;
+    // #[doc(inline)]
+    // pub use join_set::JoinSet;
+    // pub use crate::runtime::task::AbortHandle;
 
-    // Uses #[cfg(...)] instead of macro since the macro adds docsrs annotations.
-    #[cfg(not(tokio_unstable))]
-    mod join_set;
-    #[cfg(tokio_unstable)]
-    pub mod join_set;
+    // // Uses #[cfg(...)] instead of macro since the macro adds docsrs annotations.
+    // #[cfg(not(tokio_unstable))]
+    // mod join_set;
+    // #[cfg(tokio_unstable)]
+    // pub mod join_set;
 
-    cfg_unstable! {
-        pub use crate::runtime::task::{Id, id, try_id};
-    }
+    // cfg_unstable! {
+    //     pub use crate::runtime::task::{Id, id, try_id};
+    // }
 
-    cfg_trace! {
-        mod builder;
-        pub use builder::Builder;
-    }
+    // cfg_trace! {
+    //     mod builder;
+    //     pub use builder::Builder;
+    // }
 
-    /// Task-related futures.
-    pub mod futures {
-        pub use super::task_local::TaskLocalFuture;
-    }
+    // /// Task-related futures.
+    // pub mod futures {
+    //     pub use super::task_local::TaskLocalFuture;
+    // }
 }

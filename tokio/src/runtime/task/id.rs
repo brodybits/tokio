@@ -1,6 +1,6 @@
 use crate::runtime::context;
 
-use std::{fmt, num::NonZeroU64};
+use core::{fmt, num::NonZeroU64};
 
 /// An opaque ID that uniquely identifies a task relative to all other currently
 /// running tasks.

@@ -1,4 +1,5 @@
-use crate::loom::sync::atomic::AtomicPtr;
+// use crate::loom::sync::atomic::AtomicPtr;
+use core::sync::atomic::AtomicPtr;
 
 use core::ptr;
 use core::sync::atomic::Ordering::AcqRel;

@@ -47,17 +47,34 @@ pub(crate) use wake_list::WakeList;
 ))]
 pub(crate) mod linked_list;
 
-cfg_rt! {
-    pub(crate) mod sharded_list;
-}
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// cfg_rt! {
+//     pub(crate) mod sharded_list;
+// }
 
+#[cfg(feature = "std")]
 #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
 pub(crate) mod rand;
 
 cfg_rt! {
-    mod idle_notified_set;
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // XXX XXX XXX
+    // mod idle_notified_set;
     pub(crate) use idle_notified_set::IdleNotifiedSet;
 
+    #[cfg(feature = "std")]
     pub(crate) use self::rand::RngSeedGenerator;
 
     mod wake;

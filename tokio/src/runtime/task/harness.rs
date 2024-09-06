@@ -6,13 +6,31 @@ use crate::runtime::task::{Id, JoinError, Notified, RawTask, Schedule, Task};
 
 use crate::runtime::TaskMeta;
 
-use std::any::Any;
-use std::boxed::Box;
-use std::mem;
-use std::mem::ManuallyDrop;
+use core::any::Any;
+// XXX XXX XXX
+extern crate alloc;
+use alloc::boxed::Box;
+use core::mem;
+use core::mem::ManuallyDrop;
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// use std::panic;
+use core::ptr::NonNull;
+use core::task::{Context, Poll, Waker};
+
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+// XXX XXX XXX
+extern crate std;
 use std::panic;
-use std::ptr::NonNull;
-use std::task::{Context, Poll, Waker};
 
 /// Typed raw task handle.
 pub(super) struct Harness<T: Future, S: 'static> {

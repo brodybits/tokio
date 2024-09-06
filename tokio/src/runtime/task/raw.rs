@@ -2,9 +2,11 @@ use crate::future::Future;
 use crate::runtime::task::core::{Core, Trailer};
 use crate::runtime::task::{Cell, Harness, Header, Id, Schedule, State};
 
-use std::boxed::Box;
-use std::ptr::NonNull;
-use std::task::{Poll, Waker};
+// XXX XXX XXX
+extern crate alloc;
+use alloc::boxed::Box;
+use core::ptr::NonNull;
+use core::task::{Poll, Waker};
 
 /// Raw task handle
 #[derive(Clone)]
