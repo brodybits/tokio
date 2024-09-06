@@ -557,7 +557,7 @@ cfg_not_sync! {
 }
 
 // XXX TBD ??? ???
-#[cfg(any(feature = "std"))]
+// #[cfg(any(feature = "std"))]
 pub mod task;
 cfg_rt! {
     // XXX TBD ??? ???
