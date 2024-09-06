@@ -206,14 +206,18 @@ cfg_taskdump! {
     pub(crate) mod trace;
 }
 
+#[cfg(feature = "lll")]
 use crate::future::Future;
+#[cfg(feature = "ccc")]
+use ::core::future::Future;
 use crate::util::linked_list;
 use crate::util::sharded_list;
 
 use crate::runtime::TaskCallback;
-use std::marker::PhantomData;
-use std::ptr::NonNull;
-use std::{fmt, mem};
+
+use ::core::marker::PhantomData;
+use ::core::ptr::NonNull;
+use ::core::{fmt, mem};
 
 /// An owned handle to the task, tracked by ref count.
 #[repr(transparent)]
@@ -254,7 +258,7 @@ unsafe impl<S> Send for UnownedTask<S> {}
 unsafe impl<S> Sync for UnownedTask<S> {}
 
 /// Task result sent back.
-pub(crate) type Result<T> = std::result::Result<T, JoinError>;
+pub(crate) type Result<T> = ::core::result::Result<T, JoinError>;
 
 /// Hooks for scheduling tasks which are needed in the task harness.
 #[derive(Clone)]
@@ -334,8 +338,8 @@ cfg_rt! {
             raw: task.raw,
             _p: PhantomData,
         };
-        std::mem::forget(task);
-        std::mem::forget(notified);
+        ::core::mem::forget(task);
+        ::core::mem::forget(notified);
 
         (unowned, join)
     }

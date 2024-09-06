@@ -13,13 +13,13 @@ use core::task::{Context, Waker};
 
 extern crate alloc;
 // XXX XXX ???
-#[cfg(not(feature = "std"))]
-use alloc::sync::{Arc, Mutex};
+#[cfg(not(feature = "aaa"))]
+use crate::::aa_aaa::Arc;
 use alloc::vec::Vec;
 
 use crate::loom::cell::UnsafeCell;
 // XXX XXX ???
-#[cfg(feature = "std")]
+#[cfg(feature = "lll")]
 use crate::loom::sync::{Arc, Mutex};
 use crate::util::linked_list::{self, Link};
 use crate::util::{waker_ref, Wake};

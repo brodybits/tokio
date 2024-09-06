@@ -123,19 +123,28 @@
 //! }
 //! ```
 
+#[cfg(feature = "rrr")]
 use crate::loom::cell::UnsafeCell;
+#[cfg(feature = "rrr")]
 use crate::loom::sync::atomic::AtomicUsize;
+#[cfg(feature = "rrr")]
 use crate::loom::sync::Arc;
+#[cfg(feature = "ccc")]
+use core::cell::UnsafeCell;
+#[cfg(feature = "ccc")]
+use core::sync::atomic::AtomicUsize;
+#[cfg(feature = "aaa")]
+use crate::aaa_aaa::sync::Arc;
 #[cfg(all(tokio_unstable, feature = "tracing"))]
 use crate::util::trace;
 
-use std::fmt;
-use std::future::Future;
-use std::mem::MaybeUninit;
-use std::pin::Pin;
-use std::sync::atomic::Ordering::{self, AcqRel, Acquire};
-use std::task::Poll::{Pending, Ready};
-use std::task::{ready, Context, Poll, Waker};
+use crate::std_core::fmt;
+use crate::std_core::future::Future;
+use crate::std_core::mem::MaybeUninit;
+use crate::std_core::pin::Pin;
+use crate::std_core::sync::atomic::Ordering::{self, AcqRel, Acquire};
+use crate::std_core::task::Poll::{Pending, Ready};
+use crate::std_core::task::{ready, Context, Poll, Waker};
 
 /// Sends a value to the associated [`Receiver`].
 ///
@@ -332,7 +341,7 @@ pub struct Receiver<T> {
 pub mod error {
     //! `Oneshot` error types.
 
-    use std::fmt;
+    use core::fmt;
 
     /// Error returned by the `Future` implementation for `Receiver`.
     ///
@@ -358,6 +367,7 @@ pub mod error {
         }
     }
 
+    #[cfg(feature = "rrr")]
     impl std::error::Error for RecvError {}
 
     // ===== impl TryRecvError =====
@@ -371,6 +381,7 @@ pub mod error {
         }
     }
 
+    #[cfg(feature = "rrr")]
     impl std::error::Error for TryRecvError {}
 }
 
@@ -698,7 +709,7 @@ impl<T> Sender<T> {
     /// }
     /// ```
     pub async fn closed(&mut self) {
-        use std::future::poll_fn;
+        use core::future::poll_fn;
 
         #[cfg(all(tokio_unstable, feature = "tracing"))]
         let resource_span = self.resource_span.clone();
@@ -1271,7 +1282,7 @@ impl<T> Drop for Inner<T> {
 
 impl<T: fmt::Debug> fmt::Debug for Inner<T> {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use std::sync::atomic::Ordering::Relaxed;
+        use core::sync::atomic::Ordering::Relaxed;
 
         fmt.debug_struct("Inner")
             .field("state", &State::load(&self.state, Relaxed))

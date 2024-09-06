@@ -24,9 +24,21 @@ keywords = ["io", "async", "non-blocking", "futures"]
 [features]
 # XXX TBD ??? ??? ???:
 # Include nothing by default
-default = []
+# default = []
 # XXX TBD ??? ??? ???:
 # default = ["std"]
+# XXX XXX XXX
+default = ["rt", "ccc", "aaa", "ppp"]
+
+# XXX XXX
+# ppp = ["dep:anyhow"]
+# XXX XXX
+rrr = []
+lll = []
+ccc = []
+aaa = []
+ppp = ["dep:parking_lot"]
+sss = []
 
 # XXX TODO INCLUDE IN XXX XXX XXX
 std = []
@@ -38,7 +50,8 @@ full = [
   "io-std",
   "macros",
   "net",
-  "parking_lot",
+  # XXX XXX
+  # "parking_lot",
   "process",
   "rt",
   "rt-multi-thread",
@@ -99,7 +112,10 @@ pin-project-lite = "0.2.11"
 # Everything else is optional...
 bytes = { version = "1.0.0", optional = true }
 mio = { version = "1.0.1", optional = true, default-features = false }
-parking_lot = { version = "0.12.0", optional = true }
+# XXX XXX
+parking_lot = { version = "0.12.3", optional = true, default-features = false, features = ["arc_lock"] }
+# XXX XXX
+# anyhow = { version = "1.0.86", default-features = false, optional = true }
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
 socket2 = { version = "0.5.5", optional = true, features = [ "all" ] }

@@ -1,6 +1,6 @@
 use crate::runtime::task::{Header, RawTask};
-use std::fmt;
-use std::panic::{RefUnwindSafe, UnwindSafe};
+use core::fmt;
+use core::panic::{RefUnwindSafe, UnwindSafe};
 
 /// An owned permission to abort a spawned task, without awaiting its completion.
 ///

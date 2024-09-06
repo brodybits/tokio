@@ -505,6 +505,29 @@ cfg_fs! {
     pub mod fs;
 }
 
+mod std_core {
+    pub use core::future;
+    pub use core::marker;
+    pub use core::mem;
+    pub use core::ops;
+    pub use core::panic;
+    pub use core::pin;
+    pub use core::ptr;
+    pub use core::sync;
+    pub use core::task;
+}
+
+mod std_std_aaa {
+    extern crate alloc;
+    pub use alloc::sync;
+}
+
+#[cfg(feature = "aaa")]
+mod aaa_aaa {
+    extern crate alloc;
+    pub use alloc::sync;
+}
+
 mod future;
 
 // XXX TBD ??? ???

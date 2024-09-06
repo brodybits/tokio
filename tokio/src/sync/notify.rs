@@ -5,19 +5,29 @@
 // triggers this warning but it is safe to ignore in this case.
 #![cfg_attr(not(feature = "sync"), allow(unreachable_pub, dead_code))]
 
+#[cfg(feature = "lll")]
 use crate::loom::cell::UnsafeCell;
+#[cfg(feature = "lll")]
 use crate::loom::sync::atomic::AtomicUsize;
+#[cfg(feature = "lll")]
 use crate::loom::sync::Mutex;
+#[cfg(feature = "ccc")]
+use core::cell::UnsafeCell;
+#[cfg(feature = "aaa")]
+use core::sync::atomic::AtomicUsize;
+#[cfg(feature = "ppp")]
+use parking_lot::Mutex;
+
 use crate::util::linked_list::{self, GuardedLinkedList, LinkedList};
 use crate::util::WakeList;
 
-use std::future::Future;
-use std::marker::PhantomPinned;
-use std::panic::{RefUnwindSafe, UnwindSafe};
-use std::pin::Pin;
-use std::ptr::NonNull;
-use std::sync::atomic::Ordering::{self, Acquire, Relaxed, Release, SeqCst};
-use std::task::{Context, Poll, Waker};
+use crate::std_core::future::Future;
+use crate::std_core::marker::PhantomPinned;
+use crate::std_core::panic::{RefUnwindSafe, UnwindSafe};
+use crate::std_core::pin::Pin;
+use crate::std_core::ptr::NonNull;
+use crate::std_core::sync::atomic::Ordering::{self, Acquire, Relaxed, Release, SeqCst};
+use crate::std_core::task::{Context, Poll, Waker};
 
 type WaitList = LinkedList<Waiter, <Waiter as linked_list::Link>::Target>;
 type GuardedWaitList = GuardedLinkedList<Waiter, <Waiter as linked_list::Link>::Target>;

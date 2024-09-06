@@ -319,6 +319,7 @@
 #[macro_use]
 mod tests;
 
+#[cfg(feature = "rrr")]
 pub(crate) mod context;
 
 pub(crate) mod coop;
@@ -386,7 +387,9 @@ cfg_rt! {
     #[cfg(not(tokio_unstable))]
     pub(crate) use task_hooks::TaskMeta;
 
+    #[cfg(feature = "rrr")]
     mod handle;
+    #[cfg(feature = "rrr")]
     pub use handle::{EnterGuard, Handle, TryCurrentError};
 
     mod runtime;
@@ -396,7 +399,9 @@ cfg_rt! {
     /// Future being placed in the stack.
     pub(crate) const BOX_FUTURE_THRESHOLD: usize = 2048;
 
+    #[cfg(feature = "rrr")]
     mod thread_id;
+    #[cfg(feature = "rrr")]
     pub(crate) use thread_id::ThreadId;
 
     pub(crate) mod metrics;
@@ -413,5 +418,5 @@ cfg_rt! {
     pub(crate) use metrics::{MetricsBatch, SchedulerMetrics, WorkerMetrics, HistogramBuilder};
 
     /// After thread starts / before thread stops
-    type Callback = std::sync::Arc<dyn Fn() + Send + Sync>;
+    type Callback = crate::std_std_aaa::sync::Arc<dyn Fn() + Send + Sync>;
 }

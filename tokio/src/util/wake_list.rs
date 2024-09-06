@@ -1,6 +1,6 @@
-use core::mem::MaybeUninit;
-use core::ptr;
-use std::task::Waker;
+use crate::std_core::mem::MaybeUninit;
+use crate::std_core::ptr;
+use crate::std_core::task::Waker;
 
 const NUM_WAKERS: usize = 32;
 

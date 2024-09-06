@@ -1,5 +1,7 @@
 cfg_rt! {
+    #[cfg(feature = "rrr")]
     pub(crate) mod current_thread;
+    #[cfg(feature = "rrr")]
     pub(crate) use current_thread::CurrentThread;
 
     mod defer;

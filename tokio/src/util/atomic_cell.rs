@@ -1,4 +1,7 @@
+#[cfg(feature = "lll")]
 use crate::loom::sync::atomic::AtomicPtr;
+#[cfg(feature = "aaa")]
+use crate::std_core::sync::atomic::AtomicPtr;
 
 use core::ptr;
 use core::sync::atomic::Ordering::AcqRel;
