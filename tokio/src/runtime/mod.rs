@@ -319,6 +319,8 @@
 #[macro_use]
 mod tests;
 
+// XXX ???
+#[cfg(feature = "std")]
 pub(crate) mod context;
 
 pub(crate) mod coop;

@@ -1,9 +1,14 @@
+#[cfg(feature = "std")]
 use crate::loom::sync::atomic::AtomicBool;
+#[cfg(not(feature = "std"))]
+use core::sync::atomic::AtomicBool;
 
-use std::cell::UnsafeCell;
-use std::marker::PhantomData;
-use std::ops::{Deref, DerefMut};
-use std::sync::atomic::Ordering::SeqCst;
+use core::cell::UnsafeCell;
+use core::marker::PhantomData;
+use core::ops::{Deref, DerefMut};
+use core::sync::atomic::Ordering::SeqCst;
+
+extern crate alloc;
 
 pub(crate) struct TryLock<T> {
     locked: AtomicBool,
@@ -12,7 +17,7 @@ pub(crate) struct TryLock<T> {
 
 pub(crate) struct LockGuard<'a, T> {
     lock: &'a TryLock<T>,
-    _p: PhantomData<std::rc::Rc<()>>,
+    _p: PhantomData<alloc::rc::Rc<()>>,
 }
 
 unsafe impl<T: Send> Send for TryLock<T> {}

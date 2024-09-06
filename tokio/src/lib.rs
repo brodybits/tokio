@@ -561,7 +561,7 @@ cfg_not_sync! {
 pub mod task;
 cfg_rt! {
     // XXX TBD ??? ???
-    #[cfg(any(feature = "std"))]
+    // #[cfg(any(feature = "std"))]
     pub use task::spawn;
 }
 

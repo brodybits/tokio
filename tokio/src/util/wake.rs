@@ -1,9 +1,15 @@
+#[cfg(feature = "std")]
 use crate::loom::sync::Arc;
 
-use std::marker::PhantomData;
-use std::mem::ManuallyDrop;
-use std::ops::Deref;
-use std::task::{RawWaker, RawWakerVTable, Waker};
+// XXX XXX
+extern crate alloc;
+#[cfg(not(feature = "std"))]
+use alloc::sync::Arc;
+
+use core::marker::PhantomData;
+use core::mem::ManuallyDrop;
+use core::ops::Deref;
+use core::task::{RawWaker, RawWakerVTable, Waker};
 
 /// Simplified waking interface based on Arcs.
 pub(crate) trait Wake: Send + Sync + Sized + 'static {

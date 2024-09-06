@@ -48,6 +48,7 @@ pub(crate) use wake_list::WakeList;
 pub(crate) mod linked_list;
 
 cfg_rt! {
+    #[cfg(feature = "std")]
     pub(crate) mod sharded_list;
 }
 
@@ -55,9 +56,12 @@ cfg_rt! {
 pub(crate) mod rand;
 
 cfg_rt! {
+    #[cfg(feature = "std")]
     mod idle_notified_set;
+    #[cfg(feature = "std")]
     pub(crate) use idle_notified_set::IdleNotifiedSet;
 
+    #[cfg(feature = "std")]
     pub(crate) use self::rand::RngSeedGenerator;
 
     mod wake;

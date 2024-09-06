@@ -11,15 +11,16 @@ use core::mem::ManuallyDrop;
 use core::ptr::NonNull;
 use core::task::{Context, Waker};
 
-extern crate alloc;
+// extern crate alloc;
 // XXX XXX ???
-#[cfg(not(feature = "std"))]
-use alloc::sync::{Arc, Mutex};
-use alloc::vec::Vec;
+// #[cfg(not(feature = "std"))]
+// use alloc::sync::{Arc, Mutex};
+// use alloc::vec::Vec;
+use std::vec::Vec;
 
 use crate::loom::cell::UnsafeCell;
 // XXX XXX ???
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use crate::loom::sync::{Arc, Mutex};
 use crate::util::linked_list::{self, Link};
 use crate::util::{waker_ref, Wake};

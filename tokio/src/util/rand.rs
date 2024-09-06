@@ -1,3 +1,5 @@
+#![cfg(feature = "std")]
+
 cfg_rt! {
     mod rt;
     pub(crate) use rt::RngSeedGenerator;
