@@ -477,7 +477,7 @@ impl Notify {
         Notify {
             state: AtomicUsize::new(0),
             // XXX XXX
-            #[cfg(feature = "rtvvv")]
+            #[cfg(feature = "rttt")]
             waiters: Mutex::const_new(LinkedList::new()),
             #[cfg(feature = "sppp")]
             waiters: Mutex::new(LinkedList::new()),
@@ -582,7 +582,6 @@ impl Notify {
     /// ```
     // Alias for old name in 0.x
     #[cfg_attr(docsrs, doc(alias = "notify"))]
-    #[cfg(feature = "rtvvv")]
     pub fn notify_one(&self) {
         self.notify_with_strategy(NotifyOneStrategy::Fifo);
     }
@@ -596,12 +595,10 @@ impl Notify {
     /// examples.
     ///
     /// [`notify_one()`]: Notify::notify_one
-    #[cfg(feature = "rtvvv")]
     pub fn notify_last(&self) {
         self.notify_with_strategy(NotifyOneStrategy::Lifo);
     }
 
-    #[cfg(feature = "rtvvv")]
     fn notify_with_strategy(&self, strategy: NotifyOneStrategy) {
         // Load the current state
         let mut curr = self.state.load(SeqCst);
@@ -668,7 +665,6 @@ impl Notify {
     ///     println!("received notifications");
     /// }
     /// ```
-    #[cfg(feature = "rtvvv")]
     pub fn notify_waiters(&self) {
         let mut waiters = self.waiters.lock();
 
@@ -754,7 +750,6 @@ impl Default for Notify {
 impl UnwindSafe for Notify {}
 impl RefUnwindSafe for Notify {}
 
-#[cfg(feature = "rtvvv")]
 fn notify_locked(
     waiters: &mut WaitList,
     state: &AtomicUsize,
@@ -917,7 +912,6 @@ impl Notified<'_> {
     ///
     /// [`notify_one`]: Notify::notify_one()
     /// [`notify_waiters`]: Notify::notify_waiters()
-    #[cfg(feature = "rtvvv")]
     pub fn enable(self: Pin<&mut Self>) -> bool {
         self.poll_notified(None).is_ready()
     }
@@ -942,12 +936,6 @@ impl Notified<'_> {
         }
     }
 
-    // XXX XXX
-    #[cfg(not(feature = "rtvvv"))]
-    fn poll_notified(self: Pin<&mut Self>, waker: Option<&Waker>) -> Poll<()> {
-        panic!("XXX")
-    }
-    #[cfg(feature = "rtvvv")]
     fn poll_notified(self: Pin<&mut Self>, waker: Option<&Waker>) -> Poll<()> {
         let (notify, state, notify_waiters_calls, waiter) = self.project();
 
@@ -1202,9 +1190,6 @@ impl Drop for Notified<'_> {
             // the notification was triggered via `notify_one`, it must be sent
             // to the next waiter.
             if let Some(Notification::One(strategy)) = notification {
-                // XXX
-                panic!("XXX");
-                #[cfg(feature = "rtvvv")]
                 if let Some(waker) =
                     notify_locked(&mut waiters, &notify.state, notify_state, strategy)
                 {
