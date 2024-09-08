@@ -445,7 +445,6 @@ cfg_rt! {
     #[cfg(feature = "rttt")]
     pub(crate) use metrics::{MetricsBatch, SchedulerMetrics, WorkerMetrics, HistogramBuilder};
 
-    #[cfg(feature = "rttt")]
     /// After thread starts / before thread stops
-    type Callback = std::sync::Arc<dyn Fn() + Send + Sync>;
+    type Callback = crate::core_std::sync::Arc<dyn Fn() + Send + Sync>;
 }
