@@ -123,9 +123,9 @@
 //! }
 //! ```
 
-use crate::fake_loom::cell::UnsafeCell;
-use crate::fake_loom::atomic::AtomicUsize;
-use crate::fake_loom::sync::Arc;
+use crate::loom::cell::UnsafeCell;
+use crate::loom::atomic::AtomicUsize;
+use crate::loom::sync::Arc;
 #[cfg(all(tokio_unstable, feature = "tracing"))]
 use crate::util::trace;
 

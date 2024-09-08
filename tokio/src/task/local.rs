@@ -1,8 +1,8 @@
 //! Runs `!Send` futures on the current thread.
-use crate::fake_loom::cell::UnsafeCell;
+use crate::loom::cell::UnsafeCell;
 // XXX XXX
 // use crate::loom::sync::{Arc, Mutex};
-use crate::fake_loom::sync::Arc;
+use crate::loom::sync::Arc;
 // XXX XXX
 #[cfg(feature = "sppp")]
 use spin::Mutex;

@@ -510,9 +510,12 @@ mod core_std {
     pub use core::sync::atomic;
     pub use core::cell;
     pub use core::fmt;
+    pub use core::hash;
+    pub use core::hint;
     pub use core::future;
     pub use core::marker;
     pub use core::mem;
+    pub use core::num;
     pub use core::ops;
     pub use core::panic;
     pub use core::pin;
@@ -536,27 +539,7 @@ pub mod io;
 #[cfg(feature = "std")]
 pub mod net;
 
-// XXX TBD ??? ???
-// #[cfg(feature = "std")]
-#[cfg(feature = "lll")]
 mod loom;
-
-mod fake_loom {
-    #[cfg(feature = "lll")]
-    pub(crate) use crate::loom::cell;
-    #[cfg(feature = "lll")]
-    pub(crate) use crate::loom::hint;
-    #[cfg(feature = "lll")]
-    pub(crate) use crate::loom::sync::atomic;
-    #[cfg(feature = "aaa")]
-    pub use core::cell;
-    #[cfg(feature = "aaa")]
-    pub use core::sync::atomic;
-    #[cfg(feature = "aaa")]
-    pub use crate::core_std::sync;
-    #[cfg(feature = "aaa")]
-    pub(crate) use core::hint;
-}
 
 cfg_process! {
     pub mod process;

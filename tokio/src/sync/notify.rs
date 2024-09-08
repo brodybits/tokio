@@ -5,8 +5,8 @@
 // triggers this warning but it is safe to ignore in this case.
 #![cfg_attr(not(feature = "sync"), allow(unreachable_pub, dead_code))]
 
-use crate::fake_loom::cell::UnsafeCell;
-use crate::fake_loom::atomic::AtomicUsize;
+use crate::loom::cell::UnsafeCell;
+use crate::loom::sync::atomic::AtomicUsize;
 // XXX XXX
 #[cfg(feature = "sppp")]
 use spin::Mutex;

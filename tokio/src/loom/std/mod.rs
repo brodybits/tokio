@@ -4,10 +4,13 @@ mod atomic_u16;
 mod atomic_u32;
 mod atomic_u64;
 mod atomic_usize;
+#[cfg(feature = "rtvvv")]
 mod barrier;
+#[cfg(feature = "rtttt")]
 mod mutex;
 #[cfg(all(feature = "parking_lot", not(miri)))]
 mod parking_lot;
+#[cfg(feature = "rtvvv")]
 mod rwlock;
 mod unsafe_cell;
 
@@ -26,10 +29,13 @@ pub(crate) mod future {
 }
 
 pub(crate) mod hint {
-    pub(crate) use std::hint::spin_loop;
+    pub(crate) use crate::core_std::hint::spin_loop;
 }
 
+// XXX XXX
+#[cfg(feature = "rttt")]
 pub(crate) mod rand {
+    extern crate std;
     use std::collections::hash_map::RandomState;
     use std::hash::{BuildHasher, Hash, Hasher};
     use std::sync::atomic::AtomicU32;
@@ -51,25 +57,34 @@ pub(crate) mod rand {
 }
 
 pub(crate) mod sync {
-    pub(crate) use std::sync::{Arc, Weak};
+    pub(crate) use crate::core_std::sync::{Arc, Weak};
 
     // Below, make sure all the feature-influenced types are exported for
     // internal use. Note however that some are not _currently_ named by
     // consuming code.
 
-    #[cfg(all(feature = "parking_lot", not(miri)))]
-    #[allow(unused_imports)]
-    pub(crate) use crate::loom::std::parking_lot::{
-        Condvar, Mutex, MutexGuard, RwLock, RwLockReadGuard, WaitTimeoutResult,
-    };
+    //// XXX ??? ??? ???:
+    // #[cfg(all(feature = "parking_lot", not(miri)))]
+    // #[allow(unused_imports)]
+    // pub(crate) use crate::loom::std::parking_lot::{
+    //     Condvar, Mutex, MutexGuard, RwLock, RwLockReadGuard, WaitTimeoutResult,
+    // };
 
-    #[cfg(not(all(feature = "parking_lot", not(miri))))]
-    #[allow(unused_imports)]
-    pub(crate) use std::sync::{Condvar, MutexGuard, RwLockReadGuard, WaitTimeoutResult};
+    // XXX ??? ???
+    // #[cfg(not(all(feature = "parking_lot", not(miri))))]
+    // #[allow(unused_imports)]
+    // pub(crate) use std::sync::{Condvar, MutexGuard, RwLockReadGuard, WaitTimeoutResult};
 
-    #[cfg(not(all(feature = "parking_lot", not(miri))))]
-    pub(crate) use crate::loom::std::mutex::Mutex;
+    // XXX ??? ???? ???:
+    // XXX XXX
+    // #[cfg(feature = "rttt")]
+    // #[cfg(not(all(feature = "parking_lot", not(miri))))]
+    // pub(crate) use crate::loom::std::mutex::Mutex;
+    // XXX XXX
+    #[cfg(feature = "sppp")]
+    pub(crate) use spin::Mutex;
 
+    #[cfg(feature = "rtvvv")]
     #[cfg(not(all(feature = "parking_lot", not(miri))))]
     pub(crate) use crate::loom::std::rwlock::RwLock;
 
@@ -79,15 +94,18 @@ pub(crate) mod sync {
         pub(crate) use crate::loom::std::atomic_u64::{AtomicU64, StaticAtomicU64};
         pub(crate) use crate::loom::std::atomic_usize::AtomicUsize;
 
-        pub(crate) use std::sync::atomic::{fence, AtomicBool, AtomicPtr, AtomicU8, Ordering};
+        pub(crate) use crate::core_std::atomic::{fence, AtomicBool, AtomicPtr, AtomicU8, Ordering};
     }
 
+    #[cfg(feature = "rtvvv")]
     pub(crate) use super::barrier::Barrier;
 }
 
 pub(crate) mod sys {
     #[cfg(feature = "rt-multi-thread")]
     pub(crate) fn num_cpus() -> usize {
+        // XXX
+        extern crate std;
         use std::num::NonZeroUsize;
 
         const ENV_WORKER_THREADS: &str = "TOKIO_WORKER_THREADS";
@@ -121,7 +139,9 @@ pub(crate) mod sys {
     }
 }
 
+#[cfg(feature = "rttt")]
 pub(crate) mod thread {
+    extern crate std; // XXX
     #[inline]
     pub(crate) fn yield_now() {
         std::hint::spin_loop();

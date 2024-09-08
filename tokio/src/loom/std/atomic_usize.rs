@@ -1,11 +1,11 @@
-use std::cell::UnsafeCell;
-use std::fmt;
-use std::ops;
-use std::panic;
+use crate::core_std::cell::UnsafeCell;
+use crate::core_std::fmt;
+use crate::core_std::ops;
+use crate::core_std::panic;
 
 /// `AtomicUsize` providing an additional `unsync_load` function.
 pub(crate) struct AtomicUsize {
-    inner: UnsafeCell<std::sync::atomic::AtomicUsize>,
+    inner: UnsafeCell<crate::core_std::atomic::AtomicUsize>,
 }
 
 unsafe impl Send for AtomicUsize {}
@@ -15,7 +15,7 @@ impl panic::UnwindSafe for AtomicUsize {}
 
 impl AtomicUsize {
     pub(crate) const fn new(val: usize) -> AtomicUsize {
-        let inner = UnsafeCell::new(std::sync::atomic::AtomicUsize::new(val));
+        let inner = UnsafeCell::new(crate::core_std::atomic::AtomicUsize::new(val));
         AtomicUsize { inner }
     }
 
@@ -27,7 +27,7 @@ impl AtomicUsize {
     /// Additionally, there must be no concurrent mutations.
     pub(crate) unsafe fn unsync_load(&self) -> usize {
         // See <https://github.com/tokio-rs/tokio/issues/6155>
-        self.load(std::sync::atomic::Ordering::Relaxed)
+        self.load(crate::core_std::atomic::Ordering::Relaxed)
     }
 
     pub(crate) fn with_mut<R>(&mut self, f: impl FnOnce(&mut usize) -> R) -> R {
@@ -37,7 +37,7 @@ impl AtomicUsize {
 }
 
 impl ops::Deref for AtomicUsize {
-    type Target = std::sync::atomic::AtomicUsize;
+    type Target = crate::core_std::atomic::AtomicUsize;
 
     fn deref(&self) -> &Self::Target {
         // safety: it is always safe to access `&self` fns on the inner value as

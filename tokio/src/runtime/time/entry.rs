@@ -54,9 +54,9 @@
 //!
 //! [mark_pending]: TimerHandle::mark_pending
 
-use crate::fake_loom::cell::UnsafeCell;
-use crate::fake_loom::atomic::AtomicU64;
-use crate::fake_loom::atomic::Ordering;
+use crate::loom::cell::UnsafeCell;
+use crate::loom::atomic::AtomicU64;
+use crate::loom::atomic::Ordering;
 
 use crate::runtime::context;
 use crate::runtime::scheduler;

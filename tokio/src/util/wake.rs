@@ -1,4 +1,4 @@
-use crate::fake_loom::sync::Arc;
+use crate::loom::sync::Arc;
 
 use crate::core_std::marker::PhantomData;
 use crate::core_std::mem::ManuallyDrop;

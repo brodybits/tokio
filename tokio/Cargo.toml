@@ -28,13 +28,11 @@ keywords = ["io", "async", "non-blocking", "futures"]
 # XXX TBD ??? ??? ???:
 # default = ["std"]
 # default = ["std", "rttt"]
-default = ["rt", "aaa", "sppp"]
+default = ["rt", "sppp"]
 
 # XXX TODO INCLUDE IN XXX XXX XXX
 std = []
 
-aaa = []
-lll = []
 rtvvv = []
 sppp = ["dep:spin"]
 

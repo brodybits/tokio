@@ -1,4 +1,4 @@
-use crate::fake_loom::cell::UnsafeCell;
+use crate::loom::cell::UnsafeCell;
 
 use crate::core_std::rc::Rc;
 
@@ -25,7 +25,6 @@ impl<T> RcCell<T> {
     }
 
     /// Safety: This method may not be called recursively.
-    #[cfg(feature = "rtvvv")]
     #[inline]
     unsafe fn with_inner<F, R>(&self, f: F) -> R
     where
@@ -39,21 +38,18 @@ impl<T> RcCell<T> {
         self.inner.with_mut(|ptr| f(&mut *ptr))
     }
 
-    #[cfg(feature = "rtvvv")]
     pub(crate) fn get(&self) -> Option<Rc<T>> {
         // safety: The `Rc::clone` method will not call any unknown user-code,
         // so it will not result in a recursive call to `with_inner`.
         unsafe { self.with_inner(|rc| rc.clone()) }
     }
 
-    #[cfg(feature = "rtvvv")]
     pub(crate) fn replace(&self, val: Option<Rc<T>>) -> Option<Rc<T>> {
         // safety: No destructors or other unknown user-code will run inside the
         // `with_inner` call, so no recursive call to `with_inner` can happen.
         unsafe { self.with_inner(|rc| crate::core_std::mem::replace(rc, val)) }
     }
 
-    #[cfg(feature = "rtvvv")]
     pub(crate) fn set(&self, val: Option<Rc<T>>) {
         let old = self.replace(val);
         drop(old);

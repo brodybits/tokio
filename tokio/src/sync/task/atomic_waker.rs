@@ -1,8 +1,8 @@
 #![cfg_attr(any(loom, not(feature = "sync")), allow(dead_code, unreachable_pub))]
 
-use crate::fake_loom::cell::UnsafeCell;
-use crate::fake_loom::hint;
-use crate::fake_loom::atomic::AtomicUsize;
+use crate::loom::cell::UnsafeCell;
+use crate::loom::hint;
+use crate::loom::atomic::AtomicUsize;
 
 use crate::core_std::fmt;
 use crate::core_std::panic::{AssertUnwindSafe, RefUnwindSafe, UnwindSafe};
