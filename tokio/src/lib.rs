@@ -505,6 +505,29 @@ cfg_fs! {
     pub mod fs;
 }
 
+mod core_std {
+    pub use core::array;
+    pub use core::sync::atomic;
+    pub use core::cell;
+    pub use core::fmt;
+    pub use core::future;
+    pub use core::marker;
+    pub use core::mem;
+    pub use core::ops;
+    pub use core::panic;
+    pub use core::pin;
+    pub use core::ptr;
+    pub use core::task;
+    pub use core::time;
+
+    // XXX FUTURE TBD SEPARATE THESE ???
+    extern crate alloc;
+    pub use alloc::boxed;
+    pub use alloc::collections;
+    pub use alloc::rc;
+    pub use alloc::sync;
+}
+
 mod future;
 
 // XXX TBD ??? ???
@@ -514,8 +537,26 @@ pub mod io;
 pub mod net;
 
 // XXX TBD ??? ???
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
+#[cfg(feature = "lll")]
 mod loom;
+
+mod fake_loom {
+    #[cfg(feature = "lll")]
+    pub(crate) use crate::loom::cell;
+    #[cfg(feature = "lll")]
+    pub(crate) use crate::loom::hint;
+    #[cfg(feature = "lll")]
+    pub(crate) use crate::loom::sync::atomic;
+    #[cfg(feature = "aaa")]
+    pub use core::cell;
+    #[cfg(feature = "aaa")]
+    pub use core::sync::atomic;
+    #[cfg(feature = "aaa")]
+    pub use crate::core_std::sync;
+    #[cfg(feature = "aaa")]
+    pub(crate) use core::hint;
+}
 
 cfg_process! {
     pub mod process;

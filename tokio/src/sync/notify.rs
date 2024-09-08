@@ -5,19 +5,21 @@
 // triggers this warning but it is safe to ignore in this case.
 #![cfg_attr(not(feature = "sync"), allow(unreachable_pub, dead_code))]
 
-use crate::loom::cell::UnsafeCell;
-use crate::loom::sync::atomic::AtomicUsize;
-use crate::loom::sync::Mutex;
+use crate::fake_loom::cell::UnsafeCell;
+use crate::fake_loom::atomic::AtomicUsize;
+// XXX XXX
+#[cfg(feature = "sppp")]
+use spin::Mutex;
 use crate::util::linked_list::{self, GuardedLinkedList, LinkedList};
 use crate::util::WakeList;
 
-use std::future::Future;
-use std::marker::PhantomPinned;
-use std::panic::{RefUnwindSafe, UnwindSafe};
-use std::pin::Pin;
-use std::ptr::NonNull;
-use std::sync::atomic::Ordering::{self, Acquire, Relaxed, Release, SeqCst};
-use std::task::{Context, Poll, Waker};
+use crate::core_std::future::Future;
+use crate::core_std::marker::PhantomPinned;
+use crate::core_std::panic::{RefUnwindSafe, UnwindSafe};
+use crate::core_std::pin::Pin;
+use crate::core_std::ptr::NonNull;
+use crate::core_std::atomic::Ordering::{self, Acquire, Relaxed, Release, SeqCst};
+use crate::core_std::task::{Context, Poll, Waker};
 
 type WaitList = LinkedList<Waiter, <Waiter as linked_list::Link>::Target>;
 type GuardedWaitList = GuardedLinkedList<Waiter, <Waiter as linked_list::Link>::Target>;
@@ -474,7 +476,11 @@ impl Notify {
     pub const fn const_new() -> Notify {
         Notify {
             state: AtomicUsize::new(0),
+            // XXX XXX
+            #[cfg(feature = "rtvvv")]
             waiters: Mutex::const_new(LinkedList::new()),
+            #[cfg(feature = "sppp")]
+            waiters: Mutex::new(LinkedList::new()),
         }
     }
 
@@ -576,6 +582,7 @@ impl Notify {
     /// ```
     // Alias for old name in 0.x
     #[cfg_attr(docsrs, doc(alias = "notify"))]
+    #[cfg(feature = "rtvvv")]
     pub fn notify_one(&self) {
         self.notify_with_strategy(NotifyOneStrategy::Fifo);
     }
@@ -589,10 +596,12 @@ impl Notify {
     /// examples.
     ///
     /// [`notify_one()`]: Notify::notify_one
+    #[cfg(feature = "rtvvv")]
     pub fn notify_last(&self) {
         self.notify_with_strategy(NotifyOneStrategy::Lifo);
     }
 
+    #[cfg(feature = "rtvvv")]
     fn notify_with_strategy(&self, strategy: NotifyOneStrategy) {
         // Load the current state
         let mut curr = self.state.load(SeqCst);
@@ -659,6 +668,7 @@ impl Notify {
     ///     println!("received notifications");
     /// }
     /// ```
+    #[cfg(feature = "rtvvv")]
     pub fn notify_waiters(&self) {
         let mut waiters = self.waiters.lock();
 
@@ -691,7 +701,7 @@ impl Notify {
         // * This wrapper will empty the list on drop. It is critical for safety
         //   that we will not leave any list entry with a pointer to the local
         //   guard node after this function returns / panics.
-        let mut list = NotifyWaitersList::new(std::mem::take(&mut *waiters), guard.as_ref(), self);
+        let mut list = NotifyWaitersList::new(crate::core_std::mem::take(&mut *waiters), guard.as_ref(), self);
 
         let mut wakers = WakeList::new();
         'outer: loop {
@@ -744,6 +754,7 @@ impl Default for Notify {
 impl UnwindSafe for Notify {}
 impl RefUnwindSafe for Notify {}
 
+#[cfg(feature = "rtvvv")]
 fn notify_locked(
     waiters: &mut WaitList,
     state: &AtomicUsize,
@@ -906,6 +917,7 @@ impl Notified<'_> {
     ///
     /// [`notify_one`]: Notify::notify_one()
     /// [`notify_waiters`]: Notify::notify_waiters()
+    #[cfg(feature = "rtvvv")]
     pub fn enable(self: Pin<&mut Self>) -> bool {
         self.poll_notified(None).is_ready()
     }
@@ -930,6 +942,12 @@ impl Notified<'_> {
         }
     }
 
+    // XXX XXX
+    #[cfg(not(feature = "rtvvv"))]
+    fn poll_notified(self: Pin<&mut Self>, waker: Option<&Waker>) -> Poll<()> {
+        panic!("XXX")
+    }
+    #[cfg(feature = "rtvvv")]
     fn poll_notified(self: Pin<&mut Self>, waker: Option<&Waker>) -> Poll<()> {
         let (notify, state, notify_waiters_calls, waiter) = self.project();
 
@@ -1023,7 +1041,7 @@ impl Notified<'_> {
                         // None when we reach this line.
                         unsafe {
                             old_waker =
-                                waiter.waker.with_mut(|v| std::mem::replace(&mut *v, waker));
+                                waiter.waker.with_mut(|v| crate::core_std::mem::replace(&mut *v, waker));
                         }
                     }
 
@@ -1108,7 +1126,7 @@ impl Notified<'_> {
                                         None => true,
                                     };
                                     if should_update {
-                                        old_waker = std::mem::replace(&mut *v, Some(waker.clone()));
+                                        old_waker = crate::core_std::mem::replace(&mut *v, Some(waker.clone()));
                                     }
                                 }
                             });
@@ -1184,6 +1202,9 @@ impl Drop for Notified<'_> {
             // the notification was triggered via `notify_one`, it must be sent
             // to the next waiter.
             if let Some(Notification::One(strategy)) = notification {
+                // XXX
+                panic!("XXX");
+                #[cfg(feature = "rtvvv")]
                 if let Some(waker) =
                     notify_locked(&mut waiters, &notify.state, notify_state, strategy)
                 {

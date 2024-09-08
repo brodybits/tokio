@@ -1,13 +1,19 @@
 #![cfg_attr(any(loom, not(feature = "sync")), allow(dead_code, unreachable_pub))]
 
-use crate::loom::cell::UnsafeCell;
-use crate::loom::hint;
-use crate::loom::sync::atomic::AtomicUsize;
+use crate::fake_loom::cell::UnsafeCell;
+use crate::fake_loom::hint;
+use crate::fake_loom::atomic::AtomicUsize;
 
-use std::fmt;
-use std::panic::{resume_unwind, AssertUnwindSafe, RefUnwindSafe, UnwindSafe};
-use std::sync::atomic::Ordering::{AcqRel, Acquire, Release};
-use std::task::Waker;
+use crate::core_std::fmt;
+use crate::core_std::panic::{AssertUnwindSafe, RefUnwindSafe, UnwindSafe};
+use crate::core_std::atomic::Ordering::{AcqRel, Acquire, Release};
+use crate::core_std::task::Waker;
+
+// XXX XXX
+#[cfg(feature = "rttt")]
+extern crate std;
+#[cfg(feature = "rttt")]
+use std::panic::resume_unwind;
 
 /// A synchronization primitive for task waking.
 ///
@@ -267,8 +273,12 @@ impl AtomicWaker {
                     }
 
                     if let Some(panic) = maybe_panic {
+                        // XXX XXX XXX
+                        #[cfg(feature = "rttt")]
                         // If `into_waker` panicked, return the panic to the caller.
                         resume_unwind(panic);
+                        #[cfg(not(feature = "rttt"))]
+                        panic!("XXX");
                     }
                 }
             }

@@ -321,10 +321,14 @@
 //! [`task::unconstrained`]: crate::task::unconstrained()
 //! [`poll`]: method@std::future::Future::poll
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 cfg_rt! {
     pub use crate::runtime::task::{JoinError, JoinHandle};
 
+    #[cfg(feature = "rtvvv")]
     mod blocking;
+    #[cfg(feature = "rtvvv")]
     pub use blocking::spawn_blocking;
 
     mod spawn;
@@ -337,38 +341,54 @@ cfg_rt! {
     mod yield_now;
     pub use yield_now::yield_now;
 
+    #[cfg(feature = "rttt")]
     mod consume_budget;
+    #[cfg(feature = "rttt")]
     pub use consume_budget::consume_budget;
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     mod local;
+    #[cfg(feature = "rtvvv")]
     pub use local::{spawn_local, LocalSet, LocalEnterGuard};
 
+    #[cfg(feature = "rtvvv")]
     mod task_local;
+    #[cfg(feature = "rtvvv")]
     pub use task_local::LocalKey;
 
+    #[cfg(feature = "rtvvv")]
     mod unconstrained;
+    #[cfg(feature = "rtvvv")]
     pub use unconstrained::{unconstrained, Unconstrained};
 
     #[doc(inline)]
+    #[cfg(feature = "rtvvv")]
     pub use join_set::JoinSet;
+    #[cfg(feature = "rtvvv")]
     pub use crate::runtime::task::AbortHandle;
 
     // Uses #[cfg(...)] instead of macro since the macro adds docsrs annotations.
     #[cfg(not(tokio_unstable))]
+    #[cfg(feature = "rtvvv")]
     mod join_set;
     #[cfg(tokio_unstable)]
+    #[cfg(feature = "rtvvv")]
     pub mod join_set;
 
+    #[cfg(feature = "rtvvv")]
     cfg_unstable! {
         pub use crate::runtime::task::{Id, id, try_id};
     }
 
+    #[cfg(feature = "rtvvv")]
     cfg_trace! {
         mod builder;
         pub use builder::Builder;
     }
 
     /// Task-related futures.
+    #[cfg(feature = "rtvvv")]
     pub mod futures {
         pub use super::task_local::TaskLocalFuture;
     }

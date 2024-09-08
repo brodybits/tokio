@@ -1,8 +1,8 @@
 use crate::runtime::BOX_FUTURE_THRESHOLD;
 use crate::task::JoinHandle;
 
-use std::boxed::Box;
-use std::future::Future;
+use crate::core_std::boxed::Box;
+use crate::core_std::future::Future;
 
 cfg_rt! {
     /// Spawns a new asynchronous task, returning a
@@ -170,7 +170,7 @@ cfg_rt! {
     {
         // preventing stack overflows on debug mode, by quickly sending the
         // task to the heap.
-        if cfg!(debug_assertions) && std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
+        if cfg!(debug_assertions) && crate::core_std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
             spawn_inner(Box::pin(future), None)
         } else {
             spawn_inner(future, None)

@@ -319,21 +319,27 @@
 #[macro_use]
 mod tests;
 
+#[cfg(feature = "rttt")]
 pub(crate) mod context;
 
+#[cfg(feature = "rttt")]
 pub(crate) mod coop;
 
+#[cfg(feature = "rttt")]
 pub(crate) mod park;
 
+#[cfg(feature = "rttt")]
 mod driver;
 
 #[cfg(feature = "rttt")]
 pub(crate) mod scheduler;
 
+#[cfg(feature = "rttt")]
 cfg_io_driver_impl! {
     pub(crate) mod io;
 }
 
+#[cfg(feature = "rttt")]
 cfg_process_driver! {
     mod process;
 }
@@ -342,10 +348,12 @@ cfg_time! {
     pub(crate) mod time;
 }
 
+#[cfg(feature = "rttt")]
 cfg_signal_internal_and_unix! {
     pub(crate) mod signal;
 }
 
+#[cfg(feature = "rttt")]
 cfg_rt! {
     pub(crate) mod task;
 
@@ -413,8 +421,10 @@ cfg_rt! {
         }
     }
 
+    #[cfg(feature = "rttt")]
     pub(crate) use metrics::{MetricsBatch, SchedulerMetrics, WorkerMetrics, HistogramBuilder};
 
+    #[cfg(feature = "rttt")]
     /// After thread starts / before thread stops
     type Callback = std::sync::Arc<dyn Fn() + Send + Sync>;
 }

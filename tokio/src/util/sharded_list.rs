@@ -6,7 +6,8 @@ extern crate alloc;
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 
-use crate::loom::sync::{Mutex, MutexGuard};
+#[cfg(feature = "sppp")]
+use spin::{Mutex, MutexGuard};
 use crate::util::metric_atomics::{MetricAtomicU64, MetricAtomicUsize};
 
 use super::linked_list::{Link, LinkedList};

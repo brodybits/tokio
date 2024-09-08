@@ -123,19 +123,19 @@
 //! }
 //! ```
 
-use crate::loom::cell::UnsafeCell;
-use crate::loom::sync::atomic::AtomicUsize;
-use crate::loom::sync::Arc;
+use crate::fake_loom::cell::UnsafeCell;
+use crate::fake_loom::atomic::AtomicUsize;
+use crate::fake_loom::sync::Arc;
 #[cfg(all(tokio_unstable, feature = "tracing"))]
 use crate::util::trace;
 
-use std::fmt;
-use std::future::Future;
-use std::mem::MaybeUninit;
-use std::pin::Pin;
-use std::sync::atomic::Ordering::{self, AcqRel, Acquire};
-use std::task::Poll::{Pending, Ready};
-use std::task::{ready, Context, Poll, Waker};
+use crate::core_std::fmt;
+use crate::core_std::future::Future;
+use crate::core_std::mem::MaybeUninit;
+use crate::core_std::pin::Pin;
+use crate::core_std::atomic::Ordering::{self, AcqRel, Acquire};
+use crate::core_std::task::Poll::{Pending, Ready};
+use crate::core_std::task::{ready, Context, Poll, Waker};
 
 /// Sends a value to the associated [`Receiver`].
 ///
@@ -329,9 +329,13 @@ pub struct Receiver<T> {
     async_op_poll_span: tracing::Span,
 }
 
+// XXX XXX
+#[cfg(feature = "rttt")]
 pub mod error {
     //! `Oneshot` error types.
 
+    // XXX XXX
+    extern crate std;
     use std::fmt;
 
     /// Error returned by the `Future` implementation for `Receiver`.
@@ -698,7 +702,7 @@ impl<T> Sender<T> {
     /// }
     /// ```
     pub async fn closed(&mut self) {
-        use std::future::poll_fn;
+        use crate::core_std::future::poll_fn;
 
         #[cfg(all(tokio_unstable, feature = "tracing"))]
         let resource_span = self.resource_span.clone();
@@ -1271,7 +1275,7 @@ impl<T> Drop for Inner<T> {
 
 impl<T: fmt::Debug> fmt::Debug for Inner<T> {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use std::sync::atomic::Ordering::Relaxed;
+        use crate::core_std::atomic::Ordering::Relaxed;
 
         fmt.debug_struct("Inner")
             .field("state", &State::load(&self.state, Relaxed))

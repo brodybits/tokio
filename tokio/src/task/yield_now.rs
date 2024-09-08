@@ -1,8 +1,8 @@
 use crate::runtime::context;
 
-use std::future::Future;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use crate::core_std::future::Future;
+use crate::core_std::pin::Pin;
+use crate::core_std::task::{ready, Context, Poll};
 
 /// Yields execution back to the Tokio runtime.
 ///

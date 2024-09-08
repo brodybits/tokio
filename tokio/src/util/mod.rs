@@ -7,8 +7,12 @@ pub(crate) mod atomic_cell;
 
 pub(crate) mod metric_atomics;
 
-#[cfg(any(feature = "rt", feature = "signal", feature = "process"))]
-pub(crate) mod once_cell;
+// XXX XXX XXX
+// #[cfg(any(feature = "rt", feature = "signal", feature = "process"))]
+// pub(crate) mod once_cell;
+pub(crate) mod once_cell {
+    pub(crate) use core::cell::OnceCell;
+}
 
 #[cfg(any(
     // io driver uses `WakeList` directly
@@ -51,13 +55,17 @@ cfg_rt! {
     pub(crate) mod sharded_list;
 }
 
+#[cfg(feature = "rttt")]
 #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
 pub(crate) mod rand;
 
 cfg_rt! {
+    #[cfg(feature = "rtvvv")]
     mod idle_notified_set;
+    #[cfg(feature = "rtvvv")]
     pub(crate) use idle_notified_set::IdleNotifiedSet;
 
+    #[cfg(feature = "rtvvv")]
     pub(crate) use self::rand::RngSeedGenerator;
 
     mod wake;

@@ -54,19 +54,20 @@
 //!
 //! [mark_pending]: TimerHandle::mark_pending
 
-use crate::loom::cell::UnsafeCell;
-use crate::loom::sync::atomic::AtomicU64;
-use crate::loom::sync::atomic::Ordering;
+use crate::fake_loom::cell::UnsafeCell;
+use crate::fake_loom::atomic::AtomicU64;
+use crate::fake_loom::atomic::Ordering;
 
 use crate::runtime::context;
 use crate::runtime::scheduler;
+use crate::core_std;
 use crate::sync::AtomicWaker;
 use crate::time::Instant;
 use crate::util::linked_list;
 
-use std::cell::UnsafeCell as StdUnsafeCell;
-use std::task::{Context, Poll, Waker};
-use std::{marker::PhantomPinned, pin::Pin, ptr::NonNull};
+use crate::core_std::cell::UnsafeCell as StdUnsafeCell;
+use crate::core_std::task::{Context, Poll, Waker};
+use crate::core_std::{marker::PhantomPinned, pin::Pin, ptr::NonNull};
 
 type TimerResult = Result<(), crate::time::error::Error>;
 
@@ -108,8 +109,8 @@ impl Default for StateCell {
     }
 }
 
-impl std::fmt::Debug for StateCell {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core_std::fmt::Debug for StateCell {
+    fn fmt(&self, f: &mut core_std::fmt::Formatter<'_>) -> core_std::fmt::Result {
         write!(f, "StateCell({:?})", self.read_state())
     }
 }
@@ -301,7 +302,7 @@ pub(crate) struct TimerEntry {
     /// Whether the deadline has been registered.
     registered: bool,
     /// Ensure the type is !Unpin
-    _m: std::marker::PhantomPinned,
+    _m: core_std::marker::PhantomPinned,
 }
 
 unsafe impl Send for TimerEntry {}
@@ -353,8 +354,8 @@ pub(crate) struct TimerShared {
 unsafe impl Send for TimerShared {}
 unsafe impl Sync for TimerShared {}
 
-impl std::fmt::Debug for TimerShared {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core_std::fmt::Debug for TimerShared {
+    fn fmt(&self, f: &mut core_std::fmt::Formatter<'_>) -> core_std::fmt::Result {
         f.debug_struct("TimerShared")
             .field("cached_when", &self.cached_when.load(Ordering::Relaxed))
             .field("state", &self.state)
@@ -482,7 +483,7 @@ impl TimerEntry {
             inner: StdUnsafeCell::new(None),
             deadline,
             registered: false,
-            _m: std::marker::PhantomPinned,
+            _m: core_std::marker::PhantomPinned,
         }
     }
 

@@ -1,6 +1,11 @@
 //! Runs `!Send` futures on the current thread.
-use crate::loom::cell::UnsafeCell;
-use crate::loom::sync::{Arc, Mutex};
+use crate::fake_loom::cell::UnsafeCell;
+// XXX XXX
+// use crate::loom::sync::{Arc, Mutex};
+use crate::fake_loom::sync::Arc;
+// XXX XXX
+#[cfg(feature = "sppp")]
+use spin::Mutex;
 #[cfg(tokio_unstable)]
 use crate::runtime;
 use crate::runtime::task::{self, JoinHandle, LocalOwnedTasks, Task, TaskHarnessScheduleHooks};
@@ -8,15 +13,15 @@ use crate::runtime::{context, ThreadId, BOX_FUTURE_THRESHOLD};
 use crate::sync::AtomicWaker;
 use crate::util::RcCell;
 
-use std::boxed::Box;
-use std::cell::Cell;
-use std::collections::VecDeque;
-use std::fmt;
-use std::future::Future;
-use std::marker::PhantomData;
-use std::pin::Pin;
-use std::rc::Rc;
-use std::task::Poll;
+use crate::core_std::boxed::Box;
+use crate::core_std::cell::Cell;
+use crate::core_std::collections::VecDeque;
+use crate::core_std::fmt;
+use crate::core_std::future::Future;
+use crate::core_std::marker::PhantomData;
+use crate::core_std::pin::Pin;
+use crate::core_std::rc::Rc;
+use crate::core_std::task::Poll;
 
 use pin_project_lite::pin_project;
 
@@ -31,7 +36,7 @@ cfg_rt! {
     /// For example, the following code will not compile:
     ///
     /// ```rust,compile_fail
-    /// use std::rc::Rc;
+    /// use crate::fake_std::rc::Rc;
     ///
     /// #[tokio::main]
     /// async fn main() {
@@ -58,7 +63,7 @@ cfg_rt! {
     /// `!Send` futures. For example:
     ///
     /// ```rust
-    /// use std::rc::Rc;
+    /// use crate::fake_std::rc::Rc;
     /// use tokio::task;
     ///
     /// #[tokio::main]
@@ -93,7 +98,7 @@ cfg_rt! {
     ///
     /// ```rust
     /// use tokio::{task, time};
-    /// use std::rc::Rc;
+    /// use crate::fake_std::rc::Rc;
     ///
     /// #[tokio::main]
     /// async fn main() {
@@ -157,7 +162,7 @@ cfg_rt! {
     ///             .build()
     ///             .unwrap();
     ///
-    ///         std::thread::spawn(move || {
+    ///         crate::fake_std::thread::spawn(move || {
     ///             let local = LocalSet::new();
     ///
     ///             local.spawn_local(async move {
@@ -211,7 +216,7 @@ cfg_rt! {
     /// }
     /// ```
     ///
-    /// [`Send`]: trait@std::marker::Send
+    /// [`Send`]: trait@crate::fake_std::marker::Send
     /// [local task set]: struct@LocalSet
     /// [`Runtime::block_on`]: method@crate::runtime::Runtime::block_on
     /// [`task::spawn_local`]: fn@spawn_local
@@ -340,7 +345,7 @@ cfg_rt! {
     /// # Examples
     ///
     /// ```rust
-    /// use std::rc::Rc;
+    /// use crate::fake_std::rc::Rc;
     /// use tokio::task;
     ///
     /// #[tokio::main]
@@ -368,7 +373,7 @@ cfg_rt! {
         F: Future + 'static,
         F::Output: 'static,
     {
-        if cfg!(debug_assertions) && std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
+        if cfg!(debug_assertions) && crate::core_std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
             spawn_local_inner(Box::pin(future), None)
         } else {
             spawn_local_inner(future, None)
@@ -650,7 +655,7 @@ impl LocalSet {
         F: Future + 'static,
         F::Output: 'static,
     {
-        if cfg!(debug_assertions) && std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
+        if cfg!(debug_assertions) && crate::core_std::mem::size_of::<F>() > BOX_FUTURE_THRESHOLD {
             self.spawn_named_inner(Box::pin(future), name)
         } else {
             self.spawn_named_inner(future, name)
@@ -772,7 +777,7 @@ cfg_unstable! {
         /// spawned task.
         ///
         /// By default, an unhandled panic (i.e. a panic not caught by
-        /// [`std::panic::catch_unwind`]) has no impact on the `LocalSet`'s
+        /// [`crate::fake_std::panic::catch_unwind`]) has no impact on the `LocalSet`'s
         /// execution. The panic is error value is forwarded to the task's
         /// [`JoinHandle`] and all other spawned tasks continue running.
         ///
@@ -870,7 +875,7 @@ impl fmt::Debug for LocalSet {
 impl Future for LocalSet {
     type Output = ();
 
-    fn poll(self: Pin<&mut Self>, cx: &mut std::task::Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut crate::core_std::task::Context<'_>) -> Poll<Self::Output> {
         // Register the waker before starting to work
         self.context.shared.waker.register_by_ref(cx.waker());
 
@@ -980,7 +985,7 @@ impl Context {
 impl<T: Future> Future for RunUntil<'_, T> {
     type Output = T::Output;
 
-    fn poll(self: Pin<&mut Self>, cx: &mut std::task::Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut crate::core_std::task::Context<'_>) -> Poll<Self::Output> {
         let me = self.project();
 
         me.local_set.with(|| {
@@ -1054,7 +1059,7 @@ impl Shared {
     }
 
     fn ptr_eq(&self, other: &Shared) -> bool {
-        std::ptr::eq(self, other)
+        crate::core_std::ptr::eq(self, other)
     }
 }
 
@@ -1127,7 +1132,7 @@ impl LocalState {
         // the LocalSet.
         self.assert_called_from_owner_thread();
 
-        self.local_queue.with_mut(|ptr| std::mem::take(&mut (*ptr)))
+        self.local_queue.with_mut(|ptr| crate::core_std::mem::take(&mut (*ptr)))
     }
 
     unsafe fn task_remove(&self, task: &Task<Arc<Shared>>) -> Option<Task<Arc<Shared>>> {
@@ -1239,7 +1244,7 @@ mod tests {
             }));
 
             // poll the run until future once
-            std::future::poll_fn(|cx| {
+            crate::core_std::future::poll_fn(|cx| {
                 let _ = run_until.as_mut().poll(cx);
                 Poll::Ready(())
             })

@@ -1,6 +1,7 @@
 #![allow(dead_code)]
-use std::cell::UnsafeCell;
-use std::mem::MaybeUninit;
+
+use crate::core_std::cell::UnsafeCell;
+use crate::core_std::mem::MaybeUninit;
 use std::sync::Once;
 
 pub(crate) struct OnceCell<T> {

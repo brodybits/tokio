@@ -471,7 +471,9 @@ cfg_sync! {
     mod task;
     pub(crate) use task::AtomicWaker;
 
+    #[cfg(feature = "rttt")]
     mod once_cell;
+    #[cfg(feature = "rttt")]
     pub use self::once_cell::{OnceCell, SetError};
 
     pub mod watch;
@@ -487,9 +489,11 @@ cfg_not_sync! {
     #[cfg(any(feature = "rt", feature = "signal", all(unix, feature = "process")))]
     pub(crate) mod notify;
 
+    #[cfg(feature = "rttt")]
     #[cfg(any(feature = "rt", all(windows, feature = "process")))]
     pub(crate) mod oneshot;
 
+    #[cfg(feature = "rtvvv")]
     cfg_atomic_waker_impl! {
         mod task;
         pub(crate) use task::AtomicWaker;

@@ -1,9 +1,9 @@
-use crate::loom::sync::Arc;
+use crate::fake_loom::sync::Arc;
 
-use std::marker::PhantomData;
-use std::mem::ManuallyDrop;
-use std::ops::Deref;
-use std::task::{RawWaker, RawWakerVTable, Waker};
+use crate::core_std::marker::PhantomData;
+use crate::core_std::mem::ManuallyDrop;
+use crate::core_std::ops::Deref;
+use crate::core_std::task::{RawWaker, RawWakerVTable, Waker};
 
 /// Simplified waking interface based on Arcs.
 pub(crate) trait Wake: Send + Sync + Sized + 'static {

@@ -5,7 +5,7 @@ mod level;
 pub(crate) use self::level::Expiration;
 use self::level::Level;
 
-use std::{array, boxed::Box, ptr::NonNull};
+use crate::core_std::{array, boxed::Box, ptr::NonNull};
 
 use super::EntryList;
 
