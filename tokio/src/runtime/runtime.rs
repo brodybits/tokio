@@ -1,5 +1,6 @@
 use super::BOX_FUTURE_THRESHOLD;
 use crate::runtime::blocking::BlockingPool;
+#[cfg(feature = "rttt")]
 use crate::runtime::scheduler::CurrentThread;
 use crate::runtime::{context, EnterGuard, Handle};
 use crate::task::JoinHandle;
@@ -99,6 +100,7 @@ pub struct Runtime {
     /// Task scheduler
     scheduler: Scheduler,
 
+    #[cfg(feature = "rttt")]
     /// Handle to runtime, also contains driver handles
     handle: Handle,
 
@@ -139,11 +141,13 @@ pub(super) enum Scheduler {
 impl Runtime {
     pub(super) fn from_parts(
         scheduler: Scheduler,
+        #[cfg(feature = "rttt")]
         handle: Handle,
         blocking_pool: BlockingPool,
     ) -> Runtime {
         Runtime {
             scheduler,
+            #[cfg(feature = "rttt")]
             handle,
             blocking_pool,
         }

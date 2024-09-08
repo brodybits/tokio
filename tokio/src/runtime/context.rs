@@ -11,15 +11,21 @@ cfg_rt! {
     pub(crate) use blocking::{disallow_block_in_place, try_enter_blocking_region, BlockingRegionGuard};
 
     mod current;
-    pub(crate) use current::{with_current, try_set_current, SetCurrentGuard};
+    #[cfg(feature = "rttt")]
+    pub(crate) use current::{with_current};
+    pub(crate) use current::{try_set_current, SetCurrentGuard};
 
     mod runtime;
-    pub(crate) use runtime::{EnterRuntime, enter_runtime};
+    pub(crate) use runtime::EnterRuntime;
+    #[cfg(feature = "rttt")]
+    pub(crate) use runtime::{enter_runtime};
 
     mod scoped;
     use scoped::Scoped;
 
-    use crate::runtime::{scheduler, task::Id};
+    #[cfg(feature = "rttt")]
+    use crate::runtime::{scheduler};
+    use crate::runtime::{task::Id};
 
     use std::task::Waker;
 

@@ -1,5 +1,6 @@
 use super::{Context, CONTEXT};
 
+#[cfg(feature = "rttt")]
 use crate::runtime::{scheduler, TryCurrentError};
 use crate::util::markers::SyncNotSend;
 
@@ -34,6 +35,7 @@ pub(crate) fn try_set_current(handle: &scheduler::Handle) -> Option<SetCurrentGu
     CONTEXT.try_with(|ctx| ctx.set_current(handle)).ok()
 }
 
+#[cfg(feature = "rttt")]
 pub(crate) fn with_current<F, R>(f: F) -> Result<R, TryCurrentError>
 where
     F: FnOnce(&scheduler::Handle) -> R,

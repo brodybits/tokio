@@ -1,5 +1,6 @@
 use super::{BlockingRegionGuard, SetCurrentGuard, CONTEXT};
 
+#[cfg(feature = "rttt")]
 use crate::runtime::scheduler;
 use crate::util::rand::{FastRand, RngSeed};
 
@@ -29,6 +30,7 @@ pub(crate) struct EnterRuntimeGuard {
     old_seed: RngSeed,
 }
 
+#[cfg(feature = "rttt")]
 /// Marks the current thread as being within the dynamic extent of an
 /// executor.
 #[track_caller]

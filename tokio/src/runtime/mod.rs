@@ -327,6 +327,7 @@ pub(crate) mod park;
 
 mod driver;
 
+#[cfg(feature = "rttt")]
 pub(crate) mod scheduler;
 
 cfg_io_driver_impl! {
@@ -386,7 +387,9 @@ cfg_rt! {
     #[cfg(not(tokio_unstable))]
     pub(crate) use task_hooks::TaskMeta;
 
+    #[cfg(feature = "rttt")]
     mod handle;
+    #[cfg(feature = "rttt")]
     pub use handle::{EnterGuard, Handle, TryCurrentError};
 
     mod runtime;

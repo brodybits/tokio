@@ -24,9 +24,10 @@ keywords = ["io", "async", "non-blocking", "futures"]
 [features]
 # XXX TBD ??? ??? ???:
 # Include nothing by default
-default = []
+# default = []
 # XXX TBD ??? ??? ???:
 # default = ["std"]
+default = ["std", "rttt"]
 
 # XXX TODO INCLUDE IN XXX XXX XXX
 std = []
@@ -41,6 +42,7 @@ full = [
   "parking_lot",
   "process",
   "rt",
+  "rttt",
   "rt-multi-thread",
   "signal",
   "sync",
@@ -77,6 +79,7 @@ process = [
 ]
 # Includes basic task execution capabilities
 rt = []
+rttt = ["rt"]
 rt-multi-thread = ["rt"]
 signal = [
   "libc",

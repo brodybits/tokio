@@ -1,5 +1,6 @@
 #![cfg_attr(loom, allow(unused_imports))]
 
+#[cfg(feature = "rttt")]
 use crate::runtime::handle::Handle;
 #[cfg(tokio_unstable)]
 use crate::runtime::TaskMeta;
@@ -1192,6 +1193,7 @@ impl Builder {
     }
 
     fn build_current_thread_runtime(&mut self) -> io::Result<Runtime> {
+        #[cfg(feature = "rttt")]
         use crate::runtime::scheduler::{self, CurrentThread};
         use crate::runtime::{runtime::Scheduler, Config};
 
