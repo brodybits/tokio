@@ -322,8 +322,8 @@
 //! [`poll`]: method@std::future::Future::poll
 
 // XXX XXX
-#[cfg(feature = "rtvvv")]
 cfg_rt! {
+    #[cfg(feature = "rtvvv")]
     pub use crate::runtime::task::{JoinError, JoinHandle};
 
     #[cfg(feature = "rtvvv")]
@@ -331,14 +331,18 @@ cfg_rt! {
     #[cfg(feature = "rtvvv")]
     pub use blocking::spawn_blocking;
 
+    #[cfg(feature = "rtvvv")]
     mod spawn;
+    #[cfg(feature = "rtvvv")]
     pub use spawn::spawn;
 
     cfg_rt_multi_thread! {
         pub use blocking::block_in_place;
     }
 
+    #[cfg(feature = "rtvvv")]
     mod yield_now;
+    #[cfg(feature = "rtvvv")]
     pub use yield_now::yield_now;
 
     #[cfg(feature = "rttt")]

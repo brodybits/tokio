@@ -353,27 +353,36 @@ cfg_signal_internal_and_unix! {
     pub(crate) mod signal;
 }
 
-#[cfg(feature = "rttt")]
 cfg_rt! {
+    #[cfg(feature = "rtvvv")]
     pub(crate) mod task;
 
+    #[cfg(feature = "rtvvv")]
     mod config;
+    #[cfg(feature = "rtvvv")]
     use config::Config;
 
+    #[cfg(feature = "rtvvv")]
     mod blocking;
+    #[cfg(feature = "rtvvv")]
     #[cfg_attr(target_os = "wasi", allow(unused_imports))]
     pub(crate) use blocking::spawn_blocking;
 
+    #[cfg(feature = "rtvvv")]
     cfg_trace! {
         pub(crate) use blocking::Mandatory;
     }
 
+    #[cfg(feature = "rtvvv")]
     cfg_fs! {
         pub(crate) use blocking::spawn_mandatory_blocking;
     }
 
+    #[cfg(feature = "rtvvv")]
     mod builder;
+    #[cfg(feature = "rtvvv")]
     pub use self::builder::Builder;
+    #[cfg(feature = "rtvvv")]
     cfg_unstable! {
         mod id;
         #[cfg_attr(not(tokio_unstable), allow(unreachable_pub))]
@@ -383,36 +392,48 @@ cfg_rt! {
         pub use crate::util::rand::RngSeed;
     }
 
+    #[cfg(feature = "rtvvv")]
     cfg_taskdump! {
         pub mod dump;
         pub use dump::Dump;
     }
 
+    #[cfg(feature = "rtvvv")]
     mod task_hooks;
+    #[cfg(feature = "rtvvv")]
     pub(crate) use task_hooks::{TaskHooks, TaskCallback};
     #[cfg(tokio_unstable)]
+    #[cfg(feature = "rtvvv")]
     pub use task_hooks::TaskMeta;
     #[cfg(not(tokio_unstable))]
+    #[cfg(feature = "rtvvv")]
     pub(crate) use task_hooks::TaskMeta;
 
-    #[cfg(feature = "rttt")]
+    #[cfg(feature = "rtvvv")]
     mod handle;
-    #[cfg(feature = "rttt")]
+    #[cfg(feature = "rtvvv")]
     pub use handle::{EnterGuard, Handle, TryCurrentError};
 
+    #[cfg(feature = "rtvvv")]
     mod runtime;
+    #[cfg(feature = "rtvvv")]
     pub use runtime::{Runtime, RuntimeFlavor};
 
     /// Boundary value to prevent stack overflow caused by a large-sized
     /// Future being placed in the stack.
     pub(crate) const BOX_FUTURE_THRESHOLD: usize = 2048;
 
+    #[cfg(feature = "rtvvv")]
     mod thread_id;
+    #[cfg(feature = "rtvvv")]
     pub(crate) use thread_id::ThreadId;
 
+    #[cfg(feature = "rtvvv")]
     pub(crate) mod metrics;
+    #[cfg(feature = "rtvvv")]
     pub use metrics::RuntimeMetrics;
 
+    #[cfg(feature = "rtvvv")]
     cfg_unstable_metrics! {
         pub use metrics::HistogramScale;
 

@@ -506,6 +506,7 @@ cfg_fs! {
 }
 
 mod core_std {
+    pub use core::any;
     pub use core::array;
     pub use core::sync::atomic;
     pub use core::cell;
@@ -520,6 +521,7 @@ mod core_std {
     pub use core::panic;
     pub use core::pin;
     pub use core::ptr;
+    pub use core::result;
     pub use core::task;
     pub use core::time;
 
@@ -528,6 +530,7 @@ mod core_std {
     pub use alloc::boxed;
     pub use alloc::collections;
     pub use alloc::rc;
+    pub use alloc::string;
     pub use alloc::sync;
 }
 
