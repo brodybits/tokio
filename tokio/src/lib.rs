@@ -559,8 +559,6 @@ mod blocking;
 cfg_rt! {
     pub mod runtime;
 }
-// XXX TBD ??? ???
-#[cfg(feature = "std")]
 cfg_not_rt! {
     pub(crate) mod runtime;
 }
