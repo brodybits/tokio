@@ -2,7 +2,7 @@
 
 use crate::loom::cell::UnsafeCell;
 use crate::loom::hint;
-use crate::loom::atomic::AtomicUsize;
+use crate::loom::sync::atomic::AtomicUsize;
 
 use crate::core_std::fmt;
 use crate::core_std::panic::{AssertUnwindSafe, RefUnwindSafe, UnwindSafe};
@@ -182,8 +182,14 @@ impl AtomicWaker {
     where
         W: WakerRef,
     {
+        // XXX XXX XXX
+        #[cfg(feature = "rttt")]
         fn catch_unwind<F: FnOnce() -> R, R>(f: F) -> std::thread::Result<R> {
             std::panic::catch_unwind(AssertUnwindSafe(f))
+        }
+        #[cfg(not(feature = "rttt"))]
+        fn catch_unwind<F: FnOnce() -> R, R>(f: F) -> core::result::Result<R, ()> {
+            Ok(f())
         }
 
         match self
