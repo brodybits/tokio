@@ -4,12 +4,14 @@ use super::{Context, CONTEXT};
 use crate::runtime::{scheduler, TryCurrentError};
 use crate::util::markers::SyncNotSend;
 
-use std::cell::{Cell, RefCell};
-use std::marker::PhantomData;
+use crate::core_std::cell::{Cell, RefCell};
+use crate::core_std::marker::PhantomData;
 
 #[derive(Debug)]
 #[must_use]
 pub(crate) struct SetCurrentGuard {
+    // XXX
+    #[cfg(feature = "rtvvv")]
     // The previous handle
     prev: Option<scheduler::Handle>,
 
@@ -20,6 +22,8 @@ pub(crate) struct SetCurrentGuard {
     _p: PhantomData<SyncNotSend>,
 }
 
+// XXX
+#[cfg(feature = "rtvvv")]
 pub(super) struct HandleCell {
     /// Current handle
     handle: RefCell<Option<scheduler::Handle>>,
@@ -28,6 +32,7 @@ pub(super) struct HandleCell {
     depth: Cell<usize>,
 }
 
+#[cfg(feature = "rtvvv")]
 /// Sets this [`Handle`] as the current active [`Handle`].
 ///
 /// [`Handle`]: crate::runtime::scheduler::Handle
@@ -48,6 +53,8 @@ where
 }
 
 impl Context {
+    // XXX
+    #[cfg(feature = "rtvvv")]
     pub(super) fn set_current(&self, handle: &scheduler::Handle) -> SetCurrentGuard {
         let old_handle = self.current.handle.borrow_mut().replace(handle.clone());
         let depth = self.current.depth.get();
@@ -65,6 +72,8 @@ impl Context {
     }
 }
 
+// XXX
+#[cfg(feature = "rtvvv")]
 impl HandleCell {
     pub(super) const fn new() -> HandleCell {
         HandleCell {
@@ -76,10 +85,15 @@ impl HandleCell {
 
 impl Drop for SetCurrentGuard {
     fn drop(&mut self) {
+        // XXX XXX
+        #[cfg(feature = "rtvvv")]
         CONTEXT.with(|ctx| {
             let depth = ctx.current.depth.get();
 
             if depth != self.depth {
+                // XXX XXX XXX
+                panic!("XXX");
+                #[cfg(feature = "rtvvv")]
                 if !std::thread::panicking() {
                     panic!(
                         "`EnterGuard` values dropped out of order. Guards returned by \

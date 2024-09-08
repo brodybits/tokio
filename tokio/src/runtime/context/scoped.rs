@@ -1,5 +1,5 @@
-use std::cell::Cell;
-use std::ptr;
+use crate::core_std::cell::Cell;
+use crate::core_std::ptr;
 
 /// Scoped thread-local storage
 pub(super) struct Scoped<T> {

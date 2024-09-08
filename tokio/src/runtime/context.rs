@@ -1,18 +1,25 @@
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use crate::loom::thread::AccessError;
 use crate::runtime::coop;
 
-use std::cell::Cell;
+use crate::core_std::cell::Cell;
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
 use crate::util::rand::FastRand;
 
 cfg_rt! {
     mod blocking;
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     pub(crate) use blocking::{disallow_block_in_place, try_enter_blocking_region, BlockingRegionGuard};
 
     mod current;
     #[cfg(feature = "rttt")]
     pub(crate) use current::{with_current};
+    #[cfg(feature = "rttt")]
     pub(crate) use current::{try_set_current, SetCurrentGuard};
 
     mod runtime;
@@ -23,11 +30,13 @@ cfg_rt! {
     mod scoped;
     use scoped::Scoped;
 
-    #[cfg(feature = "rttt")]
+    #[cfg(feature = "rtvvv")]
     use crate::runtime::{scheduler};
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     use crate::runtime::{task::Id};
 
-    use std::task::Waker;
+    use crate::core_std::task::Waker;
 
     cfg_taskdump! {
         use crate::runtime::task::trace;
@@ -40,18 +49,24 @@ cfg_rt_multi_thread! {
 }
 
 struct Context {
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Uniquely identifies the current thread
     #[cfg(feature = "rt")]
     thread_id: Cell<Option<ThreadId>>,
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Handle to the runtime scheduler running on the current thread.
     #[cfg(feature = "rt")]
     current: current::HandleCell,
 
     /// Handle to the scheduler's internal "context"
+    #[cfg(feature = "rtvvv")]
     #[cfg(feature = "rt")]
     scheduler: Scoped<scheduler::Context>,
 
+    #[cfg(feature = "rtvvv")] // XXX
     #[cfg(feature = "rt")]
     current_task_id: Cell<Option<Id>>,
 
@@ -63,6 +78,7 @@ struct Context {
     #[cfg(feature = "rt")]
     runtime: Cell<EnterRuntime>,
 
+    #[cfg(feature = "rtvvv")]
     #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
     rng: Cell<Option<FastRand>>,
 
@@ -80,21 +96,40 @@ struct Context {
     trace: trace::Context,
 }
 
-tokio_thread_local! {
-    static CONTEXT: Context = const {
+// XXX ???
+unsafe impl Sync for Context {}
+
+// XXX XXX TBD
+// tokio_thread_local! {
+//     static CONTEXT: Context = const {
+//         Context {
+//            // XXX XXX
+//     }
+// }
+
+static CONTEXT: Context = new_context();
+
+const fn new_context() -> Context {
+    {
         Context {
+            // XXX XXX
+            #[cfg(feature = "rtvvv")]
             #[cfg(feature = "rt")]
             thread_id: Cell::new(None),
 
+            // XXX XXX
+            #[cfg(feature = "rtvvv")]
             // Tracks the current runtime handle to use when spawning,
             // accessing drivers, etc...
             #[cfg(feature = "rt")]
             current: current::HandleCell::new(),
 
+            #[cfg(feature = "rtvvv")]
             // Tracks the current scheduler internal context
             #[cfg(feature = "rt")]
             scheduler: Scoped::new(),
 
+            #[cfg(feature = "rtvvv")]
             #[cfg(feature = "rt")]
             current_task_id: Cell::new(None),
 
@@ -106,6 +141,7 @@ tokio_thread_local! {
             #[cfg(feature = "rt")]
             runtime: Cell::new(EnterRuntime::NotEntered),
 
+            #[cfg(feature = "rtvvv")]
             #[cfg(any(feature = "rt", feature = "macros", feature = "time"))]
             rng: Cell::new(None),
 
@@ -127,6 +163,7 @@ tokio_thread_local! {
     }
 }
 
+#[cfg(feature = "rtvvv")]
 #[cfg(any(
     feature = "time",
     feature = "macros",
@@ -141,10 +178,14 @@ pub(crate) fn thread_rng_n(n: u32) -> u32 {
     })
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 pub(super) fn budget<R>(f: impl FnOnce(&Cell<coop::Budget>) -> R) -> Result<R, AccessError> {
     CONTEXT.try_with(|ctx| f(&ctx.budget))
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 cfg_rt! {
     use crate::runtime::ThreadId;
 

@@ -1,10 +1,15 @@
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use super::{BlockingRegionGuard, SetCurrentGuard, CONTEXT};
+#[cfg(not(feature = "rtvvv"))]
+use super::{CONTEXT};
 
 #[cfg(feature = "rttt")]
 use crate::runtime::scheduler;
+#[cfg(feature = "rtvvv")]
 use crate::util::rand::{FastRand, RngSeed};
 
-use std::fmt;
+use crate::core_std::fmt;
 
 #[derive(Debug, Clone, Copy)]
 #[must_use]
@@ -17,6 +22,8 @@ pub(crate) enum EnterRuntime {
     NotEntered,
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Guard tracking that a caller has entered a runtime context.
 #[must_use]
 pub(crate) struct EnterRuntimeGuard {
@@ -75,12 +82,16 @@ where
     );
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl fmt::Debug for EnterRuntimeGuard {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Enter").finish()
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl Drop for EnterRuntimeGuard {
     fn drop(&mut self) {
         CONTEXT.with(|c| {

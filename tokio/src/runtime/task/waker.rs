@@ -1,10 +1,10 @@
 use crate::runtime::task::{Header, RawTask, Schedule};
 
-use std::marker::PhantomData;
-use std::mem::ManuallyDrop;
-use std::ops;
-use std::ptr::NonNull;
-use std::task::{RawWaker, RawWakerVTable, Waker};
+use crate::core_std::marker::PhantomData;
+use crate::core_std::mem::ManuallyDrop;
+use crate::core_std::ops;
+use crate::core_std::ptr::NonNull;
+use crate::core_std::task::{RawWaker, RawWakerVTable, Waker};
 
 pub(super) struct WakerRef<'a, S: 'static> {
     waker: ManuallyDrop<Waker>,
@@ -64,6 +64,8 @@ cfg_not_trace! {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn clone_waker(ptr: *const ()) -> RawWaker {
     let header = NonNull::new_unchecked(ptr as *mut Header);
     trace!(header, "waker.clone");
@@ -71,6 +73,8 @@ unsafe fn clone_waker(ptr: *const ()) -> RawWaker {
     raw_waker(header)
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn drop_waker(ptr: *const ()) {
     let ptr = NonNull::new_unchecked(ptr as *mut Header);
     trace!(ptr, "waker.drop");
@@ -78,6 +82,8 @@ unsafe fn drop_waker(ptr: *const ()) {
     raw.drop_reference();
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn wake_by_val(ptr: *const ()) {
     let ptr = NonNull::new_unchecked(ptr as *mut Header);
     trace!(ptr, "waker.wake");
@@ -90,13 +96,25 @@ unsafe fn wake_by_ref(ptr: *const ()) {
     let ptr = NonNull::new_unchecked(ptr as *mut Header);
     trace!(ptr, "waker.wake_by_ref");
     let raw = RawTask::from_raw(ptr);
+    // XXX XXX
+    panic!("XXX");
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     raw.wake_by_ref();
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 static WAKER_VTABLE: RawWakerVTable =
     RawWakerVTable::new(clone_waker, wake_by_val, wake_by_ref, drop_waker);
 
 fn raw_waker(header: NonNull<Header>) -> RawWaker {
+    // XXX XXX
+    panic!("XXX");
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     let ptr = header.as_ptr() as *const ();
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     RawWaker::new(ptr, &WAKER_VTABLE)
 }

@@ -14,14 +14,18 @@ use crate::loom::cell::UnsafeCell;
 use crate::runtime::context;
 use crate::runtime::task::raw::{self, Vtable};
 use crate::runtime::task::state::State;
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use crate::runtime::task::{Id, Schedule, TaskHarnessScheduleHooks};
+#[cfg(not(feature = "rtvvv"))]
+use crate::runtime::task::{Id, Schedule};
 use crate::util::linked_list;
 
-use std::boxed::Box;
-use std::num::NonZeroU64;
-use std::pin::Pin;
-use std::ptr::NonNull;
-use std::task::{Context, Poll, Waker};
+use crate::core_std::boxed::Box;
+use crate::core_std::num::NonZeroU64;
+use crate::core_std::pin::Pin;
+use crate::core_std::ptr::NonNull;
+use crate::core_std::task::{Context, Poll, Waker};
 
 /// The task cell. Contains the components of the task.
 ///
@@ -186,6 +190,8 @@ pub(super) struct Trailer {
     pub(super) owned: linked_list::Pointers<Header>,
     /// Consumer task waiting on completion of this task.
     pub(super) waker: UnsafeCell<Option<Waker>>,
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Optional hooks needed in the harness.
     pub(super) hooks: TaskHarnessScheduleHooks,
 }
@@ -207,6 +213,8 @@ pub(super) enum Stage<T: Future> {
 }
 
 impl<T: Future, S: Schedule> Cell<T, S> {
+    // XXX XXX
+    // #[cfg(feature = "rtvvv")]
     /// Allocates a new task cell, containing the header, trailer, and core
     /// structures.
     pub(super) fn new(future: T, scheduler: S, state: State, task_id: Id) -> Box<Cell<T, S>> {
@@ -228,7 +236,13 @@ impl<T: Future, S: Schedule> Cell<T, S> {
 
         #[cfg(all(tokio_unstable, feature = "tracing"))]
         let tracing_id = future.id();
+        // XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "rtvvv")]
         let vtable = raw::vtable::<T, S>();
+        // XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "rtvvv")]
         let result = Box::new(Cell {
             trailer: Trailer::new(scheduler.hooks()),
             header: new_header(
@@ -246,6 +260,9 @@ impl<T: Future, S: Schedule> Cell<T, S> {
             },
         });
 
+        // XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "rtvvv")]
         #[cfg(debug_assertions)]
         {
             // Using a separate function for this code avoids instantiating it separately for every `T`.
@@ -272,6 +289,9 @@ impl<T: Future, S: Schedule> Cell<T, S> {
             }
         }
 
+        // XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "rtvvv")]
         result
     }
 }
@@ -282,12 +302,16 @@ impl<T: Future> CoreStage<T> {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Set and clear the task id in the context when the future is executed or
 /// dropped, or when the output produced by the future is dropped.
 pub(crate) struct TaskIdGuard {
     parent_task_id: Option<Id>,
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl TaskIdGuard {
     fn enter(id: Id) -> Self {
         TaskIdGuard {
@@ -296,6 +320,8 @@ impl TaskIdGuard {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl Drop for TaskIdGuard {
     fn drop(&mut self) {
         context::set_current_task_id(self.parent_task_id);
@@ -303,6 +329,8 @@ impl Drop for TaskIdGuard {
 }
 
 impl<T: Future, S: Schedule> Core<T, S> {
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Polls the future.
     ///
     /// # Safety
@@ -340,6 +368,7 @@ impl<T: Future, S: Schedule> Core<T, S> {
         res
     }
 
+    #[cfg(feature = "rtvvv")]
     /// Drops the future.
     ///
     /// # Safety
@@ -352,6 +381,7 @@ impl<T: Future, S: Schedule> Core<T, S> {
         }
     }
 
+    #[cfg(feature = "rtvvv")]
     /// Stores the task output.
     ///
     /// # Safety
@@ -370,7 +400,7 @@ impl<T: Future, S: Schedule> Core<T, S> {
     ///
     /// The caller must ensure it is safe to mutate the `stage` field.
     pub(super) fn take_output(&self) -> super::Result<T::Output> {
-        use std::mem;
+        use crate::core_std::mem;
 
         self.stage.stage.with_mut(|ptr| {
             // Safety:: the caller ensures mutual exclusion to the field.
@@ -381,6 +411,8 @@ impl<T: Future, S: Schedule> Core<T, S> {
         })
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     unsafe fn set_stage(&self, stage: Stage<T>) {
         let _guard = TaskIdGuard::enter(self.task_id);
         self.stage.stage.with_mut(|ptr| *ptr = stage);
@@ -430,6 +462,8 @@ impl Header {
         NonNull::new_unchecked(scheduler)
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Gets a pointer to the id of the task containing this `Header`.
     ///
     /// # Safety
@@ -441,6 +475,8 @@ impl Header {
         NonNull::new_unchecked(id)
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Gets the id of the task containing this `Header`.
     ///
     /// # Safety
@@ -462,6 +498,8 @@ impl Header {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl Trailer {
     fn new(hooks: TaskHarnessScheduleHooks) -> Self {
         Trailer {

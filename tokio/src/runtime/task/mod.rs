@@ -175,12 +175,19 @@ use self::core::Header;
 mod error;
 pub use self::error::JoinError;
 
+#[cfg(feature = "rtvvv")]
 mod harness;
+#[cfg(feature = "rtvvv")]
 use self::harness::Harness;
 
+// #[cfg(feature = "rtvvv")]
 mod id;
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 #[cfg_attr(not(tokio_unstable), allow(unreachable_pub, unused_imports))]
 pub use id::{id, try_id, Id};
+#[cfg(not(feature = "rtvvv"))]
+use id::Id;
 
 #[cfg(feature = "rt")]
 mod abort;
@@ -210,10 +217,13 @@ use crate::future::Future;
 use crate::util::linked_list;
 use crate::util::sharded_list;
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use crate::runtime::TaskCallback;
-use std::marker::PhantomData;
-use std::ptr::NonNull;
-use std::{fmt, mem};
+
+use crate::core_std::marker::PhantomData;
+use crate::core_std::ptr::NonNull;
+use crate::core_std::{fmt, mem};
 
 /// An owned handle to the task, tracked by ref count.
 #[repr(transparent)]
@@ -253,10 +263,14 @@ pub(crate) struct UnownedTask<S: 'static> {
 unsafe impl<S> Send for UnownedTask<S> {}
 unsafe impl<S> Sync for UnownedTask<S> {}
 
+// XXX XXX XXX
 /// Task result sent back.
-pub(crate) type Result<T> = std::result::Result<T, JoinError>;
+// pub(crate) type Result<T> = std::result::Result<T, JoinError>;
+pub(crate) type Result<T> = crate::core_std::result::Result<T, JoinError>;
 
 /// Hooks for scheduling tasks which are needed in the task harness.
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 #[derive(Clone)]
 pub(crate) struct TaskHarnessScheduleHooks {
     pub(crate) task_terminate_callback: Option<TaskCallback>,
@@ -273,6 +287,8 @@ pub(crate) trait Schedule: Sync + Sized + 'static {
     /// Schedule the task
     fn schedule(&self, task: Notified<Self>);
 
+    #[cfg(feature = "rtvvv")]
+    #[derive(Clone)]
     fn hooks(&self) -> TaskHarnessScheduleHooks;
 
     /// Schedule the task to run in the near future, yielding the thread to
@@ -334,8 +350,8 @@ cfg_rt! {
             raw: task.raw,
             _p: PhantomData,
         };
-        std::mem::forget(task);
-        std::mem::forget(notified);
+        crate::core_std::mem::forget(task);
+        crate::core_std::mem::forget(notified);
 
         (unowned, join)
     }
@@ -424,6 +440,10 @@ impl<S: Schedule> Task<S> {
     pub(crate) fn shutdown(self) {
         let raw = self.raw;
         mem::forget(self);
+        // XXX XXX
+        panic!("XXX");
+        // XXX XXX
+        #[cfg(feature = "rtvvv")]
         raw.shutdown();
     }
 }
@@ -538,6 +558,12 @@ unsafe impl<S> linked_list::Link for Task<S> {
 /// `get_shard_id` will not change. (The cast may throw away the upper 32 bits of the task id, but
 /// the shard id still won't change from call to call.)
 unsafe impl<S> sharded_list::ShardedListItem for Task<S> {
+    // XXX XXX
+    #[cfg(not(feature = "rtvvv"))]
+    unsafe fn get_shard_id(target: NonNull<Self::Target>) -> usize {
+        panic!("XXX");
+    }
+    #[cfg(feature = "rtvvv")]
     unsafe fn get_shard_id(target: NonNull<Self::Target>) -> usize {
         // SAFETY: The caller guarantees that `target` points at a valid task.
         let task_id = unsafe { Header::get_id(target) };

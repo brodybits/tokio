@@ -1,10 +1,12 @@
 use super::{EnterRuntime, CONTEXT};
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use crate::loom::thread::AccessError;
 use crate::util::markers::NotSendOrSync;
 
-use std::marker::PhantomData;
-use std::time::Duration;
+use crate::core_std::marker::PhantomData;
+use crate::core_std::time::Duration;
 
 /// Guard tracking that a caller has entered a blocking region.
 #[must_use]
@@ -14,6 +16,8 @@ pub(crate) struct BlockingRegionGuard {
 
 pub(crate) struct DisallowBlockInPlaceGuard(bool);
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 pub(crate) fn try_enter_blocking_region() -> Option<BlockingRegionGuard> {
     CONTEXT
         .try_with(|c| {
@@ -30,6 +34,8 @@ pub(crate) fn try_enter_blocking_region() -> Option<BlockingRegionGuard> {
         .unwrap_or_else(|_| Some(BlockingRegionGuard::new()))
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Disallows blocking in the current runtime context until the guard is dropped.
 pub(crate) fn disallow_block_in_place() -> DisallowBlockInPlaceGuard {
     let reset = CONTEXT.with(|c| {
@@ -54,11 +60,13 @@ impl BlockingRegionGuard {
         BlockingRegionGuard { _p: PhantomData }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Blocks the thread on the specified future, returning the value with
     /// which that future completes.
     pub(crate) fn block_on<F>(&mut self, f: F) -> Result<F::Output, AccessError>
     where
-        F: std::future::Future,
+        F: crate::core_std::future::Future,
     {
         use crate::runtime::park::CachedParkThread;
 
@@ -70,6 +78,8 @@ impl BlockingRegionGuard {
     ///
     /// If the future completes before `timeout`, the result is returned. If
     /// `timeout` elapses, then `Err` is returned.
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     pub(crate) fn block_on_timeout<F>(&mut self, f: F, timeout: Duration) -> Result<F::Output, ()>
     where
         F: std::future::Future,
@@ -104,6 +114,8 @@ impl BlockingRegionGuard {
 
 impl Drop for DisallowBlockInPlaceGuard {
     fn drop(&mut self) {
+        // XXX XXX
+        #[cfg(feature = "rtvvv")]
         if self.0 {
             // XXX: Do we want some kind of assertion here, or is "best effort" okay?
             CONTEXT.with(|c| {

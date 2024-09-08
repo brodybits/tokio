@@ -1,6 +1,6 @@
 use crate::runtime::context;
 
-use std::{fmt, num::NonZeroU64};
+use crate::core_std::{fmt, num::NonZeroU64};
 
 /// An opaque ID that uniquely identifies a task relative to all other currently
 /// running tasks.
@@ -26,6 +26,7 @@ use std::{fmt, num::NonZeroU64};
 #[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub struct Id(pub(crate) NonZeroU64);
 
+#[cfg(feature = "rtvvv")] // XXX XXX
 /// Returns the [`Id`] of the currently running task.
 ///
 /// # Panics
@@ -47,6 +48,7 @@ pub fn id() -> Id {
     context::current_task_id().expect("Can't get a task id when not inside a task")
 }
 
+#[cfg(feature = "rtvvv")] // XXX XXX
 /// Returns the [`Id`] of the currently running task, or `None` if called outside
 /// of a task.
 ///

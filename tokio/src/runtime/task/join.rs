@@ -1,11 +1,11 @@
 use crate::runtime::task::{Header, RawTask};
 
-use std::fmt;
-use std::future::Future;
-use std::marker::PhantomData;
-use std::panic::{RefUnwindSafe, UnwindSafe};
-use std::pin::Pin;
-use std::task::{ready, Context, Poll, Waker};
+use crate::core_std::fmt;
+use crate::core_std::future::Future;
+use crate::core_std::marker::PhantomData;
+use crate::core_std::panic::{RefUnwindSafe, UnwindSafe};
+use crate::core_std::pin::Pin;
+use crate::core_std::task::{ready, Context, Poll, Waker};
 
 cfg_rt! {
     /// An owned permission to join on a task (await its termination).
@@ -173,6 +173,8 @@ impl<T> JoinHandle<T> {
         }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Abort the task associated with the handle.
     ///
     /// Awaiting a cancelled task might complete as usual if the task was
@@ -253,6 +255,8 @@ impl<T> JoinHandle<T> {
         state.is_complete()
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Set the waker that is notified when the task completes.
     pub(crate) fn set_join_waker(&mut self, waker: &Waker) {
         if self.raw.try_set_join_waker(waker) {
@@ -261,6 +265,8 @@ impl<T> JoinHandle<T> {
         }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Returns a new `AbortHandle` that can be used to remotely abort this task.
     ///
     /// Awaiting a task cancelled by the `AbortHandle` might complete as usual if the task was
@@ -328,8 +334,11 @@ impl<T> Future for JoinHandle<T> {
         ready!(crate::trace::trace_leaf(cx));
         let mut ret = Poll::Pending;
 
+        // XXX XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "XXX")]
         // Keep track of task budget
-        let coop = ready!(crate::runtime::coop::poll_proceed(cx));
+        // let coop = ready!(crate::runtime::coop::poll_proceed(cx));
 
         // Try to read the task output. If the task is not yet complete, the
         // waker is stored and is notified once the task does complete.
@@ -347,6 +356,9 @@ impl<T> Future for JoinHandle<T> {
                 .try_read_output(&mut ret as *mut _ as *mut (), cx.waker());
         }
 
+        // XXX XXX XXX
+        panic!("XXX");
+        #[cfg(feature = "XXX")]
         if ret.is_ready() {
             coop.made_progress();
         }
@@ -365,6 +377,8 @@ impl<T> Drop for JoinHandle<T> {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl<T> fmt::Debug for JoinHandle<T>
 where
     T: fmt::Debug,

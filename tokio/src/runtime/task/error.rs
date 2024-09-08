@@ -1,8 +1,10 @@
-use std::any::Any;
-use std::boxed::Box;
-use std::fmt;
+use crate::core_std::any::Any;
+use crate::core_std::boxed::Box;
+use crate::core_std::fmt;
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 use std::io;
-use std::string::String;
+use crate::core_std::string::String;
 
 use super::Id;
 use crate::util::SyncWrapper;
@@ -20,6 +22,8 @@ enum Repr {
     Panic(SyncWrapper<Box<dyn Any + Send + 'static>>),
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl JoinError {
     pub(crate) fn cancelled(id: Id) -> JoinError {
         JoinError {
@@ -173,8 +177,12 @@ impl fmt::Debug for JoinError {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl std::error::Error for JoinError {}
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 impl From<JoinError> for io::Error {
     fn from(src: JoinError) -> io::Error {
         io::Error::new(

@@ -1,7 +1,7 @@
 use crate::loom::sync::atomic::AtomicUsize;
 
-use std::fmt;
-use std::sync::atomic::Ordering::{AcqRel, Acquire, Release};
+use crate::core_std::fmt;
+use crate::core_std::atomic::Ordering::{AcqRel, Acquire, Release};
 
 pub(super) struct State {
     val: AtomicUsize,
@@ -351,7 +351,7 @@ impl State {
     /// Optimistically tries to swap the state assuming the join handle is
     /// __immediately__ dropped on spawn.
     pub(super) fn drop_join_handle_fast(&self) -> Result<(), ()> {
-        use std::sync::atomic::Ordering::Relaxed;
+        use crate::core_std::atomic::Ordering::Relaxed;
 
         // Relaxed is acceptable as if this function is called and succeeds,
         // then nothing has been done w/ the join handle.
@@ -430,6 +430,7 @@ impl State {
         })
     }
 
+    #[cfg(feature = "rtvvv")]
     pub(super) fn ref_inc(&self) {
         use std::process;
         use std::sync::atomic::Ordering::Relaxed;

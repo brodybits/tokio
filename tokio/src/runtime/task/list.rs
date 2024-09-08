@@ -13,8 +13,9 @@ use crate::util::linked_list::{Link, LinkedList};
 use crate::util::sharded_list;
 
 use crate::loom::sync::atomic::{AtomicBool, Ordering};
-use std::marker::PhantomData;
-use std::num::NonZeroU64;
+
+use crate::core_std::marker::PhantomData;
+use crate::core_std::num::NonZeroU64;
 
 // The id from the module below is used to verify whether a given task is stored
 // in this OwnedTasks, or some other task. The counter starts at one so we can
@@ -26,7 +27,7 @@ use std::num::NonZeroU64;
 // mixed up runtimes happen to have the same id.
 
 cfg_has_atomic_u64! {
-    use std::sync::atomic::AtomicU64;
+    use crate::core_std::atomic::AtomicU64;
 
     static NEXT_OWNED_TASKS_ID: AtomicU64 = AtomicU64::new(1);
 
@@ -233,6 +234,8 @@ impl<S: 'static> LocalOwnedTasks<S> {
         }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     pub(crate) fn bind<T>(
         &self,
         task: T,

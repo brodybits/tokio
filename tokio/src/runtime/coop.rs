@@ -66,6 +66,8 @@ impl Budget {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Runs the given closure with a cooperative task budget. When the function
 /// returns, the budget is reset to the value prior to calling the function.
 #[inline(always)]
@@ -73,6 +75,8 @@ pub(crate) fn budget<R>(f: impl FnOnce() -> R) -> R {
     with_budget(Budget::initial(), f)
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Runs the given closure with an unconstrained task budget. When the function returns, the budget
 /// is reset to the value prior to calling the function.
 #[inline(always)]
@@ -80,6 +84,8 @@ pub(crate) fn with_unconstrained<R>(f: impl FnOnce() -> R) -> R {
     with_budget(Budget::unconstrained(), f)
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 #[inline(always)]
 fn with_budget<R>(budget: Budget, f: impl FnOnce() -> R) -> R {
     struct ResetGuard {
@@ -107,6 +113,8 @@ fn with_budget<R>(budget: Budget, f: impl FnOnce() -> R) -> R {
     f()
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 #[inline(always)]
 pub(crate) fn has_budget_remaining() -> bool {
     // If the current budget cannot be accessed due to the thread-local being
@@ -121,6 +129,8 @@ cfg_rt_multi_thread! {
     }
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 cfg_rt! {
     /// Forcibly removes the budgeting constraints early.
     ///
@@ -135,8 +145,8 @@ cfg_rt! {
 }
 
 cfg_coop! {
-    use std::cell::Cell;
-    use std::task::{Context, Poll};
+    use crate::core_std::cell::Cell;
+    use crate::core_std::task::{Context, Poll};
 
     #[must_use]
     pub(crate) struct RestoreOnPending(Cell<Budget>);
@@ -147,6 +157,8 @@ cfg_coop! {
         }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     impl Drop for RestoreOnPending {
         fn drop(&mut self) {
             // Don't reset if budget was unconstrained or if we made progress.
@@ -172,6 +184,8 @@ cfg_coop! {
     /// Therefore, if the budget is _further_ adjusted between when `poll_proceed` returns and
     /// `RestRestoreOnPending` is dropped, those adjustments are erased unless the caller indicates
     /// that progress was made.
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     #[inline]
     pub(crate) fn poll_proceed(cx: &mut Context<'_>) -> Poll<RestoreOnPending> {
         context::budget(|cell| {

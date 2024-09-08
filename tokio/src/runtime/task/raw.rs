@@ -1,10 +1,12 @@
 use crate::future::Future;
 use crate::runtime::task::core::{Core, Trailer};
-use crate::runtime::task::{Cell, Harness, Header, Id, Schedule, State};
+// XXX XXX
+// use crate::runtime::task::{Cell, Harness, Header, Id, Schedule, State};
+use crate::runtime::task::{Cell, Header, Id, Schedule, State};
 
-use std::boxed::Box;
-use std::ptr::NonNull;
-use std::task::{Poll, Waker};
+use crate::core_std::boxed::Box;
+use crate::core_std::ptr::NonNull;
+use crate::core_std::task::{Poll, Waker};
 
 /// Raw task handle
 #[derive(Clone)]
@@ -44,6 +46,8 @@ pub(super) struct Vtable {
     pub(super) id_offset: usize,
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 /// Get the vtable for the requested `T` and `S` generics.
 pub(super) fn vtable<T: Future, S: Schedule>() -> &'static Vtable {
     &Vtable {
@@ -71,24 +75,24 @@ impl<T: Future, S: Schedule> OffsetHelper<T, S> {
     // inside `get_trailer_offset` because trait bounds on generic parameters
     // of const fn are unstable on our MSRV.
     const TRAILER_OFFSET: usize = get_trailer_offset(
-        std::mem::size_of::<Header>(),
-        std::mem::size_of::<Core<T, S>>(),
-        std::mem::align_of::<Core<T, S>>(),
-        std::mem::align_of::<Trailer>(),
+        crate::core_std::mem::size_of::<Header>(),
+        crate::core_std::mem::size_of::<Core<T, S>>(),
+        crate::core_std::mem::align_of::<Core<T, S>>(),
+        crate::core_std::mem::align_of::<Trailer>(),
     );
 
     // The `scheduler` is the first field of `Core`, so it has the same
     // offset as `Core`.
     const SCHEDULER_OFFSET: usize = get_core_offset(
-        std::mem::size_of::<Header>(),
-        std::mem::align_of::<Core<T, S>>(),
+        crate::core_std::mem::size_of::<Header>(),
+        crate::core_std::mem::align_of::<Core<T, S>>(),
     );
 
     const ID_OFFSET: usize = get_id_offset(
-        std::mem::size_of::<Header>(),
-        std::mem::align_of::<Core<T, S>>(),
-        std::mem::size_of::<S>(),
-        std::mem::align_of::<Id>(),
+        crate::core_std::mem::size_of::<Header>(),
+        crate::core_std::mem::align_of::<Core<T, S>>(),
+        crate::core_std::mem::size_of::<S>(),
+        crate::core_std::mem::align_of::<Id>(),
     );
 }
 
@@ -231,11 +235,15 @@ impl RawTask {
         unsafe { (vtable.drop_abort_handle)(self.ptr) }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     pub(super) fn shutdown(self) {
         let vtable = self.header().vtable;
         unsafe { (vtable.shutdown)(self.ptr) }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Increment the task's reference count.
     ///
     /// Currently, this is used only when creating an `AbortHandle`.
@@ -267,6 +275,8 @@ impl RawTask {
 
 impl Copy for RawTask {}
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn poll<T: Future, S: Schedule>(ptr: NonNull<Header>) {
     let harness = Harness::<T, S>::from_raw(ptr);
     harness.poll();
@@ -281,11 +291,15 @@ unsafe fn schedule<S: Schedule>(ptr: NonNull<Header>) {
         .schedule(Notified(Task::from_raw(ptr.cast())));
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn dealloc<T: Future, S: Schedule>(ptr: NonNull<Header>) {
     let harness = Harness::<T, S>::from_raw(ptr);
     harness.dealloc();
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn try_read_output<T: Future, S: Schedule>(
     ptr: NonNull<Header>,
     dst: *mut (),
@@ -297,16 +311,22 @@ unsafe fn try_read_output<T: Future, S: Schedule>(
     harness.try_read_output(out, waker);
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn drop_join_handle_slow<T: Future, S: Schedule>(ptr: NonNull<Header>) {
     let harness = Harness::<T, S>::from_raw(ptr);
     harness.drop_join_handle_slow();
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn drop_abort_handle<T: Future, S: Schedule>(ptr: NonNull<Header>) {
     let harness = Harness::<T, S>::from_raw(ptr);
     harness.drop_reference();
 }
 
+// XXX XXX
+#[cfg(feature = "rtvvv")]
 unsafe fn shutdown<T: Future, S: Schedule>(ptr: NonNull<Header>) {
     let harness = Harness::<T, S>::from_raw(ptr);
     harness.shutdown();

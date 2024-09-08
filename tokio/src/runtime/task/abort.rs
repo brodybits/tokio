@@ -1,6 +1,7 @@
 use crate::runtime::task::{Header, RawTask};
-use std::fmt;
-use std::panic::{RefUnwindSafe, UnwindSafe};
+
+use crate::core_std::fmt;
+use crate::core_std::panic::{RefUnwindSafe, UnwindSafe};
 
 /// An owned permission to abort a spawned task, without awaiting its completion.
 ///
@@ -29,6 +30,8 @@ impl AbortHandle {
         Self { raw }
     }
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
     /// Abort the task associated with the handle.
     ///
     /// Awaiting a cancelled task might complete as usual if the task was
@@ -88,6 +91,8 @@ unsafe impl Sync for AbortHandle {}
 impl UnwindSafe for AbortHandle {}
 impl RefUnwindSafe for AbortHandle {}
 
+    // XXX XXX
+    #[cfg(feature = "rtvvv")]
 impl fmt::Debug for AbortHandle {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         // Safety: The header pointer is valid.
@@ -103,6 +108,8 @@ impl Drop for AbortHandle {
     }
 }
 
+// XXX
+#[cfg(feature = "rtvvv")]
 impl Clone for AbortHandle {
     /// Returns a cloned `AbortHandle` that can be used to remotely abort this task.
     fn clone(&self) -> Self {

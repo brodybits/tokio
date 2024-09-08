@@ -319,10 +319,10 @@
 #[macro_use]
 mod tests;
 
-#[cfg(feature = "rttt")]
+// #[cfg(feature = "rttt")]
 pub(crate) mod context;
 
-#[cfg(feature = "rttt")]
+// #[cfg(feature = "rttt")]
 pub(crate) mod coop;
 
 #[cfg(feature = "rttt")]
@@ -354,7 +354,7 @@ cfg_signal_internal_and_unix! {
 }
 
 cfg_rt! {
-    #[cfg(feature = "rtvvv")]
+    // #[cfg(feature = "rtvvv")]
     pub(crate) mod task;
 
     #[cfg(feature = "rtvvv")]
