@@ -21,6 +21,8 @@
 #![cfg_attr(loom, allow(dead_code, unreachable_pub))]
 #![cfg_attr(windows, allow(rustdoc::broken_intra_doc_links))]
 
+#![no_std]
+
 //! A runtime for writing reliable network applications without compromising speed.
 //!
 //! Tokio is an event-driven, non-blocking I/O platform for writing asynchronous
@@ -505,10 +507,10 @@ cfg_fs! {
 
 mod future;
 
-pub mod io;
-pub mod net;
+// pub mod io;
+// pub mod net;
 
-mod loom;
+// mod loom;
 
 cfg_process! {
     pub mod process;
@@ -525,9 +527,10 @@ mod blocking;
 cfg_rt! {
     pub mod runtime;
 }
-cfg_not_rt! {
-    pub(crate) mod runtime;
-}
+// XXX XXX - ???
+// cfg_not_rt! {
+//     pub(crate) mod runtime;
+// }
 
 cfg_signal! {
     pub mod signal;
@@ -557,9 +560,9 @@ cfg_time! {
 }
 
 mod trace {
-    use std::future::Future;
-    use std::pin::Pin;
-    use std::task::{Context, Poll};
+    use core::future::Future;
+    use core::pin::Pin;
+    use core::task::{Context, Poll};
 
     cfg_taskdump! {
         pub(crate) use crate::runtime::task::trace::trace_leaf;
@@ -568,8 +571,8 @@ mod trace {
     cfg_not_taskdump! {
         #[inline(always)]
         #[allow(dead_code)]
-        pub(crate) fn trace_leaf(_: &mut std::task::Context<'_>) -> std::task::Poll<()> {
-            std::task::Poll::Ready(())
+        pub(crate) fn trace_leaf(_: &mut core::task::Context<'_>) -> core::task::Poll<()> {
+            core::task::Poll::Ready(())
         }
     }
 
@@ -642,9 +645,10 @@ pub mod doc;
 #[allow(unused)]
 pub(crate) use self::doc::os;
 
+// XXX TBD XXX XXX
 #[cfg(not(all(docsrs, unix)))]
 #[allow(unused)]
-pub(crate) use std::os;
+// pub(crate) use std::os;
 
 cfg_macros! {
     /// Implementation detail of the `select!` macro. This macro is **not**
