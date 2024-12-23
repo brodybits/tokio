@@ -209,10 +209,11 @@ pub use self::async_write::AsyncWrite;
 mod read_buf;
 pub use self::read_buf::ReadBuf;
 
+// XXX XXX TODO XXX
 // Re-export some types from `std::io` so that users don't have to deal
 // with conflicts when `use`ing `tokio::io` and `std::io`.
-#[doc(no_inline)]
-pub use std::io::{Error, ErrorKind, Result, SeekFrom};
+// #[doc(no_inline)]
+// pub use std::io::{Error, ErrorKind, Result, SeekFrom};
 
 cfg_io_driver_impl! {
     pub(crate) mod interest;

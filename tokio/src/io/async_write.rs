@@ -1,7 +1,14 @@
+// XXX XXX
+extern crate std;
 use std::io::{self, IoSlice};
-use std::ops::DerefMut;
-use std::pin::Pin;
-use std::task::{Context, Poll};
+
+use core::ops::DerefMut;
+use core::pin::Pin;
+use core::task::{Context, Poll};
+
+extern crate alloc;
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 
 /// Writes bytes asynchronously.
 ///
