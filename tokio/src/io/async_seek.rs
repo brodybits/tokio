@@ -1,6 +1,9 @@
 // XXX XXX
-extern crate std;
-use std::io::{self, SeekFrom};
+// extern crate std;
+// use std::io::{self, SeekFrom};
+
+use portable_io as io;
+use portable_io::SeekFrom;
 
 use core::ops::DerefMut;
 use core::pin::Pin;

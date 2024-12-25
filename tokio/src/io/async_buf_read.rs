@@ -1,8 +1,10 @@
 use crate::io::AsyncRead;
 
 // XXX XXX
-extern crate std;
-use std::io;
+// extern crate std;
+// use std::io;
+
+use portable_io as io;
 
 use core::ops::DerefMut;
 use core::pin::Pin;

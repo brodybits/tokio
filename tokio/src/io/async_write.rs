@@ -1,6 +1,9 @@
 // XXX XXX
-extern crate std;
-use std::io::{self, IoSlice};
+// extern crate std;
+// use std::io::{self, IoSlice};
+
+use portable_io as io;
+use portable_io::IoSlice;
 
 use core::ops::DerefMut;
 use core::pin::Pin;
