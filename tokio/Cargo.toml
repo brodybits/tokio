@@ -23,7 +23,9 @@ keywords = ["io", "async", "non-blocking", "futures"]
 
 [features]
 # Include nothing by default
-default = []
+# XXX TBD XXX XXX
+# default = []
+default = ["parking_lot", "io-util"]
 
 # enable everything
 full = [
