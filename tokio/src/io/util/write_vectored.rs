@@ -1,11 +1,18 @@
 use crate::io::AsyncWrite;
 
 use pin_project_lite::pin_project;
-use std::io;
-use std::marker::PhantomPinned;
-use std::pin::Pin;
-use std::task::{Context, Poll};
-use std::{future::Future, io::IoSlice};
+// use core::io;
+use core::marker::PhantomPinned;
+use core::pin::Pin;
+use core::task::{Context, Poll};
+// use std::{future::Future, io::IoSlice};
+use core::future::Future;
+
+use portable_io as io;
+use portable_io::IoSlice;
+
+extern crate alloc;
+use alloc::vec::Vec;
 
 pin_project! {
     /// A future to write a slice of buffers to an `AsyncWrite`.

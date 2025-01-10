@@ -1,10 +1,13 @@
 use crate::io::util::poll_proceed_and_make_progress;
 use crate::io::{AsyncBufRead, AsyncRead, AsyncSeek, AsyncWrite, ReadBuf};
 
-use std::fmt;
-use std::io::{self, SeekFrom};
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use core::fmt;
+// use std::io::{self, SeekFrom};
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+use portable_io as io;
+use portable_io::SeekFrom;
 
 cfg_io_util! {
     /// `Empty` ignores any data written via [`AsyncWrite`], and will always be empty

@@ -2,10 +2,12 @@ use super::copy::CopyBuffer;
 
 use crate::io::{AsyncRead, AsyncWrite};
 
-use std::future::poll_fn;
-use std::io;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use core::future::poll_fn;
+// use std::io;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+use portable_io as io;
 
 enum TransferState {
     Running(CopyBuffer),

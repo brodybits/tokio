@@ -4,11 +4,17 @@ use crate::io::util::vec_with_initialized::VecWithInitialized;
 use crate::io::AsyncRead;
 
 use pin_project_lite::pin_project;
-use std::future::Future;
-use std::marker::PhantomPinned;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
-use std::{io, mem};
+use core::future::Future;
+use core::marker::PhantomPinned;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+// use std::{io, mem};
+use core::mem;
+use portable_io as io;
+
+extern crate alloc;
+use alloc::string::String;
+use alloc::vec::Vec;
 
 pin_project! {
     /// Future for the [`read_to_string`](super::AsyncReadExt::read_to_string) method.

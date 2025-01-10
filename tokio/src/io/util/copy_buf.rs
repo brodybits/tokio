@@ -1,8 +1,13 @@
 use crate::io::{AsyncBufRead, AsyncWrite};
-use std::future::Future;
-use std::io;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use core::future::Future;
+// use std::io;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+use portable_io as io;
+
+extern crate alloc;
+use alloc::boxed::Box;
 
 cfg_io_util! {
     /// A future that asynchronously copies the entire contents of a reader into a
@@ -88,7 +93,7 @@ where
 
             let i = ready!(Pin::new(&mut *me.writer).poll_write(cx, buffer))?;
             if i == 0 {
-                return Poll::Ready(Err(std::io::ErrorKind::WriteZero.into()));
+                return Poll::Ready(Err(io::ErrorKind::WriteZero.into()));
             }
             self.amt += i as u64;
             Pin::new(&mut *self.reader).consume(i);

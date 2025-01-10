@@ -16,6 +16,10 @@ use crate::io::AsyncRead;
 
 use bytes::BufMut;
 
+extern crate alloc;
+use alloc::string::String;
+use alloc::vec::Vec;
+
 cfg_io_util! {
     /// Defines numeric reader
     macro_rules! read_impl {

@@ -5,6 +5,12 @@ use crate::io::util::read_until::{read_until, ReadUntil};
 use crate::io::util::split::{split, Split};
 use crate::io::AsyncBufRead;
 
+extern crate alloc;
+use alloc::string::String;
+use alloc::vec::Vec;
+
+use core::pin;
+
 cfg_io_util! {
     /// An extension trait which adds utility methods to [`AsyncBufRead`] types.
     ///
@@ -300,7 +306,7 @@ cfg_io_util! {
         where
             Self: Unpin,
         {
-            std::pin::Pin::new(self).consume(amt);
+            pin::Pin::new(self).consume(amt);
         }
 
         /// Returns a stream over the lines of this reader.

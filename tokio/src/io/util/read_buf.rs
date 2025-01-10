@@ -2,11 +2,13 @@ use crate::io::AsyncRead;
 
 use bytes::BufMut;
 use pin_project_lite::pin_project;
-use std::future::Future;
-use std::io;
-use std::marker::PhantomPinned;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use core::future::Future;
+// use std::io;
+use core::marker::PhantomPinned;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+use portable_io as io;
 
 pub(crate) fn read_buf<'a, R, B>(reader: &'a mut R, buf: &'a mut B) -> ReadBuf<'a, R, B>
 where
@@ -41,7 +43,7 @@ where
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<io::Result<usize>> {
         use crate::io::ReadBuf;
-        use std::mem::MaybeUninit;
+        use core::mem::MaybeUninit;
 
         let me = self.project();
 

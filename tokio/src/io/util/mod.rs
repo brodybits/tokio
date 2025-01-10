@@ -81,22 +81,23 @@ cfg_io_util! {
     mod write_all_buf;
     mod write_int;
 
+    use core::task;
 
     // used by `BufReader` and `BufWriter`
     // https://github.com/rust-lang/rust/blob/master/library/std/src/sys_common/io.rs#L1
     const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
     cfg_coop! {
-        fn poll_proceed_and_make_progress(cx: &mut std::task::Context<'_>) -> std::task::Poll<()> {
-            let coop = std::task::ready!(crate::runtime::coop::poll_proceed(cx));
+        fn poll_proceed_and_make_progress(cx: &mut task::Context<'_>) -> task::Poll<()> {
+            let coop = task::ready!(crate::runtime::coop::poll_proceed(cx));
             coop.made_progress();
-            std::task::Poll::Ready(())
+            task::Poll::Ready(())
         }
     }
 
     cfg_not_coop! {
-        fn poll_proceed_and_make_progress(_: &mut std::task::Context<'_>) -> std::task::Poll<()> {
-            std::task::Poll::Ready(())
+        fn poll_proceed_and_make_progress(_: &mut task::Context<'_>) -> task::Poll<()> {
+            task::Poll::Ready(())
         }
     }
 }

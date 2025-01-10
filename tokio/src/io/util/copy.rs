@@ -1,9 +1,15 @@
 use crate::io::{AsyncRead, AsyncWrite, ReadBuf};
 
-use std::future::Future;
-use std::io;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use core::future::Future;
+// use std::io;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+use portable_io as io;
+
+extern crate alloc;
+use alloc::boxed::Box;
+use alloc::vec;
 
 #[derive(Debug)]
 pub(super) struct CopyBuffer {

@@ -6,12 +6,18 @@
 
 use crate::io::{AsyncRead, AsyncWrite, ReadBuf};
 
-use std::fmt;
-use std::io;
-use std::pin::Pin;
-use std::sync::Arc;
-use std::sync::Mutex;
-use std::task::{Context, Poll};
+use core::fmt;
+// use std::io;
+use core::pin::Pin;
+// use std::sync::Arc;
+// use std::sync::Mutex;
+use parking_lot::Mutex;
+use core::task::{Context, Poll};
+
+use portable_io as io;
+
+extern crate alloc;
+use alloc::sync::Arc;
 
 cfg_io_util! {
     /// The readable half of a value returned from [`split`](split()).
@@ -57,7 +63,7 @@ struct Inner<T> {
 
 impl<T> Inner<T> {
     fn with_lock<R>(&self, f: impl FnOnce(Pin<&mut T>) -> R) -> R {
-        let mut guard = self.stream.lock().unwrap();
+        let mut guard = self.stream.lock();
 
         // safety: we do not move the stream.
         let stream = unsafe { Pin::new_unchecked(&mut *guard) };
@@ -70,7 +76,8 @@ impl<T> ReadHalf<T> {
     /// Checks if this `ReadHalf` and some `WriteHalf` were split from the same
     /// stream.
     pub fn is_pair_of(&self, other: &WriteHalf<T>) -> bool {
-        other.is_pair_of(self)
+        // other.is_pair_of(self)
+        Arc::ptr_eq(&other.inner, &self.inner)
     }
 
     /// Reunites with a previously split `WriteHalf`.
@@ -92,7 +99,7 @@ impl<T> ReadHalf<T> {
                 .ok()
                 .expect("`Arc::try_unwrap` failed");
 
-            inner.stream.into_inner().unwrap()
+            inner.stream.into_inner()
         } else {
             panic!("Unrelated `split::Write` passed to `split::Read::unsplit`.")
         }
@@ -113,7 +120,7 @@ impl<T: AsyncRead> AsyncRead for ReadHalf<T> {
         cx: &mut Context<'_>,
         buf: &mut ReadBuf<'_>,
     ) -> Poll<io::Result<()>> {
-        self.inner.with_lock(|stream| stream.poll_read(cx, buf))
+        self.inner.with_lock(|stream: Pin<&mut T>| stream.poll_read(cx, buf))
     }
 }
 
@@ -123,15 +130,15 @@ impl<T: AsyncWrite> AsyncWrite for WriteHalf<T> {
         cx: &mut Context<'_>,
         buf: &[u8],
     ) -> Poll<Result<usize, io::Error>> {
-        self.inner.with_lock(|stream| stream.poll_write(cx, buf))
+        self.inner.with_lock(|stream: Pin<&mut T>| stream.poll_write(cx, buf))
     }
 
     fn poll_flush(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
-        self.inner.with_lock(|stream| stream.poll_flush(cx))
+        self.inner.with_lock(|stream: Pin<&mut T>| stream.poll_flush(cx))
     }
 
     fn poll_shutdown(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), io::Error>> {
-        self.inner.with_lock(|stream| stream.poll_shutdown(cx))
+        self.inner.with_lock(|stream: Pin<&mut T>| stream.poll_shutdown(cx))
     }
 
     fn poll_write_vectored(
@@ -140,7 +147,7 @@ impl<T: AsyncWrite> AsyncWrite for WriteHalf<T> {
         bufs: &[io::IoSlice<'_>],
     ) -> Poll<Result<usize, io::Error>> {
         self.inner
-            .with_lock(|stream| stream.poll_write_vectored(cx, bufs))
+            .with_lock(|stream: Pin<&mut T>| stream.poll_write_vectored(cx, bufs))
     }
 
     fn is_write_vectored(&self) -> bool {

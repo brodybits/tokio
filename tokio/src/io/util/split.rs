@@ -2,10 +2,14 @@ use crate::io::util::read_until::read_until_internal;
 use crate::io::AsyncBufRead;
 
 use pin_project_lite::pin_project;
-use std::io;
-use std::mem;
-use std::pin::Pin;
-use std::task::{ready, Context, Poll};
+use portable_io as io;
+use core::mem;
+use core::pin::Pin;
+use core::task::{ready, Context, Poll};
+
+extern crate alloc;
+use alloc::string::String;
+use alloc::vec::Vec;
 
 pin_project! {
     /// Splitter for the [`split`](crate::io::AsyncBufReadExt::split) method.
@@ -59,7 +63,7 @@ where
     /// # }
     /// ```
     pub async fn next_segment(&mut self) -> io::Result<Option<Vec<u8>>> {
-        use std::future::poll_fn;
+        use core::future::poll_fn;
 
         poll_fn(|cx| Pin::new(&mut *self).poll_next_segment(cx)).await
     }
