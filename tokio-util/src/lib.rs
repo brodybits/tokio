@@ -12,6 +12,8 @@
 ))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+#![no_std]
+
 //! Utilities for working with Tokio.
 //!
 //! This crate is not versioned in lockstep with the core
@@ -23,7 +25,8 @@
 #[macro_use]
 mod cfg;
 
-mod loom;
+// XXX TBD XXX
+// mod loom;
 
 cfg_codec! {
     #[macro_use]
@@ -55,7 +58,8 @@ cfg_time! {
     pub mod time;
 }
 
-pub mod sync;
+// XXX XXX
+// pub mod sync;
 
 pub mod either;
 

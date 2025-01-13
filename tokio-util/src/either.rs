@@ -1,11 +1,14 @@
 //! Module defining an Either type.
-use std::{
+use core::{
     future::Future,
-    io::SeekFrom,
+    // io::SeekFrom,
     pin::Pin,
     task::{Context, Poll},
 };
+use core::result;
 use tokio::io::{AsyncBufRead, AsyncRead, AsyncSeek, AsyncWrite, ReadBuf, Result};
+
+use portable_io::{self as io, SeekFrom};
 
 /// Combines two different futures, streams, or sinks having the same associated types into a single type.
 ///
@@ -154,8 +157,8 @@ where
     fn poll_write_vectored(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-        bufs: &[std::io::IoSlice<'_>],
-    ) -> Poll<std::result::Result<usize, std::io::Error>> {
+        bufs: &[io::IoSlice<'_>],
+    ) -> Poll<result::Result<usize, io::Error>> {
         delegate_call!(self.poll_write_vectored(cx, bufs))
     }
 
@@ -189,25 +192,25 @@ where
     fn poll_ready(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-    ) -> Poll<std::result::Result<(), Self::Error>> {
+    ) -> Poll<result::Result<(), Self::Error>> {
         delegate_call!(self.poll_ready(cx))
     }
 
-    fn start_send(self: Pin<&mut Self>, item: Item) -> std::result::Result<(), Self::Error> {
+    fn start_send(self: Pin<&mut Self>, item: Item) -> result::Result<(), Self::Error> {
         delegate_call!(self.start_send(item))
     }
 
     fn poll_flush(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-    ) -> Poll<std::result::Result<(), Self::Error>> {
+    ) -> Poll<result::Result<(), Self::Error>> {
         delegate_call!(self.poll_flush(cx))
     }
 
     fn poll_close(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-    ) -> Poll<std::result::Result<(), Self::Error>> {
+    ) -> Poll<result::Result<(), Self::Error>> {
         delegate_call!(self.poll_close(cx))
     }
 }
