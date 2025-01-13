@@ -214,6 +214,8 @@ pub use self::read_buf::ReadBuf;
 // with conflicts when `use`ing `tokio::io` and `std::io`.
 // #[doc(no_inline)]
 // pub use std::io::{Error, ErrorKind, Result, SeekFrom};
+// XXX TBD XXX XXX
+pub use portable_io::Result;
 
 cfg_io_driver_impl! {
     pub(crate) mod interest;
