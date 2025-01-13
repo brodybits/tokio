@@ -16,6 +16,8 @@
     attr(deny(warnings, rust_2018_idioms), allow(dead_code, unused_variables))
 ))]
 
+#![no_std]
+
 //! Stream utilities for Tokio.
 //!
 //! A `Stream` is an asynchronous sequence of values. It can be thought of as
@@ -74,7 +76,8 @@
 #[macro_use]
 mod macros;
 
-pub mod wrappers;
+// XXX TODO XXX
+// pub mod wrappers;
 
 mod stream_ext;
 pub use stream_ext::{collect::FromStream, StreamExt};
@@ -108,8 +111,9 @@ pub use once::{once, Once};
 mod pending;
 pub use pending::{pending, Pending};
 
-mod stream_map;
-pub use stream_map::StreamMap;
+// XXX XXX
+// mod stream_map;
+// pub use stream_map::StreamMap;
 
 mod stream_close;
 pub use stream_close::StreamNotifyClose;

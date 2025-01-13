@@ -1,7 +1,7 @@
 use crate::Stream;
 use pin_project_lite::pin_project;
-use std::pin::Pin;
-use std::task::{Context, Poll};
+use core::pin::Pin;
+use core::task::{Context, Poll};
 
 pin_project! {
     /// A `Stream` that wraps the values in an `Option`.

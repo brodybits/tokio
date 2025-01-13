@@ -7,6 +7,11 @@ use core::pin::Pin;
 use core::task::{ready, Context, Poll};
 use pin_project_lite::pin_project;
 
+extern crate alloc;
+use alloc::boxed::Box;
+use alloc::string::String;
+use alloc::vec::Vec;
+
 // Do not export this struct until `FromStream` can be unsealed.
 pin_project! {
     /// Future returned by the [`collect`](super::StreamExt::collect) method.

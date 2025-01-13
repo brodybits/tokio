@@ -1,6 +1,10 @@
 use core::future::Future;
 use futures_core::Stream;
 
+extern crate alloc;
+use alloc::string::String;
+use alloc::vec::Vec;
+
 mod all;
 use all::AllFuture;
 
