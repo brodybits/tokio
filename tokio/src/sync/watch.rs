@@ -111,12 +111,15 @@
 //! [`Sender::closed`]: crate::sync::watch::Sender::closed
 //! [`Sender::subscribe()`]: crate::sync::watch::Sender::subscribe
 
+use crate::alias::std;
+
 use crate::runtime::coop::cooperative;
 use crate::sync::notify::Notify;
 
 use crate::loom::sync::atomic::AtomicUsize;
 use crate::loom::sync::atomic::Ordering::{AcqRel, Relaxed};
 use crate::loom::sync::{Arc, RwLock, RwLockReadGuard};
+
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -279,6 +282,8 @@ impl<T: fmt::Debug> fmt::Debug for Shared<T> {
 
 pub mod error {
     //! Watch error types.
+
+    use crate::alias::std;
 
     use std::error::Error;
     use std::fmt;
