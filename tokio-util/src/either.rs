@@ -1,4 +1,7 @@
 //! Module defining an Either type.
+
+use crate::alias::std;
+
 use std::{
     future::Future,
     io::SeekFrom,

@@ -38,6 +38,8 @@
 //! Specifically, through invariant #2, we know that we always have to lock a parent
 //! before its child.
 //!
+
+use crate::alias::std::{self, prelude::*};
 use crate::loom::sync::{Arc, Mutex, MutexGuard};
 
 /// A node of the cancellation tree structure

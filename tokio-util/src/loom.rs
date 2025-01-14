@@ -1,1 +1,1 @@
-pub(crate) use std::sync;
+pub(crate) use crate::alias::std::sync;
