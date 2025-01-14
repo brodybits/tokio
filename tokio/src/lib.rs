@@ -502,6 +502,8 @@ linux, on `aarch64`, `x86` and `x86_64`."
 pub mod macros;
 
 cfg_fs! {
+    // XXX XXX ??? ??? ???
+    #[cfg(not(test))]
     pub mod fs;
 }
 
