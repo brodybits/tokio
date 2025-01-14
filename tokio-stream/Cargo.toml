@@ -24,16 +24,19 @@ full = [
     "net",
     "io-util",
     "fs",
+    "std",
     "sync",
     "signal"
 ]
 
+# XXX TODO FEATURES LIKELY NEED "std" feature to work
 time = ["tokio/time"]
 net = ["tokio/net"]
 io-util = ["tokio/io-util"]
 fs = ["tokio/fs"]
 sync = ["tokio/sync", "tokio-util"]
 signal = ["tokio/signal"]
+std = []
 
 [dependencies]
 futures-core = { version = "0.3.0" }

@@ -16,6 +16,8 @@
     attr(deny(warnings, rust_2018_idioms), allow(dead_code, unused_variables))
 ))]
 
+#![no_std]
+
 //! Stream utilities for Tokio.
 //!
 //! A `Stream` is an asynchronous sequence of values. It can be thought of as
@@ -108,11 +110,36 @@ pub use once::{once, Once};
 mod pending;
 pub use pending::{pending, Pending};
 
+#[cfg(feature = "std")]
 mod stream_map;
+#[cfg(feature = "std")]
 pub use stream_map::StreamMap;
 
 mod stream_close;
 pub use stream_close::StreamNotifyClose;
+
+pub(crate) mod alias {
+    pub(crate) mod std {
+        pub(crate) mod prelude {
+            pub(crate) use super::boxed::Box;
+            pub(crate) use super::string::String;
+            pub(crate) use super::vec;
+            pub(crate) use super::vec::Vec;
+        }
+
+        pub(crate) use core::{cell, future, pin, task};
+
+        extern crate alloc;
+
+        pub(crate) use alloc::{borrow, boxed, string, vec};
+
+        #[cfg(feature = "std")]
+        extern crate std;
+
+        #[cfg(feature = "std")]
+        pub(crate) use std::{collections, hash, sync, thread_local};
+    }
+}
 
 #[doc(no_inline)]
 pub use futures_core::Stream;

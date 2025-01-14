@@ -1,3 +1,4 @@
+use crate::alias::std::{self, prelude::*};
 use crate::Stream;
 
 use std::borrow::Borrow;
@@ -728,11 +729,14 @@ impl<K, V> Extend<(K, V)> for StreamMap<K, V> {
 }
 
 mod rand {
+    use crate::alias::std;
     use std::cell::Cell;
+    use std::thread_local;
 
     mod loom {
         #[cfg(not(loom))]
         pub(crate) mod rand {
+            use crate::alias::std;
             use std::collections::hash_map::RandomState;
             use std::hash::{BuildHasher, Hash, Hasher};
             use std::sync::atomic::AtomicU32;
