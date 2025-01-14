@@ -79,7 +79,7 @@ pub(crate) mod alias {
             pub(crate) use super::vec::Vec;
         }
 
-        pub(crate) use core::{cell, fmt, future, mem, pin, ptr, task};
+        pub(crate) use core::{cell, cmp, fmt, future, mem, pin, ptr, task};
 
         pub(crate) use crate::alloc::{borrow, boxed, string, vec};
 

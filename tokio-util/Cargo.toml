@@ -27,6 +27,7 @@ net = ["tokio/net"]
 compat = ["futures-io",]
 codec = []
 time = ["tokio/time","slab"]
+# XXX TODO io needs std to work
 io = []
 io-util = ["io", "tokio/rt", "tokio/io-util"]
 rt = ["tokio/rt", "tokio/sync", "futures-util", "hashbrown"]
