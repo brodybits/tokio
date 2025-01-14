@@ -120,6 +120,7 @@ pub fn poll_read_buf<T: AsyncRead + ?Sized, B: BufMut>(
 /// [`AsyncWrite`]: tokio::io::AsyncWrite
 /// [`File`]: tokio::fs::File
 /// [vectored writes]: tokio::io::AsyncWrite::poll_write_vectored
+#[cfg(not(feature = "portable-io"))]
 #[cfg_attr(not(feature = "io"), allow(unreachable_pub))]
 pub fn poll_write_buf<T: AsyncWrite + ?Sized, B: Buf>(
     io: Pin<&mut T>,

@@ -79,17 +79,23 @@ pub(crate) mod alias {
             pub(crate) use super::vec::Vec;
         }
 
-        pub(crate) use core::{cell, cmp, fmt, future, mem, pin, ptr, task};
+        pub(crate) use core::{cell, cmp, fmt, future, mem, pin, ptr, result, task};
 
         pub(crate) use crate::alloc::{borrow, boxed, string, vec};
+
+        #[cfg(feature = "portable-io")]
+        pub(crate) use portable_io as io;
 
         #[cfg(feature = "std")]
         extern crate std;
 
-        #[cfg(feature = "std")]
+        #[cfg(all(
+            feature = "std",
+            not(feature = "portable-io"),
+        ))]
         pub(crate) use std::io;
 
         #[cfg(feature = "std")]
-        pub(crate) use std::{alloc, error, collections, hash, panic, result, sync, thread_local};
+        pub(crate) use std::{alloc, error, collections, hash, panic, sync, thread_local};
     }
 }

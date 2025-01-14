@@ -30,6 +30,7 @@ time = ["tokio/time","slab"]
 # XXX TODO io needs std to work
 io = []
 io-util = ["io", "tokio/rt", "tokio/io-util"]
+portable-io = ["dep:portable-io", "tokio/portable-io"]
 rt = ["tokio/rt", "tokio/sync", "futures-util", "hashbrown"]
 std = []
 
@@ -43,6 +44,7 @@ futures-sink = "0.3.0"
 futures-io = { version = "0.3.0", optional = true }
 futures-util = { version = "0.3.0", optional = true }
 pin-project-lite = "0.2.11"
+portable-io = { version = "0.0.4", optional = true }
 slab = { version = "0.4.4", optional = true } # Backs `DelayQueue`
 tracing = { version = "0.1.29", default-features = false, features = ["std"], optional = true }
 

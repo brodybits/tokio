@@ -4,5 +4,11 @@ mod poll_buf;
 
 pub(crate) use maybe_dangling::MaybeDangling;
 #[cfg(any(feature = "io", feature = "codec"))]
-#[cfg_attr(not(feature = "io"), allow(unreachable_pub))]
-pub use poll_buf::{poll_read_buf, poll_write_buf};
+// XXX TBD ???
+// #[cfg_attr(not(feature = "io"), allow(unreachable_pub))]
+pub use poll_buf::poll_read_buf;
+#[cfg(all(
+    any(feature = "io", feature = "codec"),
+    not(feature = "portable-io"),
+))]
+pub use poll_buf::poll_write_buf;
