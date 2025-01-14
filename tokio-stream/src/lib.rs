@@ -133,8 +133,17 @@ pub(crate) mod alias {
 
         pub(crate) use alloc::{borrow, boxed, string, vec};
 
+        #[cfg(feature = "portable-io")]
+        pub(crate) use portable_io as io;
+
         #[cfg(feature = "std")]
         extern crate std;
+
+        #[cfg(all(
+            feature = "std",
+            not(feature = "portable-io"),
+        ))]
+        pub(crate) use std::io;
 
         #[cfg(feature = "std")]
         pub(crate) use std::{collections, hash, sync, thread_local};

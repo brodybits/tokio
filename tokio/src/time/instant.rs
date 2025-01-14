@@ -1,5 +1,7 @@
 #![allow(clippy::trivially_copy_pass_by_ref)]
 
+use crate::alias::std;
+
 use std::fmt;
 use std::ops;
 use std::time::Duration;

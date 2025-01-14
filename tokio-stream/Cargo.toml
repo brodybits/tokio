@@ -32,6 +32,8 @@ full = [
 # XXX TODO FEATURES LIKELY NEED "std" feature to work
 time = ["tokio/time"]
 net = ["tokio/net"]
+portable-io = ["dep:portable-io", "tokio/portable-io"]
+# XXX TODO REQUIRES EITHER "std" or "portable-io" - XXX TODO COMPILE ERROR IF NEITHER IS PRESENT
 io-util = ["tokio/io-util"]
 fs = ["tokio/fs"]
 sync = ["tokio/sync", "tokio-util"]
@@ -41,6 +43,7 @@ std = []
 [dependencies]
 futures-core = { version = "0.3.0" }
 pin-project-lite = "0.2.11"
+portable-io = { version = "0.0.4", optional = true }
 tokio = { version = "1.15.0", path = "../tokio", features = ["sync"] }
 tokio-util = { version = "0.7.0", path = "../tokio-util", optional = true }
 
